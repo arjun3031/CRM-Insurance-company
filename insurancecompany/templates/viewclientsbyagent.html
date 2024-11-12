@@ -1,0 +1,667 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View clients by agent</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+      * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+            height: 100%;
+            background: url("{% static 'images/bg.jpg' %}") no-repeat center center/cover;
+
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: white;
+            padding: 0 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: 120px;
+            width: 100%;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            font-size: 35px;
+            color: rgb(170, 99, 170);
+            margin-right: 14px;
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo h1 {
+            color: rgb(141, 42, 118);
+            font-size: 40px;
+            margin-bottom: 5px;
+            font-family: 'Lucida Sans', 'Lucida Grande', Geneva, Verdana, sans-serif;
+        }
+        
+        .logo p {
+            font-size: 18px;
+            color: rgb(141, 145, 145);
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            margin: 0 20px;
+        }
+        
+        .search-bar input[type="text"] {
+            width: 100%;
+            max-width: 400px;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .search-bar input[type="text"]:focus {
+            border-color: rgb(188, 32, 170);
+        }
+        
+        .navbar-links {
+            display: flex;
+            list-style: none;
+            align-items: center;
+            margin-left: auto;
+            gap: 20px;
+        }
+        
+        .navbar-links li {
+            margin: 0;
+        }
+        
+        .navbar-links a {
+            text-decoration: none;
+            color: rgb(141, 42, 118);
+            font-size: 18px;
+            padding: 10px;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            line-height: 1;
+        }
+        
+        .navbar-links a:hover {
+            color: rgb(51, 5, 41);
+        }
+        
+        .navbar-links a i {
+            margin-right: 8px;
+        }
+        
+        .toggle-btn {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: black;
+        }
+        
+        @media (max-width: 1560px) {
+            .search-bar {
+                display: none;
+            }
+        }
+        
+        @media (min-width: 750px) and (max-width: 1030px) {
+            .navbar-links {
+                flex-wrap: nowrap;
+                gap: 10px;
+            }
+        
+            .logo h1 {
+                font-size: 30px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar-links {
+                display: none;
+                flex-direction: column;
+                align-items: flex-start;
+                width: 100%;
+                position: absolute;
+                top: 120px;
+                left: 0;
+                background-color: white;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                z-index: 999;
+                padding: 20px;
+            }
+        
+            .navbar-links.active {
+                display: flex;
+            }
+        
+            .navbar-links li {
+                width: 100%;
+            }
+        
+            .navbar-links a {
+                padding: 10px 20px;
+                width: 100%;
+            }
+        
+            .toggle-btn {
+                display: block;
+            }
+        }
+        
+        .badge {
+            background-color: #ef105a;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 8px;
+            position: relative;
+            top: -2px;
+            display: inline-block;
+        }
+        
+        .navbar-links li {
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-links li a {
+            display: flex;
+            align-items: center;
+        }
+        
+        @media (max-width: 768px) {
+            .badge {
+                margin-left: 6px;
+                top: 0;
+            }
+        }
+        
+
+
+
+        .footer {
+    background-color: #efd6ea;
+    color: rgb(106, 53, 107);
+    padding: 40px 20px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-columns {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.footer-column {
+    flex: 1;
+    min-width: 200px;
+    margin: 10px 20px;
+}
+
+.footer-column h4 {
+    color: #532a4f;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.footer-column p, .footer-column ul {
+    font-size: 14px;
+    color: #532a4f;
+    line-height: 1.6;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 8px;
+}
+
+.footer-column ul li a {
+    color: #532a4f;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-column ul li a:hover {
+    color: #532a4f;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.social-icons a {
+    color: #532a4f;
+    font-size: 20px;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: #532a4f;
+}
+
+.footer-bottom {
+    font-size: 14px;
+    color: #532a4f;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #351839;
+    margin: 20px 0;
+}
+
+@media (max-width: 768px) {
+    .footer-columns {
+        flex-direction: column;
+    }
+    .footer-column {
+        text-align: left;
+    }
+}
+
+.main-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.filter-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; 
+    margin-bottom: 50px;
+    margin-top: 50px;
+    flex-direction: row;
+    justify-content: flex-start; 
+}
+
+.filter-section select {
+    width: 70%; 
+    max-width: 300px;
+    padding: 12px;
+    font-size: 16px;
+    border: 2px solid #91568c;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #333;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin: 0 auto;
+}
+
+.filter-section select:focus {
+    outline: none;
+    border-color: #ff69b4;
+    box-shadow: 0 0 5px rgba(255, 105, 180, 0.4);
+}
+
+.filter-section select option {
+    background-color: #ffe6f2;
+    color: #333;
+    font-size: 15px;
+    padding: 10px;
+}
+
+@media (max-width: 780px) {
+    .filter-section select {
+        width: 80%;
+        max-width: 50%; 
+    }
+}
+
+.table-container {
+    overflow-x: auto;
+    width: 100%; 
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    max-width: 100%; 
+}
+
+.history-table th, .history-table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    color: #333;
+}
+
+.history-table th {
+    background-color: #82267b;
+    color: #fcf2f2;
+}
+
+.history-table tbody tr {
+    background-color: #f9f9f9;
+}
+
+.view-more {
+    color: #440a4f;
+    text-decoration: none;
+}
+
+.view-more:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .history-table th, .history-table td {
+        font-size: 14px;
+        max-width: 1600px;
+    }
+}
+
+.table-heading {
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    color: #5a1e3c;
+    font-family: 'Arial', sans-serif;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    margin-top: 30px;
+}
+
+
+
+</style>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <i class="fa-solid fa-hand-holding-heart"></i>
+            <div class="logo-text">
+                <h1>JAN SURAKSHA</h1>
+                <p>Insurance Company</p>
+            </div>
+        </div>
+        <!-- <div class="search-bar">
+            <input type="text" placeholder="Search...">
+        </div> -->
+        <div class="toggle-btn">
+            <i class="fas fa-bars"></i>
+        </div>
+        <ul class="navbar-links" id="navbarLinks">
+            <li><a href="{% url 'addclient' %}"><i class="fa fa-id-card"></i> Add Clients</a></li>
+            <li><a style="color: rgb(51, 5, 41);" href="{% url 'viewclientsbyagent' %}"><i class="fa fa-users"></i> View Clients</a></li>
+            <li>
+                <a href="{% url 'viewcampaignbyagent' %}"><i class="fa fa-bullhorn"></i> Campaigns</a>
+                <span class="badge">2</span>
+            </li>
+            <li><a href="{% url 'profile' %}"><i class="fa-solid fa-user"></i>Profile</a></li>
+            <li><a href="{% url 'agenthome' %}"><i class="fa-solid fa-arrow-circle-left"></i></a></li>
+        </ul>
+    </nav>
+
+
+
+
+
+    <div class="main-container">
+        
+        <h2 class="table-heading">Collected Clients</h2>
+
+        <div class="filter-section">
+            <select>
+                <option>Select Client Name</option>
+                <option>Manu Pramod</option>
+                <option>Joyson</option>
+                <option>Anamika</option>
+                <option>Rahul</option>
+                <option>Priya</option>
+                <option>Deepa</option>
+            </select>
+            <select>
+                <option>Select Profession</option>
+                <option>Doctor</option>
+                <option>Engineer </option>
+                <option>Accountant</option>
+                <option>Teacher</option>
+            </select>
+        </div>
+    
+        <div class="table-container">
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Client Name</th>
+                        <th>Address</th>
+                        <th>Mobile</th>
+                        <th>Date of birth</th>
+                        <th>Age</th>
+                        <th>Profession</th>
+                        <th>Annuel income</th>
+                        <th>Qualification</th>
+                        <th>Adhaar Number</th>
+                        <th>PAN Number</th>
+                        <th>More Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Manu Pramod</td>
+                        <td>Kannur Street, Kannur</td>
+                        <td>9812345678</td>
+                        <td>1990-04-15</td>
+                        <td>34</td>
+                        <td>Engineer</td>
+                        <td>₹5,00,000</td>
+                        <td>Bachelor's Degree</td>
+                        <td>1234 5678 9101</td>
+                        <td>ABCDE1234F</td>
+                        <td><a href="{% url 'moreaboutclient' %}" class="view-more">View More</a></td>
+                    </tr>
+                    <tr>
+                        <td>Joyson</td>
+                        <td>Vatakara, Calicut</td>
+                        <td>9823456789</td>
+                        <td>1990-04-15</td>
+                        <td>34</td>
+                        <td>Doctor</td>
+                        <td>₹7,50,000</td>
+                        <td>Master's Degree</td>
+                        <td>2345 6789 1012</td>
+                        <td>FGHIJ5678K</td>
+                        <td><a href="#" class="view-more">View More</a></td>
+                    </tr>
+                    <tr>
+                        <td>Anamika</td>
+                        <td>Vatakara, Calicut</td>
+                        <td>9834567890</td>
+                        <td>1985-07-20</td>
+                        <td>39</td>
+                        <td>Teacher</td>
+                        <td>₹3,20,000</td>
+                        <td>Diploma</td>
+                        <td>3456 7891 0123</td>
+                        <td>KLMNO1234P</td>                    
+                        <td><a href="#" class="view-more">View More</a></td>
+                    </tr>
+                    <tr>
+                        <td>Rahul</td>
+                        <td>Kochi, Ernakulam</td>
+                        <td>9876543210</td>
+                        <td>1990-05-15</td>
+                        <td>34</td>
+                        <td>Engineer</td>
+                        <td>₹5,50,000</td>
+                        <td>Bachelor's Degree</td>
+                        <td>1234 5678 9101</td>
+                        <td>ABCDE1234F</td>
+                        <td><a href="#" class="view-more">View More</a></td>
+                    </tr>
+                    <tr>
+                        <td>Priya</td>
+                        <td>Thiruvananthapuram</td>
+                        <td>9123456789</td>
+                        <td>1992-11-30</td>
+                        <td>31</td>
+                        <td>Doctor</td>
+                        <td>₹8,00,000</td>
+                        <td>Master's Degree</td>
+                        <td>2345 6789 1012</td>
+                        <td>FGHIJ5678K</td>
+                        <td><a href="#" class="view-more">View More</a></td>
+                    </tr>
+                    <tr>
+                        <td>Deepa</td>
+                        <td>Kozhikode, Calicut</td>
+                        <td>9898989898</td>
+                        <td>1987-08-25</td>
+                        <td>37</td>
+                        <td>Accountant</td>
+                        <td>₹4,75,000</td>
+                        <td>Diploma</td>
+                        <td>3456 7891 0123</td>
+                        <td>KLMNO1234P</td>
+                        <td><a href="#" class="view-more">View More</a></td>
+                    </tr>                    
+                </tbody>
+            </table>
+        </div>        
+    </div>
+
+
+
+
+    
+    
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-columns">
+                <div class="footer-column">
+                    <h4>Vision</h4>
+                    <p>Our vision is to become the most trusted general insurer for a transforming India.</p>
+                    <h4>Mission</h4>
+                    <p>Our mission is to provide simple and innovative general insurance solutions, be responsive to our customers' needs and build a sustainable business for the future.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Popular Links</h4>
+                    <ul>
+                        <li><a href="#">Blogs</a></li>
+                        <li><a href="#">Become an Agent</a></li>
+                        <li><a href="#">Important Links</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Usage</a></li>
+                        <li><a href="#">Azadi ka Amrit Mahotsav</a></li>
+                        <li><a href="#">Glossary</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Investors</a></li>
+                        <li><a href="#">Public Disclosure</a></li>
+                        <li><a href="#">SBI General in News</a></li>
+                        <li><a href="#">Testimonials</a></li>
+                        <li><a href="#">Careers</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="#">Intimate Claim</a></li>
+                        <li><a href="#">Renew Policy</a></li>
+                        <li><a href="#">Downloads</a></li>
+                        <li><a href="#">Retrieve Quote</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Help & Support</h4>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Write To Us</a></li>
+                        <li><a href="#">Garage Network</a></li>
+                        <li><a href="#">Hospital Network</a></li>
+                        <li><a href="#">Grievance Redressal</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>We're Socially Active!</h4>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Jan Suraksha Insurance Scheme. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const toggleBtn = document.querySelector('.toggle-btn');
+        const navbarLinks = document.querySelector('.navbar-links');
+
+        toggleBtn.addEventListener('click', () => {
+            navbarLinks.classList.toggle('active');
+        });
+
+        document.getElementById('toggleCurrent').addEventListener('click', function () {
+                        const passwordField = document.getElementById('password');
+                        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                        passwordField.setAttribute('type', type);
+                        this.classList.toggle('fa-eye-slash');
+                    });
+
+              
+    </script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+    
+</body>
+</html>

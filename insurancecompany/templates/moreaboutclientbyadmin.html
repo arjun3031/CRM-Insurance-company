@@ -1,0 +1,756 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View more about client by admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+      * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+            height: 100%;
+            background: url("{% static 'images/bg.jpg' %}") no-repeat center center/cover;
+
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: white;
+            padding: 0 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: 120px;
+            width: 100%;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            font-size: 35px;
+            color: rgb(170, 99, 170);
+            margin-right: 14px;
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo h1 {
+            color: rgb(141, 42, 118);
+            font-size: 40px;
+            margin-bottom: 5px;
+            font-family: 'Lucida Sans', 'Lucida Grande', Geneva, Verdana, sans-serif;
+        }
+        
+        .logo p {
+            font-size: 18px;
+            color: rgb(141, 145, 145);
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            margin: 0 20px;
+        }
+        
+        .search-bar input[type="text"] {
+            width: 100%;
+            max-width: 400px;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .search-bar input[type="text"]:focus {
+            border-color: rgb(188, 32, 170);
+        }
+        
+        .navbar-links {
+            display: flex;
+            list-style: none;
+            align-items: center;
+            margin-left: auto;
+            gap: 20px;
+        }
+        
+        .navbar-links li {
+            margin: 0;
+        }
+        
+        .navbar-links a {
+            text-decoration: none;
+            color: rgb(141, 42, 118);
+            font-size: 18px;
+            padding: 10px;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-links a:hover {
+            color: rgb(51, 5, 41);
+        }
+        
+        .navbar-links a i {
+            margin-right: 8px;
+        }
+        
+        .toggle-btn {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: black;
+        }
+        
+        @media (max-width: 1560px) {
+            .search-bar {
+                display: none;
+            }
+        }
+        
+        @media (min-width: 750px) and (max-width: 1030px) {
+            .navbar-links {
+                flex-wrap: nowrap;
+                gap: 10px;
+            }
+        
+            .logo h1 {
+                font-size: 30px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar-links {
+                display: none;
+                flex-direction: column;
+                align-items: flex-start;
+                width: 100%;
+                position: absolute;
+                top: 120px;
+                left: 0;
+                background-color: white;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                z-index: 999;
+                padding: 20px;
+            }
+        
+            .navbar-links.active {
+                display: flex;
+            }
+        
+            .navbar-links li {
+                width: 100%;
+            }
+        
+            .navbar-links a {
+                padding: 10px 20px;
+                width: 100%;
+            }
+        
+            .toggle-btn {
+                display: block;
+            }
+            
+        }
+        
+        
+
+
+        .footer {
+    background-color: #efd6ea;
+    color: rgb(106, 53, 107);
+    padding: 40px 20px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-columns {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.footer-column {
+    flex: 1;
+    min-width: 200px;
+    margin: 10px 20px;
+}
+
+.footer-column h4 {
+    color: #532a4f;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.footer-column p, .footer-column ul {
+    font-size: 14px;
+    color: #532a4f;
+    line-height: 1.6;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 8px;
+}
+
+.footer-column ul li a {
+    color: #532a4f;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-column ul li a:hover {
+    color: #532a4f;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.social-icons a {
+    color: #532a4f;
+    font-size: 20px;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: #532a4f;
+}
+
+.footer-bottom {
+    font-size: 14px;
+    color: #532a4f;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #351839;
+    margin: 20px 0;
+}
+
+@media (max-width: 768px) {
+    .footer-columns {
+        flex-direction: column;
+    }
+    .footer-column {
+        text-align: left;
+    }
+}
+
+
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    max-width: 800px;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.card h2 {
+    text-align: center;
+    color: #0056b3;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+input[type="radio"]:checked {
+    border-color: #37252e; 
+    background-color: #342b30; 
+}
+
+.more-button {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #5e285c;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.more-button:hover {
+    background-color: #433945;
+}
+
+.hidden {
+    display: none;
+}
+
+.form-group button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.form-group button:first-child {
+    background-color: #53254c;
+    color: #fff;
+}
+
+.form-group button:last-child {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+@media (max-width: 600px) {
+    .card {
+        padding: 15px;
+    }
+    .form-group {
+        margin-bottom: 10px;
+    }
+    textarea {
+        font-size: 14px;
+        padding: 12px;
+    }
+}
+textarea {
+    width: 100%;
+    height: 70px;
+    padding: 15px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical; 
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+    text-align: left;
+    
+}
+.range-slider {
+    width: 100%;
+    height: 10px;
+}
+
+.progress-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px 0;
+}
+
+.progress-bar-container {
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 10px;
+    background-color: #4caf50;
+    transition: width 0.3s ease;
+    border-radius: 5px;
+}
+
+.percentage-display {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: right;
+    margin-top: 10px;
+}
+
+</style>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <i class="fa-solid fa-hand-holding-heart"></i>
+            <div class="logo-text">
+                <h1 >JAN SURAKSHA</h1>
+                <p>Insurance Company</p>
+            </div>
+        </div>
+        <!-- <div class="search-bar">
+            <input type="text" placeholder="Search...">
+        </div> -->
+        <div class="toggle-btn">
+            <i class="fas fa-bars"></i>
+        </div>
+        <ul class="navbar-links" id="navbarLinks">
+            <li><a href="{% url 'addagent' %}"><i class="fa fa-id-card"></i> Add Agent</a></li>
+            <li><a href="{% url 'viewagent' %}"><i class="fa fa-users"></i> View Agents</a></li>
+            <li><a href="{% url 'addcampaign' %}"><i class="fa fa-bullhorn"></i> Campaigns</a></li>
+            <li><a href="{% url 'viewcampaign' %}"><i class="fa-solid fa-chart-line"></i> View Campaigns</a></li>
+            <li><a href="{% url 'viewclients' %}"><i class="fa-solid fa-arrow-circle-left"></i></a></li>
+        </ul>
+    </nav>
+
+
+
+
+    <div class="card">
+        <h2><b style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;color: #351839;">MANU PRASAD</b></h2>
+        
+        <div id="basic-info" class="card-content">
+            <div class="form-group">
+                <input type="text" name="mobile" value="9834567890" readonly>
+            </div>
+            
+            <div class="form-group">
+                <input type="text" name="profession" value="Teacher" readonly>
+            </div>
+    
+            <div class="form-group">
+                <label>Aadhar Card Number</label>
+                <input type="text" name="aadhar" placeholder="1234 5678 9101" required>
+            </div>
+    
+            <div class="form-group">
+                <label>PAN Number</label>
+                <input type="text" name="pan" placeholder="ABCDE1234F" required>
+            </div>
+    
+            <div class="form-group">
+                <label>Income Level</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="income_level" value="low" disabled> Low</label>
+                    <label><input type="radio" name="income_level" value="medium" checked disabled> Medium</label>
+                    <label><input type="radio" name="income_level" value="high" disabled> High</label>
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <div class="label-radio-container">
+                    <label>Presence of Kids</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="children" value="yes" required checked disabled>
+                            <span class="radio-label">Yes</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="children" value="no" required disabled>
+                            <span class="radio-label">No</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+    
+            <button type="button" class="more-button" onclick="toggleDetails()">More</button>
+        </div>
+    
+        <div id="additional-info" class="card-content hidden">
+            <div class="form-group">
+                <label for="source" class="checkbox-group-label">Source of Information</label>
+                <div class="checkbox-options">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="source" value="social_media" checked disabled>
+                        Social Media
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="source" value="customer" disabled>
+                        Customer
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="source" value="news" checked disabled>
+                        News
+                    </label>
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <div class="input-icon">
+                    <textarea name="feedback" placeholder="Customer feedback" required disabled>
+                        This is some sample customer feedback by Manu Prasad 
+                    </textarea>
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <label for="claim_satisfaction" class="rating-label">Claim Satisfaction</label>
+                <div class="progress-container">
+                    <div class="progress-bar-container">
+                        <div id="progress-bar" class="progress-bar" style="width: 40%;"></div>
+                    </div>
+                </div>
+                <div class="percentage-display">
+                    <span id="percentage-value">40%</span>
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <label for="source" class="checkbox-group-label">Insurance markup area</label>
+                <div class="checkbox-options">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="area" value="social_media" checked disabled>
+                        Life
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="area" value="customer" disabled>
+                        Health
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="area" value="travel" disabled>
+                        Travel
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="area" value="Commercial" disabled>
+                        Commercial
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="area" value="Vehicle" disabled checked>
+                        Vehicle
+                    </label>
+                </div>
+            </div>
+    
+            <div style="margin-bottom: 50px;" class="form-group">
+                <a href="path-to-your-file.pdf" download="AgentVisitedPolicy.pdf">
+                    <button style="background-color: #eaaee4;width: 100%;" type="button"> Agent Visited Policy Download <i class="fas fa-download"></i> 
+                    </button>
+                </a>
+            </div>
+    
+            <div class="form-group">
+                <div class="label-radio-container">
+                    <label>Willingness to Purchase Insurance</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="Purchase" value="yes" required disabled checked>
+                            <span class="radio-label">High</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="Purchase" value="no" required disabled>
+                            <span class="radio-label">Low</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <div class="label-radio-container">
+                    <label>Willingness to Share Previous Insurance</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="Previous" value="yes" required disabled>
+                            <span class="radio-label">Yes</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="Previous" value="no" required disabled checked>
+                            <span class="radio-label">No</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <textarea name="feedback" required disabled>
+                    Sample customer preferences of Manu Prasad
+                </textarea>
+            </div>
+    
+            <div class="form-group">
+                <textarea name="feedback" placeholder="Agent Notes" required disabled>Nothing</textarea>
+            </div>
+    
+            <div class="form-group">
+                <div class="label-radio-container">
+                    <label>Willingness to Switch Over Another Insurance</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="Switch" value="yes" required disabled>
+                            <span class="radio-label">Yes</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="Switch" value="no" required disabled checked>
+                            <span class="radio-label">No</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+    
+            <div style="margin-bottom: 50px;" class="form-group">  
+                <a href="path-to-your-file.pdf" download="Profile Details.pdf">
+                    <button style="background-color: #eaaee4;width: 100%;" type="button"> Existing Profile Details<i class="fas fa-download"></i> 
+                    </button>
+                </a>
+            </div>
+    
+            <div class="form-group">
+                <button style="width: 100%;background-color: #342b30;color: white;" type="button" onclick="toggleDetails()">Previous</button>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+
+    
+  
+    
+    
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-columns">
+                <div class="footer-column">
+                    <h4>Vision</h4>
+                    <p>Our vision is to become the most trusted general insurer for a transforming India.</p>
+                    <h4>Mission</h4>
+                    <p>Our mission is to provide simple and innovative general insurance solutions, be responsive to our customers' needs and build a sustainable business for the future.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Popular Links</h4>
+                    <ul>
+                        <li><a href="#">Blogs</a></li>
+                        <li><a href="#">Become an Agent</a></li>
+                        <li><a href="#">Important Links</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Usage</a></li>
+                        <li><a href="#">Azadi ka Amrit Mahotsav</a></li>
+                        <li><a href="#">Glossary</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Investors</a></li>
+                        <li><a href="#">Public Disclosure</a></li>
+                        <li><a href="#">SBI General in News</a></li>
+                        <li><a href="#">Testimonials</a></li>
+                        <li><a href="#">Careers</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="#">Intimate Claim</a></li>
+                        <li><a href="#">Renew Policy</a></li>
+                        <li><a href="#">Downloads</a></li>
+                        <li><a href="#">Retrieve Quote</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Help & Support</h4>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Write To Us</a></li>
+                        <li><a href="#">Garage Network</a></li>
+                        <li><a href="#">Hospital Network</a></li>
+                        <li><a href="#">Grievance Redressal</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>We're Socially Active!</h4>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Jan Suraksha Insurance Scheme. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+
+        function toggleDetails() {
+            var basicInfo = document.getElementById("basic-info");
+            var additionalInfo = document.getElementById("additional-info");
+
+            if (basicInfo.classList.contains("hidden")) {
+                basicInfo.classList.remove("hidden");
+                additionalInfo.classList.add("hidden");
+            } else {
+                basicInfo.classList.add("hidden");
+                additionalInfo.classList.remove("hidden");
+            }
+        }
+
+        function updateProgressBar(slider) {
+            const progressBar = document.getElementById('progress-bar');
+            const percentageValue = document.getElementById('percentage-value');
+            const value = slider.value;
+            
+            progressBar.style.width = value + '%';
+            percentageValue.innerText = value + '%';
+        }
+
+        const toggleBtn = document.querySelector('.toggle-btn');
+        const navbarLinks = document.querySelector('.navbar-links');
+
+        toggleBtn.addEventListener('click', () => {
+            navbarLinks.classList.toggle('active');
+        });
+
+        document.getElementById('toggleCurrent').addEventListener('click', function () {
+                        const passwordField = document.getElementById('password');
+                        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                        passwordField.setAttribute('type', type);
+                        this.classList.toggle('fa-eye-slash');
+                    });
+
+              
+    </script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+    
+</body>
+</html>

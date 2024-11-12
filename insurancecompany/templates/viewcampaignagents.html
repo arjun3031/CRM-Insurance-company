@@ -1,0 +1,581 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Campaign agents</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+      * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+            height: 100%;
+            background: url("{% static 'images/bg.jpg' %}") no-repeat center center/cover;
+
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: white;
+            padding: 0 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: 120px;
+            width: 100%;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            font-size: 35px;
+            color: rgb(170, 99, 170);
+            margin-right: 14px;
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo h1 {
+            color: rgb(141, 42, 118);
+            font-size: 40px;
+            margin-bottom: 5px;
+            font-family: 'Lucida Sans', 'Lucida Grande', Geneva, Verdana, sans-serif;
+        }
+        
+        .logo p {
+            font-size: 18px;
+            color: rgb(141, 145, 145);
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            margin: 0 20px;
+        }
+        
+        .search-bar input[type="text"] {
+            width: 100%;
+            max-width: 400px;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .search-bar input[type="text"]:focus {
+            border-color: rgb(188, 32, 170);
+        }
+        
+        .navbar-links {
+            display: flex;
+            list-style: none;
+            align-items: center;
+            margin-left: auto;
+            gap: 20px;
+        }
+        
+        .navbar-links li {
+            margin: 0;
+        }
+        
+        .navbar-links a {
+            text-decoration: none;
+            color: rgb(141, 42, 118);
+            font-size: 18px;
+            padding: 10px;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-links a:hover {
+            color: rgb(51, 5, 41);
+        }
+        
+        .navbar-links a i {
+            margin-right: 8px;
+        }
+        
+        .toggle-btn {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: black;
+        }
+        
+        @media (max-width: 1560px) {
+            .search-bar {
+                display: none;
+            }
+        }
+        
+        @media (min-width: 750px) and (max-width: 1030px) {
+            .navbar-links {
+                flex-wrap: nowrap;
+                gap: 10px;
+            }
+        
+            .logo h1 {
+                font-size: 30px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar-links {
+                display: none;
+                flex-direction: column;
+                align-items: flex-start;
+                width: 100%;
+                position: absolute;
+                top: 120px;
+                left: 0;
+                background-color: white;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                z-index: 999;
+                padding: 20px;
+            }
+        
+            .navbar-links.active {
+                display: flex;
+            }
+        
+            .navbar-links li {
+                width: 100%;
+            }
+        
+            .navbar-links a {
+                padding: 10px 20px;
+                width: 100%;
+            }
+        
+            .toggle-btn {
+                display: block;
+            }
+            
+        }
+        
+        
+
+
+
+        .footer {
+    background-color: #efd6ea;
+    color: rgb(106, 53, 107);
+    padding: 40px 20px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-columns {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.footer-column {
+    flex: 1;
+    min-width: 200px;
+    margin: 10px 20px;
+}
+
+.footer-column h4 {
+    color: #532a4f;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.footer-column p, .footer-column ul {
+    font-size: 14px;
+    color: #532a4f;
+    line-height: 1.6;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 8px;
+}
+
+.footer-column ul li a {
+    color: #532a4f;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-column ul li a:hover {
+    color: #532a4f;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.social-icons a {
+    color: #532a4f;
+    font-size: 20px;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: #532a4f;
+}
+
+.footer-bottom {
+    font-size: 14px;
+    color: #532a4f;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #351839;
+    margin: 20px 0;
+}
+
+@media (max-width: 768px) {
+    .footer-columns {
+        flex-direction: column;
+    }
+    .footer-column {
+        text-align: left;
+    }
+}
+
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.first-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    min-height: 150px;
+    background-color: #f7e9fc;
+}
+
+
+.content-container {
+    width: 55%;
+    margin-left: 30px;
+}
+
+.campaign-name {
+    font-size: 24px;
+    margin-bottom: 10px;
+    margin-top: 30px;
+}
+
+.location {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.description {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.read-more-btn {
+    background-color: #392039;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+.read-more-btn:hover {
+    background-color: #6a4f74;
+}
+
+.second-container {
+    display: flex;
+    justify-content: center;
+}
+
+.card-container {
+    display: flex;
+    gap: 100px;
+}
+
+.card {
+    width: 400px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-details {
+    padding: 15px;
+}
+
+.card-details h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.card-details p {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.view-clients-btn {
+    background-color: #392039;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+}
+
+.view-clients-btn:hover {
+    background-color: #6a4f74;
+}
+
+@media (max-width: 768px) {
+    .first-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .image-container,
+    .content-container {
+        width: 100%;
+    }
+
+    .second-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        width: 90%;
+        margin-bottom: 20px;
+    }
+}
+
+
+</style>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <i class="fa-solid fa-hand-holding-heart"></i>
+            <div class="logo-text">
+                <h1 >JAN SURAKSHA</h1>
+                <p>Insurance Company</p>
+            </div>
+        </div>
+        <!-- <div class="search-bar">
+            <input type="text" placeholder="Search...">
+        </div> -->
+        <div class="toggle-btn">
+            <i class="fas fa-bars"></i>
+        </div>
+        <ul class="navbar-links" id="navbarLinks">
+            <li><a href="{% url 'addagent' %}"><i class="fa fa-id-card"></i> Add Agent</a></li>
+            <li><a href="{% url 'viewagent' %}"><i class="fa fa-users"></i> View Agents</a></li>
+            <li><a href="{% url 'addcampaign' %}"><i class="fa fa-bullhorn"></i> Campaigns</a></li>
+            <li><a href="{% url 'viewcampaign' %}"><i class="fa-solid fa-chart-line"></i> View Campaigns</a>
+            <li><a href="{% url 'viewcampaign' %}"><i class="fa-solid fa-arrow-circle-left"></i></a></li>
+        </ul>
+    </nav>
+
+
+
+
+
+    <div class="main-container">
+        <div class="first-container">
+            <div class="content-container">
+                <h2 class="campaign-name">Campaign @ Kannur</h2>
+                <p class="location">Location: Kannur</p>
+                <p class="description">This campaign in Kannur focuses on enhancing community engagement and raising awareness about local initiatives.</p>
+                <button class="read-more-btn">Read More</button>
+            </div>
+        </div>
+    
+        <div class="second-container">
+            <div class="card-container">
+                <div class="card">
+                    <div class="card-image">
+                        <img src="{% static 'images/nandha.jpg' %}" alt="Agent 1" class="profile-image">
+                    </div>
+                    <div class="card-details">
+                        <h3>Anupriya S</h3>
+                        <p>Contact: 9867767890</p>
+                        <p>Email: aanupriyas@gmail.com</p>
+                        <p>Address: Vatakara, Calicut</p>
+                       <a href="{% url 'viewcampaignclients' %}"><button class="view-clients-btn">View Clients</button></a> 
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-image">
+                        <img src="{% static 'images/danya.jpg' %}" alt="Agent 2" class="profile-image">
+                    </div>
+                    <div class="card-details">
+                        <h3>Nandha P</h3>
+                        <p>Contact: 987886543210</p>
+                        <p>Email: nandhap@gmail.com</p>
+                        <p>Address: Shornur, Palakkad</p>
+                        <button class="view-clients-btn">View Clients</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+
+
+    
+    
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-columns">
+                <div class="footer-column">
+                    <h4>Vision</h4>
+                    <p>Our vision is to become the most trusted general insurer for a transforming India.</p>
+                    <h4>Mission</h4>
+                    <p>Our mission is to provide simple and innovative general insurance solutions, be responsive to our customers' needs and build a sustainable business for the future.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Popular Links</h4>
+                    <ul>
+                        <li><a href="#">Blogs</a></li>
+                        <li><a href="#">Become an Agent</a></li>
+                        <li><a href="#">Important Links</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Usage</a></li>
+                        <li><a href="#">Azadi ka Amrit Mahotsav</a></li>
+                        <li><a href="#">Glossary</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Investors</a></li>
+                        <li><a href="#">Public Disclosure</a></li>
+                        <li><a href="#">SBI General in News</a></li>
+                        <li><a href="#">Testimonials</a></li>
+                        <li><a href="#">Careers</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="#">Intimate Claim</a></li>
+                        <li><a href="#">Renew Policy</a></li>
+                        <li><a href="#">Downloads</a></li>
+                        <li><a href="#">Retrieve Quote</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Help & Support</h4>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Write To Us</a></li>
+                        <li><a href="#">Garage Network</a></li>
+                        <li><a href="#">Hospital Network</a></li>
+                        <li><a href="#">Grievance Redressal</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>We're Socially Active!</h4>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Jan Suraksha Insurance Scheme. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const toggleBtn = document.querySelector('.toggle-btn');
+        const navbarLinks = document.querySelector('.navbar-links');
+
+        toggleBtn.addEventListener('click', () => {
+            navbarLinks.classList.toggle('active');
+        });
+
+        document.getElementById('toggleCurrent').addEventListener('click', function () {
+                        const passwordField = document.getElementById('password');
+                        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                        passwordField.setAttribute('type', type);
+                        this.classList.toggle('fa-eye-slash');
+                    });
+
+              
+    </script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+    
+</body>
+</html>
