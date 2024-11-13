@@ -35,35 +35,35 @@
             height: 120px;
             width: 100%;
         }
-
+        
         .logo {
             display: flex;
             align-items: center;
         }
-
+        
         .logo i {
             font-size: 35px;
             color: rgb(170, 99, 170);
             margin-right: 14px;
         }
-
+        
         .logo-text {
             display: flex;
             flex-direction: column;
         }
-
+        
         .logo h1 {
             color: rgb(141, 42, 118);
             font-size: 40px;
             margin-bottom: 5px;
             font-family: 'Lucida Sans', 'Lucida Grande', Geneva, Verdana, sans-serif;
         }
-
+        
         .logo p {
             font-size: 18px;
             color: rgb(141, 145, 145);
         }
-
+        
         .search-bar {
             display: flex;
             align-items: center;
@@ -71,7 +71,7 @@
             flex: 1;
             margin: 0 20px;
         }
-
+        
         .search-bar input[type="text"] {
             width: 100%;
             max-width: 400px;
@@ -81,87 +81,101 @@
             outline: none;
             transition: border-color 0.3s;
         }
-
+        
         .search-bar input[type="text"]:focus {
             border-color: rgb(188, 32, 170);
         }
-
+        
         .navbar-links {
             display: flex;
             list-style: none;
             align-items: center;
             margin-left: auto;
-            padding-left: 30px;
+            gap: 20px;
         }
-
+        
         .navbar-links li {
-            margin-left: 30px;
-            display: flex;
-            align-items: center;
+            margin: 0;
         }
-
+        
         .navbar-links a {
             text-decoration: none;
             color: rgb(141, 42, 118);
             font-size: 18px;
-            padding: 15px 0;
-            line-height: 60px;
+            padding: 10px;
             transition: color 0.3s;
             display: flex;
             align-items: center;
         }
-
+        
         .navbar-links a:hover {
             color: rgb(51, 5, 41);
         }
-
+        
         .navbar-links a i {
-            margin-right: 8px; 
+            margin-right: 8px;
         }
-
+        
         .toggle-btn {
             display: none;
             font-size: 24px;
             cursor: pointer;
             color: black;
         }
-
-        @media (max-width: 768px) {
+        
+        @media (max-width: 1560px) {
             .search-bar {
-                display: none; 
+                display: none;
             }
-
+        }
+        
+        @media (min-width: 750px) and (max-width: 1030px) {
+            .navbar-links {
+                flex-wrap: nowrap;
+                gap: 10px;
+            }
+        
+            .logo h1 {
+                font-size: 30px;
+            }
+        }
+        
+        @media (max-width: 1530px) {
             .navbar-links {
                 display: none;
                 flex-direction: column;
+                align-items: flex-start;
                 width: 100%;
                 position: absolute;
-                top: 100px;
+                top: 120px;
                 left: 0;
                 background-color: white;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                z-index: 999;
+                padding: 20px;
             }
-
+        
             .navbar-links.active {
                 display: flex;
             }
-
+        
             .navbar-links li {
-                margin-left: 0;
-                margin-top: 10px;
                 width: 100%;
-                text-align: left;
             }
-
+        
             .navbar-links a {
                 padding: 10px 20px;
                 width: 100%;
             }
-
+        
             .toggle-btn {
                 display: block;
             }
+            
         }
+
+
+
         .footer {
     background-color: #efd6ea;
     color: rgb(106, 53, 107);
@@ -578,10 +592,10 @@ label {
                 <p>Insurance Company</p>
             </div>
         </div>
-        <div class="search-bar">
+        <!-- <div class="search-bar">
             <input type="text" placeholder="Search...">
-        </div>
-        <div class="toggle-btn">
+        </div> -->
+        <div class="toggle-btn" onclick="toggleMenu()">
             <i class="fas fa-bars"></i>
         </div>
         <ul class="navbar-links" id="navbarLinks">
@@ -591,8 +605,8 @@ label {
                 <a href="{% url 'viewcampaignbyagent' %}"><i class="fa fa-bullhorn"></i> Campaigns</a>
                 <span class="badge">2</span>
             </li>
-            <li><a href="{% url 'profile' %}"><i class="fa-solid fa-user"></i>Profile</a></li>
-            <li><a href="{% url 'agenthome' %}"><i class="fa-solid fa-arrow-circle-left"></i></a></li>
+            <li><a href="{% url 'profile' %}"><i class="fa-solid fa-user"></i> Profile</a></li>
+            <li><a href="{% url 'homepage' %}"><i class="fa-solid fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </nav>
 
