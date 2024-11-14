@@ -268,7 +268,6 @@ hr {
     }
 }
 
-
 .main-container {
     display: flex;
     flex-direction: column;
@@ -278,40 +277,53 @@ hr {
 .first-container {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
     margin-bottom: 30px;
-    min-height: 150px;
     background-color: #f7e9fc;
 }
 
-
 .content-container {
-    width: 55%;
-    margin-left: 30px;
+    width: 50%;
+    margin-right: 25px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-left: 25px; 
 }
 
 .campaign-name {
     font-size: 24px;
-    margin-bottom: 10px;
     margin-top: 30px;
+    margin-bottom: 20px;
+    margin-left: 25px; 
+    color: #392039;
 }
 
 .location {
     font-size: 18px;
     margin-bottom: 15px;
+    margin-left: 25px;
+    color: #532a4f;
 }
 
 .description {
     font-size: 16px;
     margin-bottom: 20px;
+    letter-spacing: 1px; 
+    line-height: 1.6; 
+    flex-grow: 1;
+    margin-left: 25px; 
 }
 
 .read-more-btn {
-    background-color: #392039;
+    background-color: #521a41;
     color: white;
     padding: 10px 20px;
     border: none;
     cursor: pointer;
     font-size: 16px;
+    margin-top: auto; 
+    margin-left: 25px; 
     margin-bottom: 30px;
 }
 
@@ -320,26 +332,27 @@ hr {
 }
 
 .second-container {
-    display: flex;
-    justify-content: center;
+    width: 50%;
 }
 
 .card-container {
     display: flex;
-    gap: 100px;
+    justify-content: center;
 }
 
 .card {
-    width: 400px;
+    width: 100%;
+    max-width: 400px;
     border: 1px solid #ddd;
-    border-radius: 8px;
+    border-radius: 3px;
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
 }
 
 .card-image {
     width: 100%;
-    height: 200px;
+    height: 270px;
     overflow: hidden;
 }
 
@@ -364,7 +377,7 @@ hr {
 }
 
 .view-clients-btn {
-    background-color: #392039;
+    background-color: #6a4f74;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -374,7 +387,7 @@ hr {
 }
 
 .view-clients-btn:hover {
-    background-color: #6a4f74;
+    background-color: #230e2b;
 }
 
 @media (max-width: 768px) {
@@ -383,19 +396,18 @@ hr {
         align-items: center;
     }
 
-    .image-container,
     .content-container {
         width: 100%;
+        margin-right: 0;
+        margin-bottom: 30px;
     }
 
     .second-container {
-        flex-direction: column;
-        align-items: center;
+        width: 100%;
     }
 
     .card-container {
-        flex-direction: column;
-        align-items: center;
+        justify-content: center;
     }
 
     .card {
@@ -416,9 +428,6 @@ hr {
                 <p>Insurance Company</p>
             </div>
         </div>
-        <!-- <div class="search-bar">
-            <input type="text" placeholder="Search...">
-        </div> -->
         <div class="toggle-btn">
             <i class="fas fa-bars"></i>
         </div>
@@ -438,37 +447,36 @@ hr {
     <div class="main-container">
         <div class="first-container">
             <div class="content-container">
-                <h2 class="campaign-name">Campaign @ Kannur</h2>
-                <p class="location">Location: Kannur</p>
-                <p class="description">This campaign in Kannur focuses on enhancing community engagement and raising awareness about local initiatives.</p>
+                <h2 class="campaign-name">Campaign @ {{ campaign.location }}</h2>
+                <p class="location">Location: {{ campaign.location }}</p>
+                <p class="description">
+                    Jan Suraksha Insurance Company is organizing this campaign to enhance public awareness of affordable health and safety insurance plans. The campaign aims to educate communities on the importance of insurance coverage, provide information on policy options, and offer personalized consultations. The initiative will also focus on reaching vulnerable groups who may not have easy access to health services. Through targeted workshops and digital resources, we aim to break down barriers to understanding and utilizing health insurance. 
+                    This campaign will run over a series of weeks, visiting various locations in the region. Local representatives will be available to answer any questions and provide guidance tailored to individual needs. Additionally, we will offer incentives for new policy sign-ups during the campaign. Community leaders will also be invited to speak at certain events to encourage engagement and highlight the importance of securing health coverage. 
+                </p>
                 <button class="read-more-btn">Read More</button>
             </div>
-        </div>
     
-        <div class="second-container">
-            <div class="card-container">
-                <div class="card">
-                    <div class="card-image">
-                        <img src="{% static 'images/nandha.jpg' %}" alt="Agent 1" class="profile-image">
-                    </div>
-                    <div class="card-details">
-                        <h3>Anupriya S</h3>
-                        <p>Contact: 9867767890</p>
-                        <p>Email: aanupriyas@gmail.com</p>
-                        <p>Address: Vatakara, Calicut</p>
-                       <a href="{% url 'viewcampaignclients' %}"><button class="view-clients-btn">View Clients</button></a> 
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-image">
-                        <img src="{% static 'images/danya.jpg' %}" alt="Agent 2" class="profile-image">
-                    </div>
-                    <div class="card-details">
-                        <h3>Nandha P</h3>
-                        <p>Contact: 987886543210</p>
-                        <p>Email: nandhap@gmail.com</p>
-                        <p>Address: Shornur, Palakkad</p>
-                        <button class="view-clients-btn">View Clients</button>
+            <div class="second-container">
+                <div class="card-container">
+                    <div class="card">
+                        <div class="card-image">
+                            {% if agent.image %}
+                                <img src="{{ agent.image.url }}" alt="{{ agent.name }}" class="profile-image">
+                            {% else %}
+                                <img src="{% static 'images/default-agent.jpg' %}" alt="Default Image" class="profile-image">
+                            {% endif %}
+                        </div>
+                        <div class="card-details">
+                            <h3 style="font-family:'Courier New', Courier, monospace; font-size: 28px; text-transform: capitalize;">
+                                {{ agent.user.first_name }} {{ agent.user.last_name }}
+                            </h3>
+                            <p>Contact: {{ agent.mobile }}</p>
+                            <p>Email: {{ agent.user.email }}</p>
+                            <p>Address: {{ agent.place }}</p>
+                            <a href="{% url 'viewcampaignclients' %}">
+                                <button class="view-clients-btn">View Clients</button>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

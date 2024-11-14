@@ -262,47 +262,20 @@ hr {
     }
 }
   
-.error-message {
-            background-color: #f8d7da; 
-            color: #721c24; 
-            border: 1px solid #f5c6cb; 
-            padding: 15px; 
-            margin-bottom: 10px; 
-            margin-top: 7px;
-            border-radius: 5px; 
-            display: none; 
-            text-align: center; 
-        }
 
-        .error-message.active {
-            display: block;
-        }
-
-        @media (max-width: 768px) {
-            .error-message {
-                font-size: 10px; 
-                padding: 8px;
-                margin-top: 8px;
-            }
-        }
-
-
-        .login-section {
+     .login-section {
             background: url("{% static 'images/bg.jpg' %}") no-repeat center center/cover;
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: calc(100vh - 80px);
-        
-        
-        
+        min-height: calc(100vh - 80px);  
     }
 
     .login-container {
         display: flex;
         width: 100%;
         
-        max-width: 700px;
+        max-width: 1000px;
         background-color: rgba(249, 254, 255, 0.7);
 
         border-radius: 8px;
@@ -319,13 +292,15 @@ hr {
 
     .login-image {
         flex: 1;
-        background: url("{% static 'images/campaign.jpg' %}") no-repeat center center/cover;
-        min-width: 250px;
+        background: url("{% static 'images/campa.avif' %}") no-repeat center center/cover;
+        min-width: 350px;
     }
 
     .login-form {
         flex: 2;
         padding: 40px;
+        max-width: 450px;
+
     }
 
    
@@ -504,9 +479,6 @@ hr {
     transition: border-color 0.3s;
 }
 
-
-
-
 .input-icon select:focus {
     border-color: #c121c4; 
     outline: none; }
@@ -531,6 +503,40 @@ hr {
     }
 }
 
+.error-message, .success-message {
+    padding: 15px;
+    margin-bottom: 10px;
+    margin-top: 7px;
+    border-radius: 5px;
+    display: none;
+    text-align: center;
+}
+
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.error-message.active, .success-message.active {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .error-message, .success-message {
+        font-size: 10px;
+        padding: 8px;
+        margin-top: 8px;
+    }
+}
+
+
     </style>
 </head>
 <body>
@@ -543,9 +549,6 @@ hr {
                 <p style="font-size: 18px;">Insurance Company</p>
             </div>
         </div>
-        <!-- <div class="search-bar">
-            <input type="text" placeholder="Search...">
-        </div> -->
         <div class="toggle-btn">
             <i class="fas fa-bars"></i>
         </div>
@@ -561,31 +564,32 @@ hr {
     <div class="login-section">
         <div class="login-container">
             <div class="login-image"></div>
-            
-            <form method="POST" class="login-form" enctype="multipart/form-data" action="{% url 'viewagent' %}">
+    
+            <form method="POST" class="login-form" enctype="multipart/form-data" action="">
                 {% csrf_token %}
-                <h2 style="color: #392039; letter-spacing: 1px;">ADD NEW CAMPIGN</h2>
-                
-                <div class="error-message {% if messages %}active{% endif %}">
+                <div>
                     {% if messages %}
                         {% for message in messages %}
-                            <p>{{ message }}</p>
+                            <div class="{% if message.tags == 'success' %}success-message{% else %}error-message{% endif %} active">
+                                <p>{{ message }}</p>
+                            </div>
                         {% endfor %}
                     {% endif %}
                 </div>
-                
+    
+                <h2 style="color: #392039; letter-spacing: 1px;">ADD NEW CAMPAIGN</h2>
+    
                 <div class="form-group">
                     <div class="input-icon">
                         <select name="agent" id="agent" required>
                             <option value="" disabled selected>Select an agent</option>
-                            <option value="agent1">Ajmal M</option>
-                            <option value="agent2">Ajay Kumar</option>
-                            <option value="agent3">Anupriya S</option>
-                            <option value="agent4">Danya</option>
+                            {% for agent in agents %}
+                                <option value="{{ agent.id }}">{{ agent.user.first_name }} {{ agent.user.last_name }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                 </div>
-                
+    
                 <div class="form-group">
                     <label class="role-label" for="start_date">Start Date</label>
                     <div class="input-icon">
@@ -593,7 +597,7 @@ hr {
                         <input type="date" name="start_date" id="start_date" required>
                     </div>
                 </div>
-                
+    
                 <div class="form-group">
                     <label class="role-label" for="end_date">End Date</label>
                     <div class="input-icon">
@@ -601,6 +605,7 @@ hr {
                         <input type="date" name="end_date" id="end_date" required>
                     </div>
                 </div>
+    
                 <div class="form-group">
                     <label class="role-label" for="start_time">Time</label>
                     <div class="input-icon">
@@ -608,27 +613,28 @@ hr {
                         <input type="time" name="start_time" id="start_time" required>
                     </div>
                 </div>
-                
+    
                 <div class="form-group">
                     <div class="input-icon">
                         <i class="fas fa-map-marker-alt"></i>
                         <input type="text" name="location" id="location" placeholder="Location" required>
                     </div>
                 </div>
-                
+    
                 <div class="form-group">
                     <label for="img" class="file-upload-label">
                         <i class="fa-regular fa-folder-open"></i> Upload Image
                     </label>
                     <input type="file" name="img" id="img" class="file-upload-input" required>
                 </div>
-                
+    
                 <div class="login-buttons">
                     <button type="submit" class="login-button">SUBMIT DETAILS</button>
                 </div>
             </form>
         </div>
     </div>
+    
     
 
 <footer class="footer">

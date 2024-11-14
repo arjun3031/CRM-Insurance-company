@@ -366,6 +366,7 @@ hr {
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    min-width: 450px;
 }
 
 .card:hover {
@@ -524,9 +525,8 @@ hr {
             <li><a href="{% url 'viewclientsbyagent' %}"><i class="fa fa-users"></i> View Clients</a></li>
             <li>
                 <a style="color: rgb(51, 5, 41);"  href="{% url 'viewcampaignbyagent' %}"><i class="fa fa-bullhorn"></i> Campaigns</a>
-                <!-- <span class="badge">2</span> -->
             </li>    
-            <a href="{% url 'profile' %}"><i class="fa-solid fa-chart-line"></i> Profile</a></li>
+            <a href="{% url 'profile' %}"><i class="fa-solid fa-user"></i> Profile</a></li>
             <li><a href="{% url 'homepage' %}"><i class="fa-solid fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </nav>
@@ -534,42 +534,30 @@ hr {
 
     <div class="dashboard">
         <div class="card-container">
-            <div class="card">
-                <div class="profile-container">
-                    <img src="{% static 'images/city1.webp' %}" alt="Agent 1" class="profile-image">
+            {% for campaign in campaigns %}
+                <div class="card">
+                    <div class="profile-container">
+                        <img src="{{ campaign.image.url }}" alt="Campaign Location Image" class="profile-image">
+                    </div>
+                    <div class="card-info">
+                        <h3>{{ campaign.location }}</h3>
+                        <p><strong>Start Date:</strong> {{ campaign.start_date }}</p>
+                        <p><strong>End Date:</strong> {{ campaign.end_date }}</p>
+                        <p><strong>Time:</strong> {{ campaign.start_time|time:"h:i A" }}</p>
+                        <p class="client-description">
+                            This campaign targets {{ campaign.location }}, focusing on engaging with potential clients in the area.
+                        </p>
+                    </div>
+                    <div class="center-btn">
+                        <a href="{% url 'addclient' %}" class="add-client-btn">Add Client</a>
+                    </div>
                 </div>
-                <div class="card-info">
-                    <h3>Kannur</h3>
-                    <p><strong>Start Date:</strong> 2024-01-01</p>
-                    <p><strong>End Date:</strong> 2024-12-31</p>
-                    <p><strong>Time:</strong> 10:00 AM</p>
-                    <p class="client-description">The campaign target is focused on Kannur, a bustling city located in a crowded area. The aim is to reach a wide audience in this densely populated area and engage with potential clients.</p>
-                </div>
-               
-                <div class="center-btn">
-                    <a href="{% url 'addclient' %}" class="add-client-btn">Add Client</a>
-                </div>
-            </div>
-    
-            <div class="card">
-                <div class="profile-container">
-                    <img src="{% static 'images/calicut.webp' %}" alt="Agent 2" class="profile-image">
-                </div>
-                <div class="card-info">
-                    <h3>Calicut</h3>
-                    <p><strong>Start Date:</strong> 2024-02-01</p>
-                    <p><strong>End Date:</strong> 2024-12-31</p>
-                    <p><strong>Time:</strong> 1:30 PM</p>
-                    <p class="client-description">The campaign target is focused on Kozhikode, a vibrant city located in a bustling area. The objective is to engage with a wide audience in this rapidly growing, densely populated region, fostering strong connections with potential clients.</p>
-                </div>
-                
-                <div class="center-btn">
-                    <a href="{% url 'addclient' %}" class="add-client-btn">Add Client</a>
-                </div>
-                
-            </div>
+            {% empty %}
+                <p>No campaigns assigned.</p>
+            {% endfor %}
         </div>
     </div>
+    
     
     
 

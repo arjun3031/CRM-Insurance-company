@@ -510,21 +510,22 @@ hr {
             
             <div class="login-form">
                 <h2 style="
-    color: #450d49; 
-    letter-spacing: 1px; 
-    font-size: 26px; 
-    font-family: 'Poppins', sans-serif; 
-    text-transform: uppercase; 
-    font-weight: 550; 
-    text-align: center; 
-    margin-bottom: 30px; 
-    padding: 10px; 
-    border-bottom: 2px solid #28041e;
-    display: inline-block;
-    transition: transform 0.3s ease;">
-    Jan Suraksha             <i class="fa-solid fa-hand-holding-heart"></i>
+                color: #450d49; 
+                letter-spacing: 1px; 
+                font-size: 26px; 
+                font-family: 'Poppins', sans-serif; 
+                text-transform: uppercase; 
+                font-weight: 550; 
+                text-align: center; 
+                margin-bottom: 30px; 
+                padding: 10px; 
+                border-bottom: 2px solid #28041e;
+                display: inline-block;
+                transition: transform 0.3s ease;">
+                Jan Suraksha <i class="fa-solid fa-hand-holding-heart"></i>
+                </h2>
 
-</h2>
+
                 <div id="message-container">
                     {% if messages %}
                     <div class="message-container">
@@ -537,7 +538,7 @@ hr {
                     {% endif %}
                 </div>
 
-                <form action="" method="POST">
+                <form action="{% url 'userlog' %}" method="POST">
                     {% csrf_token %}
                     <div class="form-group">
                         <div class="input-icon">
