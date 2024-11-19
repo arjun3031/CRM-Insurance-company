@@ -591,6 +591,97 @@ label {
         font-size: 18px; 
     }
 }
+.error-message, .success-message {
+    padding: 15px;
+    margin-bottom: 10px;
+    margin-top: 7px;
+    border-radius: 5px;
+    display: none;
+    text-align: center;
+}
+
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.error-message.active, .success-message.active {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .error-message, .success-message {
+        font-size: 10px;
+        padding: 8px;
+        margin-top: 8px;
+    }
+}
+
+
+.validation-message {
+    margin-top: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 5px 10px;
+    opacity: 0; 
+    max-width: 400px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.validation-message.error {
+    color: #f44336; 
+    background-color: #ffebee;
+    border-left: 4px solid #f44336;
+    transform: translateX(10px);
+}
+
+.validation-message.success {
+    color: #4CAF50; 
+    background-color: #e8f5e9;
+    border-left: 4px solid #4CAF50;
+    transform: translateX(10px);
+}
+
+.validation-message.warning {
+    color: #ff9800; 
+    background-color: #fff3e0;
+    border-left: 4px solid #ff9800;
+    transform: translateX(10px);
+}
+
+.validation-message i {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+.login-button {
+    background-color: #4a154d;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-button:hover {
+    background-color: #353039;
+}
+
+.login-button.disabled {
+    background-color: #f44336;
+    cursor: not-allowed;
+}
+
+.login-button.disabled:hover {
+    background-color: #f44336;
+}
 
     </style>
 </head>
@@ -604,9 +695,6 @@ label {
                 <p>Insurance Company</p>
             </div>
         </div>
-        <!-- <div class="search-bar">
-            <input type="text" placeholder="Search...">
-        </div> -->
         <div class="toggle-btn">
             <i class="fas fa-bars"></i>
         </div>
@@ -615,10 +703,10 @@ label {
             <li><a href="{% url 'viewclientsbyagent' %}"><i class="fa fa-users"></i> View Clients</a></li>
             <li>
                 <a href="{% url 'viewcampaignbyagent' %}"><i class="fa fa-bullhorn"></i> Campaigns</a>
-                <span class="badge">2</span>
+                <span class="badge">{{ campaign_count }}</span>
             </li>            
             <li><a  href="{% url 'profile' %}"><i class="fa-solid fa-user"></i>Profile</a></li>
-            <li><a href="{% url 'homepage' %}"><i class="fa-solid fa-sign-out-alt"></i> Logout</a></li>
+            <li><a href="{% url 'logout' %}"><i class="fa-solid fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </nav>
 
@@ -628,89 +716,121 @@ label {
         <div class="login-container">
             <div class="login-image"></div>
             
-            <form id="form1" class="login-form" enctype="multipart/form-data" action="">
-                <h2>ENTER BASIC INFORMATIONS OF CLIENT</h2>
-                <div class="form-row">
-                    <div class="form-group">
-                        <div class="input-icon">
-                            <i class="fas fa-user"></i>
-                            <input type="text" name="fname" placeholder="First name" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-icon">
-                            <i class="fas fa-user"></i>
-                            <input type="text" name="lname" placeholder="Last name" required>
-                        </div>
-                    </div>
-                </div>
+            <form id="form1" class="login-form" enctype="multipart/form-data" 
+            onsubmit="event.preventDefault(); submitForm('form1','form2');">
+            {% csrf_token %}
 
-                <div class="form-group">
-                    <div class="input-icon">
-                        <i class="fas fa-home"></i>
-                        <textarea name="address" placeholder="Address" required></textarea>
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <div class="input-icon">
-                        <i class="fas fa-calendar-alt"></i>
-                        <input type="text" name="dob" id="dob" placeholder="Date of Birth" required>
-                    </div>
-                </div>
-                
-                
+            <div>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="{% if message.tags == 'success' %}success-message{% else %}error-message{% endif %} active">
+                            <p>{{ message }}</p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <h2>ENTER BASIC INFORMATIONS OF CLIENT</h2>
+            <div class="form-row">
                 <div class="form-group">
                     <div class="input-icon">
                         <i class="fas fa-user"></i>
-                        <input type="number" name="age" placeholder="Age" required min="1">
+                        <input type="text" name="fname" id="fname" placeholder="First name" required>
                     </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <div class="input-icon">
-                            <i class="fas fa-briefcase"></i>
-                            <input type="text" name="profession" placeholder="Profession" required>
-                        </div>
-                    </div>
-                
-                    <div class="form-group">
-                        <div class="input-icon">
-                            <i class="fa-solid fa-indian-rupee-sign"></i>
-                            <input type="number" name="annual_income" placeholder="Annual Income" required min="0" step="0.01">
-                        </div>
-                    </div>
+                    <div class="validation-message" id="fname-message"></div>
                 </div>
                 <div class="form-group">
                     <div class="input-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                        <input type="text" name="qualification" placeholder="Qualification" required>
+                        <i class="fas fa-user"></i>
+                        <input type="text" name="lname" id="lname" placeholder="Last name" required>
                     </div>
+                    <div class="validation-message" id="lname-message"></div>
                 </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <div class="input-icon">
-                            <i class="fas fa-id-card"></i>
-                            <input type="text" name="aadhar" placeholder="Aadhar Card Number" required>
-                        </div>
-                    </div>
-                
-                    <div class="form-group">
-                        <div class="input-icon">
-                            <i class="fas fa-id-badge"></i>
-                            <input type="text" name="pan" placeholder="PAN Number" required>
-                        </div>
-                    </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="input-icon">
+                    <i class="fas fa-phone"></i>
+                    <input type="text" name="phone" id="phone" placeholder="Mobile number" required>
                 </div>
+                <div class="validation-message" id="phone-message"></div>
+            </div>
+            
+            <div class="form-group">
+                <div class="input-icon">
+                    <i class="fas fa-home"></i>
+                    <textarea name="address" id="address" placeholder="Address" required></textarea>
+                </div>
+                <div class="validation-message" id="address-message"></div>
+            </div>
+            
+            <div class="form-group">
+                <div class="input-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                    <input type="date" name="dob" id="dob" placeholder="Date of Birth" required>
+                </div>
+                <div class="validation-message" id="dob-message"></div>
+            </div>
+            
+            <div class="form-group">
+                <div class="input-icon">
+                    <i class="fas fa-user"></i>
+                    <input type="number" name="age" id="age" placeholder="Age" required min="1">
+                </div>
+                <div class="validation-message" id="age-message"></div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fas fa-briefcase"></i>
+                        <input type="text" name="profession" id="profession" placeholder="Profession" required>
+                    </div>
+                    <div class="validation-message" id="profession-message"></div>
+                </div>
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fa-solid fa-indian-rupee-sign"></i>
+                        <input type="number" name="annual_income" id="annual_income" placeholder="Annual Income" required min="0" step="0.01">
+                    </div>
+                    <div class="validation-message" id="annual_income-message"></div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="input-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                    <input type="text" name="qualification" id="qualification" placeholder="Qualification" required>
+                </div>
+                <div class="validation-message" id="qualification-message"></div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" name="aadhar" id="aadhar" placeholder="Aadhar Card Number" required>
+                    </div>
+                    <div class="validation-message" id="aadhar-message"></div>
+                </div>
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fas fa-id-badge"></i>
+                        <input type="text" name="pan" id="pan" placeholder="PAN Number" required>
+                    </div>
+                    <div class="validation-message" id="pan-message"></div>
+                </div>
+            </div>
                 
                 <div class="login-buttons">
-                    <button type="button" class="login-button" onclick="showForm('form2')">Next</button>
+                    <input type="submit" class="login-button" value="Next" onclick="showForm('form2')" id="submit-btn" disabled>
                 </div>
             </form>
     
-            <form id="form2" class="login-form" enctype="multipart/form-data" style="display: none;" action="">
+            <form id="form2" class="login-form" enctype="multipart/form-data" style="display: none;" onsubmit="event.preventDefault(); submitForm('form2', 'form3');">
+                {% csrf_token %}
+
                 <h2>ENTER ADDITIONAL DETAILS</h2>
             
                 <div class="form-group">
@@ -793,45 +913,47 @@ label {
                     <label for="source" class="checkbox-group-label">Insurance markup area</label>
                     <div class="checkbox-options">
                         <label class="checkbox-option">
-                            <input type="checkbox" name="area" value="social_media">
+                            <input type="checkbox" name="area" value="Life">
                             Life
                         </label>
                         <label class="checkbox-option">
-                            <input type="checkbox" name="area" value="customer">
+                            <input type="checkbox" name="area" value="Health">
                             Health
                         </label>
                         <label class="checkbox-option">
-                            <input type="checkbox" name="area" value="news">
+                            <input type="checkbox" name="area" value="Travel">
                             Travel
                         </label>
                         <label class="checkbox-option">
-                            <input type="checkbox" name="area" value="news">
+                            <input type="checkbox" name="area" value="Commercial">
                             Commercial
                         </label>
                         <label class="checkbox-option">
-                            <input type="checkbox" name="area" value="news">
+                            <input type="checkbox" name="area" value="Vehicle">
                             Vehicle
                         </label>
                     </div>
                 </div>
                 <div style="margin-bottom: 50px;" class="form-group">
-                    <label for="img" class="file-upload-label">
+                    <label for="img1" class="file-upload-label">
                         <i class="fas fa-upload"></i> Agent Visited Policy
                     </label>
-                    <input type="file" name="img" id="img" class="file-upload-input" required>
+                    <input type="file" name="img1" id="img1" class="file-upload-input" required>
                 </div>
                 
             
                 <div class="login-buttons">
                     <button type="button" class="login-button" onclick="showForm('form1')">Previous</button>
-                    <button type="button" class="login-button" onclick="showForm('form3')">Next</button>
+                    <button type="submit" class="login-button" onclick="showForm('form3')" >Next</button>
                 </div>
             </form>
 
 
 
 
-            <form id="form3" class="login-form" enctype="multipart/form-data" style="display: none;" action="">
+            <form id="form3" class="login-form" enctype="multipart/form-data" action="{% url 'form3_submission' %}" method="POST" style="display: none;">
+                {% csrf_token %}
+
                 <h2>ENTER ADDITIONAL DETAILS</h2>
             
                 
@@ -841,12 +963,12 @@ label {
                         <label>Willingness to Purchase Insurance</label>
                         <div class="radio-group">
                             <label class="radio-option">
-                                <input type="radio" name="Purchase" value="yes" required>
-                                <span class="radio-label">High</span>
+                                <input type="radio" name="Purchase" value="Yes" required>
+                                <span class="radio-label">Yes</span>
                             </label>
                             <label class="radio-option">
-                                <input type="radio" name="Purchase" value="no" required>
-                                <span class="radio-label">Low</span>
+                                <input type="radio" name="Purchase" value="No" required>
+                                <span class="radio-label">No</span>
                             </label>
                         </div>
                     </div>
@@ -878,7 +1000,7 @@ label {
                 <div class="form-group">
                     <div class="input-icon">
                         <i class="fa-regular fa-message"></i>
-                        <textarea name="feedback" placeholder="Agent Notes" required></textarea>
+                        <textarea name="agent_notes" placeholder="Agent Notes" required></textarea>
                     </div>
                 </div>
 
@@ -992,23 +1114,194 @@ label {
 </footer>
 <script>
 
-function updateProgressBar(input) {
-    var progressBar = document.getElementById('progress-bar');
-    var percentageValue = document.getElementById('percentage-value');
+document.addEventListener("DOMContentLoaded", () => {
+    const fields = [
+        { id: "fname", message: "First name is required." },
+        { id: "lname", message: "Last name is required." },
+        { id: "phone", message: "Enter a valid phone number.", pattern: /^[0-9]{10}$/ },
+        { id: "address", message: "Address is required." },
+        { id: "dob", message: "Date of Birth is required." },
+        { id: "age", message: "Enter a valid age.", pattern: /^[1-9][0-9]*$/ },
+        { id: "profession", message: "Profession is required." },
+        { id: "annual_income", message: "Enter a valid annual income.", pattern: /^[0-9]+(\.[0-9]{1,2})?$/ },
+        { id: "qualification", message: "Qualification is required." },
+        { id: "aadhar", message: "Enter a valid Aadhar number.", pattern: /^\d{12}$/ },
+        { id: "pan", message: "Enter a valid PAN number.", pattern: /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/ }
+    ];
+
+    const submitButton = document.getElementById("submit-btn");
+
+    function validateField(field) {
+        const input = document.getElementById(field.id);
+        const messageEl = document.getElementById(`${field.id}-message`);
+        const value = input.value.trim();
+
+        if (!value) {
+            messageEl.textContent = field.message;
+            messageEl.className = "validation-message error";
+            messageEl.style.opacity = 1;
+            return false;
+        }
+
+        if (field.pattern && !field.pattern.test(value)) {
+            messageEl.textContent = field.message;
+            messageEl.className = "validation-message warning";
+            messageEl.style.opacity = 1;
+            return false;
+        }
+
+        messageEl.textContent = "Looks good!";
+        messageEl.className = "validation-message success";
+        messageEl.style.opacity = 1;
+        return true;
+    }
+
+    fields.forEach(field => {
+        const input = document.getElementById(field.id);
+        input.addEventListener("input", () => {
+            const allValid = fields.every(f => validateField(f));
+            submitButton.disabled = !allValid;
+            submitButton.classList.toggle("disabled", !allValid);
+        });
+    });
+
+    const aadharInput = document.getElementById("aadhar");
+    const mobileInput = document.getElementById("phone");
+    const panInput = document.getElementById("pan");
     
-    var percentage = input.value;
-    progressBar.style.width = percentage + '%';
-    percentageValue.innerText = percentage + '%';
-}
+    aadharInput.addEventListener('input', function() {
+        const aadhar = this.value.trim();
+
+        if (!/^\d{12}$/.test(aadhar)) {
+            showMessage(aadharInput, "Aadhar number is required and must be 12 digits.", false);
+        } else {
+            checkAadhar(aadhar);
+        }
+    });
+
+    mobileInput.addEventListener('input', function() {
+        const mobile = this.value.trim();
+
+        if (!/^[0-9]{10}$/.test(mobile)) {
+            showMessage(mobileInput, "Please enter a valid mobile number.", false);
+        } else {
+            checkMobile(mobile);
+        }
+    });
+
+    panInput.addEventListener('input', function() {
+        const pan = this.value.trim();
+
+        if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(pan)) {
+            showMessage(panInput, "Please enter a valid PAN number.", false);
+        } else {
+            checkPan(pan);
+        }
+    });
+
+    function checkAadhar(aadhar) {
+        fetch(`/check-adhaar/?aadhar=${aadhar}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.exists) {
+                    showMessage(aadharInput, "Aadhar number already exists", false);
+                } else {
+                    showMessage(aadharInput, "Aadhar number is valid", true);
+                }
+            })
+            .catch(error => {
+                showMessage(aadharInput, "Error checking Aadhar number availability.", false);
+            });
+    }
+
+    function checkMobile(mobile) {
+        fetch(`/check-mobile?mobile=${mobile}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.exists) {
+                    showMessage(mobileInput, "Mobile number already exists", false);
+                } else {
+                    showMessage(mobileInput, "Mobile number is available", true);
+                }
+            })
+            .catch(error => {
+                showMessage(mobileInput, "Error checking mobile number availability.", false);
+            });
+    }
+
+    function checkPan(pan) {
+    fetch(`/check-pan/?pan=${pan}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.exists) {
+                showMessage(panInput, "PAN number already exists", false);
+            } else {
+                showMessage(panInput, "PAN number is valid", true);
+            }
+        })
+        .catch(error => {
+            showMessage(panInput, "Error checking PAN number availability.", false);
+        });
+    }
+
+
+    function showMessage(input, message, success) {
+        const messageEl = document.getElementById(`${input.id}-message`);
+        messageEl.textContent = message;
+        messageEl.className = success ? "validation-message success" : "validation-message error";
+        messageEl.style.opacity = 1;
+    }
+});
+
+
+
+
 
 
     function showForm(formId) {
-    document.getElementById("form1").style.display = "none";
-    document.getElementById("form2").style.display = "none";
-    document.getElementById("form3").style.display = "none";
-    document.getElementById(formId).style.display = "block";
-}
+        document.getElementById("form1").style.display = "none";
+        document.getElementById("form2").style.display = "none";
+        document.getElementById("form3").style.display = "none";
+        document.getElementById(formId).style.display = "block";
+    }
 
+   
+    function submitForm(formId, nextFormId) {
+        const form = document.getElementById(formId);
+
+        const formData = new FormData(form);
+
+        fetch(`/${formId}/`, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById(formId).style.display = 'none';
+                if (nextFormId) {
+                    document.getElementById(nextFormId).style.display = 'block';
+                }
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while submitting the form.');
+        });
+    }
+
+
+
+    function updateProgressBar(slider) {
+        var percentage = slider.value;
+        document.getElementById("progress-bar").style.width = percentage + "%";
+        document.getElementById("percentage-value").innerText = percentage + "%";
+    }
 
     const toggleBtn = document.querySelector('.toggle-btn');
     const navbarLinks = document.querySelector('.navbar-links');
@@ -1016,17 +1309,6 @@ function updateProgressBar(input) {
     toggleBtn.addEventListener('click', () => {
         navbarLinks.classList.toggle('active');
     });
-
-    document.getElementById('toggleCurrent').addEventListener('click', function () {
-                    const passwordField = document.getElementById('password');
-                    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-                    passwordField.setAttribute('type', type);
-                    this.classList.toggle('fa-eye-slash');
-                });
-                flatpickr("#dob", {
-        dateFormat: "Y-m-d", 
-    });
-          
 </script>
 
 </body>

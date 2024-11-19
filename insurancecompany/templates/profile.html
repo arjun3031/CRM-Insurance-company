@@ -494,10 +494,10 @@ p {
             <li><a href="{% url 'viewclientsbyagent' %}"><i class="fa fa-users"></i> View Clients</a></li>
             <li>
                 <a href="{% url 'viewcampaignbyagent' %}"><i class="fa fa-bullhorn"></i> Campaigns</a>
-                <span class="badge">2</span>
+                <span class="badge">{{ campaign_count }}</span>
             </li>
             <li><a style="color: rgb(51, 5, 41);" href="{% url 'profile' %}"><i class="fa-solid fa-user"></i>Profile</a></li>
-            <li><a href="{% url 'homepage' %}"><i class="fa-solid fa-sign-out-alt"></i> Logout</a></li>
+            <li><a href="{% url 'logout' %}"><i class="fa-solid fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </nav>
 

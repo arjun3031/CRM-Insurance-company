@@ -579,7 +579,7 @@ h2:hover {
                             <a style="text-decoration: none;color: white;" href="{% url 'agent_prfile_by_admin' agent.id  %}"><i class="fas fa-user"></i>  Profile</a>
                         </button>
                         <button class="clients-btn">
-                            <a style="text-decoration: none;color: white;" href="{% url 'viewclients' %}"><i class="fas fa-users"></i>  Clients</a>
+                            <a style="text-decoration: none;color: white;" href="{% url 'viewclients' agent.id %}"><i class="fas fa-users"></i>  Clients</a>
                         </button>
                     </div>
                     

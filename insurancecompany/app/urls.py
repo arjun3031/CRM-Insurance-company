@@ -19,8 +19,8 @@ urlpatterns = [
         path('editprofilebyadmin/<int:agent_id>', views.editprofilebyadmin, name='editprofilebyadmin'),
  
         path('location', views.location, name='location'),
-        path('viewclients', views.viewclients, name='viewclients'),
-        path('moreaboutclientbyadmin', views.moreaboutclientbyadmin, name='moreaboutclientbyadmin'),
+        path('viewclients/<int:agent_id>/', views.viewclients, name='viewclients'),
+        path('moreaboutclientbyadmin/<int:client_id>', views.moreaboutclientbyadmin, name='moreaboutclientbyadmin'),
 
         path('addcampaign', views.addcampaign, name='addcampaign'),
         path('viewcampaign', views.viewcampaign, name='viewcampaign'),
@@ -35,17 +35,39 @@ urlpatterns = [
 
         path('agenthome', views.agenthome, name='agenthome'),  
         path('profile', views.profile, name='profile'),
-  
+
         path('resetpassword', views.resetpassword, name='resetpassword'), 
     
-        path('check-phone/', views.check_phone, name='check_phone'),
+        path('check-mobile/', views.check_mobile, name='check_mobile'),
+        path('check-username/', views.check_username, name='check_username'),
+        path('check-email/', views.check_email, name='check_email'),
         path('editprofile', views.editprofile, name='editprofile'),
 
+        path('check-adhaar/', views.check_adhaar, name='check_adhaar'),
+        path('check-pan/', views.check_pan, name='check_pan'),
+        path('addclient', views.addclient, name='addclient'), 
+        path('form1/', views.add_client_form1, name='add_client_form1'),
+        path('form2/', views.add_client_form2, name='add_client_form2'),
+        path('form3/', views.form3_submission, name='form3_submission'),
 
-        path('addclient', views.addclient, name='addclient'),    
+
+
+
+
+
+
+
+
+
+
         path('viewclientsbyagent', views.viewclientsbyagent, name='viewclientsbyagent'),    
-        path('moreaboutclient', views.moreaboutclient, name='moreaboutclient'),    
-        path('editclient', views.editclient, name='editclient'),    
+        path('moreaboutclient/<int:client_id>/', views.moreaboutclient, name='moreaboutclient'),
+
+
+        path('editclient/<int:client_id>/', views.editclient, name='editclient'),
+        path('update_client/<int:client_id>/', views.update_client, name='update_client'),
+
+
         path('viewcampaignbyagent', views.viewcampaignbyagent, name='viewcampaignbyagent'),    
 
 ]

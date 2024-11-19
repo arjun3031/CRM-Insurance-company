@@ -434,51 +434,61 @@ textarea {
 
 
     <div class="card">
-        <h2><b style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;color: #351839;">MANU PRASAD</b></h2>
-        
+        <h2 style="background-color: #351839; height: 70px; display: flex; justify-content: center; align-items: center;">
+            <b style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; color: #ffffff; text-transform: uppercase;">
+                {{ client.first_name }} {{ client.last_name }}
+            </b>
+        </h2>
+                
         <div id="basic-info" class="card-content">
             <div class="form-group">
-                <input type="text" name="mobile" value="9834567890" readonly>
+                <label>Mobile</label>
+                <input type="text" value="{{ client.phone }}" readonly>
             </div>
-            
             <div class="form-group">
-                <input type="text" name="profession" value="Teacher" readonly>
+                <label>Profession</label>
+                <input type="text" value="{{ client.profession }}" readonly>
             </div>
-    
             <div class="form-group">
                 <label>Aadhar Card Number</label>
-                <input type="text" name="aadhar" placeholder="1234 5678 9101" required>
+                <input type="text" value="{{ client.aadhar }}" readonly>
             </div>
-    
             <div class="form-group">
                 <label>PAN Number</label>
-                <input type="text" name="pan" placeholder="ABCDE1234F" required>
+                <input type="text" value="{{ client.pan }}" readonly>
             </div>
     
             <div class="form-group">
                 <label>Income Level</label>
                 <div class="radio-group">
-                    <label><input type="radio" name="income_level" value="low" disabled> Low</label>
-                    <label><input type="radio" name="income_level" value="medium" checked disabled> Medium</label>
-                    <label><input type="radio" name="income_level" value="high" disabled> High</label>
+                    <label>
+                        <input type="radio" name="income_level" value="low" {% if client.income_level == 'low' %} checked {% endif %} disabled> Low
+                    </label>
+                    <label>
+                        <input type="radio" name="income_level" value="medium" {% if client.income_level == 'medium' %} checked {% endif %} disabled> Medium
+                    </label>
+                    <label>
+                        <input type="radio" name="income_level" value="high" {% if client.income_level == 'high' %} checked {% endif %} disabled> High
+                    </label>
                 </div>
             </div>
-    
+            
             <div class="form-group">
                 <div class="label-radio-container">
                     <label>Presence of Kids</label>
                     <div class="radio-group">
                         <label class="radio-option">
-                            <input type="radio" name="children" value="yes" required checked disabled>
+                            <input type="radio" name="children" value="yes" {% if client.children == 'yes' %} checked {% endif %} required disabled>
                             <span class="radio-label">Yes</span>
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="children" value="no" required disabled>
+                            <input type="radio" name="children" value="no" {% if client.children == 'no' %} checked {% endif %} required disabled>
                             <span class="radio-label">No</span>
                         </label>
                     </div>
                 </div>
             </div>
+            
     
             <button type="button" class="more-button" onclick="toggleDetails()">More</button>
         </div>
@@ -488,140 +498,137 @@ textarea {
                 <label for="source" class="checkbox-group-label">Source of Information</label>
                 <div class="checkbox-options">
                     <label class="checkbox-option">
-                        <input type="checkbox" name="source" value="social_media" checked disabled>
+                        <input type="checkbox" name="source" value="social_media" 
+                               {% if 'social_media' in client_sources %} checked {% endif %} disabled>
                         Social Media
                     </label>
                     <label class="checkbox-option">
-                        <input type="checkbox" name="source" value="customer" disabled>
+                        <input type="checkbox" name="source" value="customer" 
+                               {% if 'customer' in client_sources %} checked {% endif %} disabled>
                         Customer
                     </label>
                     <label class="checkbox-option">
-                        <input type="checkbox" name="source" value="news" checked disabled>
+                        <input type="checkbox" name="source" value="news" 
+                               {% if 'news' in client_sources %} checked {% endif %} disabled>
                         News
                     </label>
                 </div>
             </div>
-    
+            
+            
             <div class="form-group">
                 <div class="input-icon">
-                    <textarea name="feedback" placeholder="Customer feedback" required disabled>
-                        This is some sample customer feedback by Manu Prasad 
-                    </textarea>
+                    <textarea name="feedback" placeholder="Customer feedback" required disabled>{{ client.feedback }}</textarea>
                 </div>
             </div>
-    
+            
             <div class="form-group">
                 <label for="claim_satisfaction" class="rating-label">Claim Satisfaction</label>
                 <div class="progress-container">
                     <div class="progress-bar-container">
-                        <div id="progress-bar" class="progress-bar" style="width: 40%;"></div>
+                        <div id="progress-bar" class="progress-bar" style="width: {{ client.claim_satisfaction }}%;"></div>
                     </div>
                 </div>
                 <div class="percentage-display">
-                    <span id="percentage-value">40%</span>
+                    <span id="percentage-value">{{ client.claim_satisfaction }}%</span>
                 </div>
             </div>
-    
-            <div class="form-group">
-                <label for="source" class="checkbox-group-label">Insurance markup area</label>
-                <div class="checkbox-options">
-                    <label class="checkbox-option">
-                        <input type="checkbox" name="area" value="social_media" checked disabled>
-                        Life
-                    </label>
-                    <label class="checkbox-option">
-                        <input type="checkbox" name="area" value="customer" disabled>
-                        Health
-                    </label>
-                    <label class="checkbox-option">
-                        <input type="checkbox" name="area" value="travel" disabled>
-                        Travel
-                    </label>
-                    <label class="checkbox-option">
-                        <input type="checkbox" name="area" value="Commercial" disabled>
-                        Commercial
-                    </label>
-                    <label class="checkbox-option">
-                        <input type="checkbox" name="area" value="Vehicle" disabled checked>
-                        Vehicle
-                    </label>
-                </div>
+            
+            <div class="selected-areas">
+                <label>Selected Areas</label>
+                <ul>
+                    {% for area in client_areas %}
+                        <li style="margin-left: 20px;">{{ area|title }}</li>
+                    {% endfor %}
+                </ul>
             </div>
-    
-            <div style="margin-bottom: 50px;" class="form-group">
-                <a href="path-to-your-file.pdf" download="AgentVisitedPolicy.pdf">
-                    <button style="background-color: #eaaee4;width: 100%;" type="button"> Agent Visited Policy Download <i class="fas fa-download"></i> 
+            
+            
+            
+
+            <div class="form-group" style="margin-bottom: 50px;">
+                <a href="{{ client.agent_visited_policy.url }}" download="{{ client.agent_visited_policy.name }}">
+                    <button style="background-color: #eaaee4;width: 100%;" type="button">
+                        Agent Visited Policy Download <i class="fas fa-download"></i>
                     </button>
                 </a>
             </div>
+            
+            
     
             <div class="form-group">
                 <div class="label-radio-container">
                     <label>Willingness to Purchase Insurance</label>
                     <div class="radio-group">
                         <label class="radio-option">
-                            <input type="radio" name="Purchase" value="yes" required disabled checked>
-                            <span class="radio-label">High</span>
+                            <input type="radio" name="Purchase" value="yes" {% if client.willingness_to_purchase|default:''|lower == 'yes' %} checked {% endif %} disabled>
+                            <span class="radio-label">Yes</span>
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="Purchase" value="no" required disabled>
-                            <span class="radio-label">Low</span>
+                            <input type="radio" name="Purchase" value="no" {% if client.willingness_to_purchase|default:''|lower == 'no' %} checked {% endif %} disabled>
+                            <span class="radio-label">No</span>
                         </label>
                     </div>
                 </div>
             </div>
-    
+            
+            
             <div class="form-group">
                 <div class="label-radio-container">
                     <label>Willingness to Share Previous Insurance</label>
                     <div class="radio-group">
                         <label class="radio-option">
-                            <input type="radio" name="Previous" value="yes" required disabled>
+                            <input type="radio" name="Previous" value="yes" {% if client.willingness_to_share_previous_insurance == 'yes' %} checked {% endif %} disabled>
                             <span class="radio-label">Yes</span>
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="Previous" value="no" required disabled checked>
+                            <input type="radio" name="Previous" value="no" {% if client.willingness_to_share_previous_insurance == 'no' %} checked {% endif %} disabled>
                             <span class="radio-label">No</span>
                         </label>
                     </div>
                 </div>
             </div>
-    
+            
             <div class="form-group">
-                <textarea name="feedback" required disabled>
-                    Sample customer preferences of Manu Prasad
-                </textarea>
+                <textarea name="feedback" required disabled>{{ client.feedback }}</textarea>
             </div>
-    
+            
             <div class="form-group">
-                <textarea name="feedback" placeholder="Agent Notes" required disabled>Nothing</textarea>
+                <textarea name="feedback" placeholder="Agent Notes" required disabled>{{ client.agent_notes }}</textarea>
             </div>
-    
+            
             <div class="form-group">
                 <div class="label-radio-container">
                     <label>Willingness to Switch Over Another Insurance</label>
                     <div class="radio-group">
                         <label class="radio-option">
-                            <input type="radio" name="Switch" value="yes" required disabled>
+                            <input type="radio" name="Switch" value="yes" {% if client.willingness_to_switch == 'yes' %} checked {% endif %} disabled>
                             <span class="radio-label">Yes</span>
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="Switch" value="no" required disabled checked>
+                            <input type="radio" name="Switch" value="no" {% if client.willingness_to_switch == 'no' %} checked {% endif %} disabled>
                             <span class="radio-label">No</span>
                         </label>
                     </div>
                 </div>
             </div>
+            
+            
+            
+
+            
     
             <div style="margin-bottom: 50px;" class="form-group">  
-                <a href="path-to-your-file.pdf" download="Profile Details.pdf">
+                <a href="{{ client.existing_profile_details.url }}" download="{{ client.existing_profile_details.name }}">
                     <button style="background-color: #eaaee4;width: 100%;" type="button"> Existing Profile Details<i class="fas fa-download"></i> 
                     </button>
                 </a>
             </div>
+
+          
     
             <div class="form-group">
-                <button style="width: 100%;background-color: #342b30;color: white;" type="button" onclick="toggleDetails()">Previous</button>
+                <button style="width: 100%;background-color: #4e2853;color: white;" type="button" onclick="toggleDetails()">Previous</button>
             </div>
         </div>
     </div>

@@ -566,7 +566,7 @@ hr {
             <li><a href="{% url 'viewagent' %}"><i class="fa fa-users"></i> View Agents</a></li>
             <li><a href="{% url 'addcampaign' %}"><i class="fa fa-bullhorn"></i> Campaigns</a></li>
             <li><a href="{% url 'viewcampaign' %}"><i class="fa-solid fa-chart-line"></i> View Campaigns</a></li>
-            <li><a href="{% url 'homepage' %}"><i class="fa-solid fa-sign-out-alt"></i> Logout</a></li>
+            <li><a href="{% url 'logout' %}"><i class="fa-solid fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </nav>
 
@@ -603,7 +603,14 @@ hr {
                     <label class="role-label" for="start_date">Start Date</label>
                     <div class="input-icon">
                         <i class="fas fa-calendar-alt"></i>
-                        <input type="date" name="start_date" id="start_date" required value="{{ campaign.start_date|date:'Y-m-d' }}"> 
+                        <input 
+                            type="date" 
+                            name="start_date" 
+                            id="start_date" 
+                            required 
+                            value="{{ campaign.start_date|date:'Y-m-d' }}" 
+                            oninput="validateDates()"
+                        > 
                     </div>
                 </div>
                 
@@ -611,23 +618,44 @@ hr {
                     <label class="role-label" for="end_date">End Date</label>                    
                     <div class="input-icon">
                         <i class="fas fa-calendar-alt"></i>
-                        <input type="date" name="end_date" id="end_date" required value="{{ campaign.end_date|date:'Y-m-d' }}"> 
+                        <input 
+                            type="date" 
+                            name="end_date" 
+                            id="end_date" 
+                            required 
+                            value="{{ campaign.end_date|date:'Y-m-d' }}" 
+                            oninput="validateDates()"
+                        > 
                     </div>
+                    <small 
+                        id="error-message" 
+                        style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        * End Date cannot be earlier than Start Date.
+                    </small>
                 </div>
+                
                 
                 <div class="form-group">
                     <div class="input-icon">
                         <i class="fas fa-clock"></i>
-                        <input type="time" name="start_time" id="start_time" required value="{{ campaign.start_time|date:'H:i' }}">
+                        <input type="time" name="start_time" id="start_time" required value="{{ campaign.start_time|date:'H:i' }}" oninput="validateTime()">
                     </div>
+                    <small id="error-message-time" style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        * Time must be between 08:00 AM and 08:00 PM
+                    </small>
                 </div>
+                
                 
                 <div class="form-group">
                     <div class="input-icon">
                         <i class="fas fa-map-marker-alt"></i>
-                        <input type="text" name="location" id="location" placeholder="Location" required value="{{ campaign.location }}">
+                        <input type="text" name="location" id="location" placeholder="Location" required value="{{ campaign.location }}" oninput="validateLocation()">
                     </div>
+                    <small id="error-message-location" style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        * Location is required.
+                    </small>
                 </div>
+                
                 
                 <div class="form-group">
                     <label for="img" class="file-upload-label">
@@ -637,8 +665,8 @@ hr {
                 </div>
                 
                 <div class="login-buttons">
-                    <button type="submit" class="login-button">EDIT DETAILS</button>
-                </div>
+                    <button type="submit" class="login-button" id="submit-button" disabled>EDIT DETAILS</button>
+                </div>                
             </form>
         </div>
     </div>
@@ -721,6 +749,73 @@ hr {
 </footer>
 
 <script>
+
+
+const startDateInput = document.getElementById('start_date');
+const endDateInput = document.getElementById('end_date');
+const errorMessage = document.getElementById('error-message');
+const submitButton = document.getElementById('submit-button');
+
+validateDates();
+
+function validateDates() {
+    const startDate = startDateInput.value.trim();
+    const endDate = endDateInput.value.trim();
+    
+    errorMessage.style.display = "none";
+    submitButton.disabled = false;
+
+    if (startDate === "" || endDate === "") {
+        return;
+    }
+
+    if (new Date(endDate) < new Date(startDate)) {
+        errorMessage.style.display = "block";
+        submitButton.disabled = true; 
+    } else {
+        errorMessage.style.display = "none";
+    }
+
+    if (new Date(startDate) > new Date(endDate)) {
+        errorMessage.style.display = "block";
+        submitButton.disabled = true; 
+    }
+}
+
+
+const locationInput = document.getElementById('location');
+const errorMessageLocation = document.getElementById('error-message-location');
+
+function validateLocation() {
+    const locationValue = locationInput.value.trim();
+
+    if (locationValue === "") {
+        errorMessageLocation.style.display = "block";
+        submitButton.disabled = true;
+    } else {
+        errorMessageLocation.style.display = "none";
+        submitButton.disabled = false;
+    }
+}
+
+
+const timeInput = document.getElementById('start_time');
+const errorMessageTime = document.getElementById('error-message-time');
+
+function validateTime() {
+    const selectedTime = timeInput.value;
+    const [hours, minutes] = selectedTime.split(":").map(Number);
+    
+    if (hours < 8 || hours > 20 || (hours === 20 && minutes > 0)) {
+        errorMessageTime.style.display = "block";
+        submitButton.disabled = true;
+    } else {
+        errorMessageTime.style.display = "none";
+        submitButton.disabled = false;
+    }
+}
+
+
     const toggleBtn = document.querySelector('.toggle-btn');
     const navbarLinks = document.querySelector('.navbar-links');
 

@@ -338,7 +338,7 @@ hr {
     max-width: 500px;
     padding: 12px;
     font-size: 16px;
-    border: 2px solid #91568c;
+    border: 2px solid #301f2e;
     border-radius: 8px;
     background-color: #ffffff;
     color: #333;
@@ -349,12 +349,12 @@ hr {
 
 .filter-section select:focus {
     outline: none;
-    border-color: #ff69b4;
-    box-shadow: 0 0 5px rgba(255, 105, 180, 0.4);
+    border-color: #351c28;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
 }
 
 .filter-section select option {
-    background-color: #ffe6f2;
+    background-color: #ffffff;
     color: #333;
     font-size: 15px;
     padding: 10px;
@@ -437,9 +437,6 @@ hr {
                 <p>Insurance Company</p>
             </div>
         </div>
-        <!-- <div class="search-bar">
-            <input type="text" placeholder="Search...">
-        </div> -->
         <div class="toggle-btn">
             <i class="fas fa-bars"></i>
         </div>
@@ -448,7 +445,7 @@ hr {
             <li><a href="{% url 'viewagent' %}"><i class="fa fa-users"></i> View Agents</a></li>
             <li><a href="{% url 'addcampaign' %}"><i class="fa fa-bullhorn"></i> Campaigns</a></li>
             <li><a href="{% url 'viewcampaign' %}"><i class="fa-solid fa-chart-line"></i> View Campaigns</a></li>
-            <li><a href="{% url 'viewagent' %}"><i class="fa-solid fa-arrow-circle-left"></i></a></li>
+            <li><a href="{% url 'logout' %}"><i class="fa-solid fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </nav>
 
@@ -460,36 +457,42 @@ hr {
     <div class="main-container">
         <div class="agent-details">
             <div class="agent-image">
-                <img src="{% static 'images/ajay.jpg' %}" alt="Agent 1" >
+                <img src="{{ agent.image.url }}" alt="{{ agent.user.first_name }} {{ agent.user.last_name }}" />
             </div>
             <div class="agent-info">
-                <div class="agent-name">AJAY KUMAR</div>
+                <div class="agent-name">{{ agent.user.first_name }} {{ agent.user.last_name }}</div>
                 <div class="agent-icon">
                     <span>👤</span>Agent
                 </div>
                 <div class="contact-info">
-                    <p> Mobile: 9875978565</p>
-                    <p>✉️ Email: ajayk@gmail.com</p>
+                    <p> Mobile: {{ agent.phone }}</p>
+                    <p>✉️ Email: {{ agent.user.email }}</p>
                 </div>
             </div>
         </div>
+    
         <h2 class="table-heading">Collected Clients</h2>
-
-        <div class="filter-section">
-            <select>
-                <option>Select Client Name</option>
-                <option>Manu Pramod</option>
-                <option>Joyson</option>
-                <option>Anamika</option>
-                <option>Aswanth K</option>
-            </select>
-            <select>
-                <option>Select Location</option>
-                <option>Kannur</option>
-                <option>Calicut </option>
-                <option>Vatakara</option>
-                <option>Mavoor</option>
-            </select>
+    
+        <div class="filter-section" style="display: flex; justify-content: center; gap: 35px; align-items: center;">
+            <form method="GET" style="display: flex; gap: 35px;">
+                <select name="client_name" style="background-color: rgb(255, 255, 255); width: 250px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px; background-color: transparent; color: #565555; transition: border-color 0.3s;" onchange="this.form.submit()">
+                    <option value="">Select Client Name</option>
+                    {% for client in clients %}
+                        <option value="{{ client.first_name }} {{ client.last_name }}" {% if selected_client_name == client.first_name|add:" "|add:client.last_name %}selected{% endif %}>
+                            {{ client.first_name }} {{ client.last_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+    
+                <select name="profession" style="background-color: rgb(255, 255, 255); width: 250px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px; background-color: transparent; color: #565555; transition: border-color 0.3s;" onchange="this.form.submit()">
+                    <option value="">Select Profession</option>
+                    {% for profession in distinct_professions %}
+                        <option value="{{ profession }}" {% if selected_profession == profession %}selected{% endif %}>
+                            {{ profession }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
         </div>
     
         <div class="table-container">
@@ -500,47 +503,28 @@ hr {
                         <th>Address</th>
                         <th>Profession</th>
                         <th>Mobile Number</th>
-                        <th>Email</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Manu Pramod</td>
-                        <td>Kannur Street, Kannur</td>
-                        <td>Engineer</td>
-                        <td>9812345678</td>
-                        <td>manupramod@gmail.com</td>
-                        <td><a href="{% url 'moreaboutclientbyadmin' %}" class="view-more">View More</a></td>
-                    </tr>
-                    <tr>
-                        <td>Joyson</td>
-                        <td>Calicut</td>
-                        <td>Doctor</td>
-                        <td>9823456789</td>
-                        <td>joyson@gmail.com</td>
-                        <td><a href="#" class="view-more">View More</a></td>
-                    </tr>
-                    <tr>
-                        <td>Anamika</td>
-                        <td>Vatakara</td>
-                        <td>Teacher</td>
-                        <td>9834567890</td>
-                        <td>anamika@gmail.com</td>
-                        <td><a href="#" class="view-more">View More</a></td>
-                    </tr>
-                    <tr>
-                        <td>Aswanth K</td>
-                        <td>Mavoor</td>
-                        <td>Architect</td>
-                        <td>9845678901</td>
-                        <td>aswanthk@gmail.com</td>
-                        <td><a href="#" class="view-more">View More</a></td>
-                    </tr>
+                    {% for client in clients %}
+                        <tr>
+                            <td>{{ client.first_name }} {{ client.last_name }}</td>
+                            <td>{{ client.address }}</td>
+                            <td>{{ client.profession }}</td>
+                            <td>{{ client.phone }}</td>
+                            <td><a href="{% url 'moreaboutclientbyadmin' client.id %}" class="view-more">View More</a></td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" style="text-align: center;">No data found</td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
-        </div>        
+        </div>
     </div>
+    
 
 
 

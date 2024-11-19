@@ -11,7 +11,11 @@ import re
 from django.contrib.auth import authenticate, update_session_auth_hash
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
-
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
+from .models import Client
+from datetime import datetime
+from django.core.exceptions import ValidationError
 
 
 
@@ -63,6 +67,10 @@ def userlog(request):
             return redirect('loginpage')
     else:
         return redirect('loginpage')
+
+
+
+
 
 @login_required(login_url='homepage')
 def adminhome(request):
@@ -199,15 +207,41 @@ def editprofilebyadmin(request, agent_id):
 
     return render(request, 'editprofilebyadmin.html', {'agent': agent})
 
-
 def location(request):
     return render(request,'location.html')
 
-def viewclients(request):
-    return render(request,'viewclients.html')
+def viewclients(request, agent_id):
+    agent = get_object_or_404(Agent, id=agent_id)
+    clients = Client.objects.filter(agent=agent)
 
-def moreaboutclientbyadmin(request):
-    return render(request,'moreaboutclientbyadmin.html')
+    selected_client_name = request.GET.get('client_name')
+    selected_profession = request.GET.get('profession')
+
+    if selected_client_name:
+        clients = clients.filter(first_name__icontains=selected_client_name.split(' ')[0],
+                                 last_name__icontains=selected_client_name.split(' ')[1] if len(selected_client_name.split(' ')) > 1 else '')
+    if selected_profession:
+        clients = clients.filter(profession__icontains=selected_profession)
+
+    distinct_professions = clients.values_list('profession', flat=True).distinct()
+    return render(request, 'viewclients.html', {
+        'agent': agent, 
+        'clients': clients,
+        'distinct_professions': distinct_professions,
+        'selected_client_name': selected_client_name, 
+        'selected_profession': selected_profession,
+    })
+
+def moreaboutclientbyadmin(request, client_id):
+    client = get_object_or_404(Client, id=client_id)
+    client_sources = client.source.split(',') if isinstance(client.source, str) else client.source
+    client_areas = client.insurance_area if isinstance(client.insurance_area, list) else client.insurance_area.split(',')
+    return render(request, 'moreaboutclientbyadmin.html', {
+        'client': client,
+        'client_sources': client_sources,
+        'client_areas': client_areas,
+    })
+
 
 def addcampaign(request):
     if request.method == "POST":
@@ -316,20 +350,29 @@ def delete_campaign(request, campaign_id):
     return redirect('viewcampaign')  
 
 
+
+
+
+@login_required(login_url='homepage')
 def agenthome(request):
-    return render(request,'agenthome.html')
+    agent = Agent.objects.filter(user=request.user).first()
+    campaign_count = Campaign.objects.filter(agent=agent).count() if agent else 0
+    return render(request, 'agenthome.html', {'campaign_count': campaign_count})
 
 def profile(request):
     if request.user.is_authenticated:
         try:
             agent = Agent.objects.get(user=request.user)
-            return render(request, 'profile.html', {'agent': agent})
+            campaign_count = Campaign.objects.filter(agent=agent).count() 
+            return render(request, 'profile.html', {'agent': agent, 'campaign_count': campaign_count})  
         except Agent.DoesNotExist:
-            return redirect('loginpage') 
+            return redirect('loginpage')
     else:
         return redirect('loginpage')
-
+    
 def resetpassword(request):
+    agent = Agent.objects.get(user=request.user)
+    campaign_count = Campaign.objects.filter(agent=agent).count() 
     if request.method == 'POST':
         current_password = request.POST.get('cpassword')
         new_password = request.POST.get('npassword')
@@ -357,11 +400,26 @@ def resetpassword(request):
 
         messages.success(request, "Password reset successfully.")
         return redirect('resetpassword')
-    return render(request, 'resetpassword.html')
+    return render(request, 'resetpassword.html',{'campaign_count': campaign_count})
 
-def check_phone(request):
-    phone = request.GET.get('phone')
-    exists = Agent.objects.filter(mobile=phone).exists()
+def check_mobile(request):
+    mobile = request.GET.get('mobile', '')
+    current_mobile = request.GET.get('current_mobile', '') 
+    if mobile:
+        exists = Agent.objects.filter(mobile=mobile).exclude(mobile=current_mobile).exists()
+        return JsonResponse({'exists': exists})
+    return JsonResponse({'exists': False})
+
+def check_username(request):
+    username = request.GET.get('username')
+    current_username = request.GET.get('current_username')
+    exists = User.objects.filter(username=username).exclude(username=current_username).exists()
+    return JsonResponse({'exists': exists})
+
+def check_email(request):
+    email = request.GET.get('email')
+    current_email = request.GET.get('current_email')
+    exists = User.objects.filter(email=email).exclude(email=current_email).exists()
     return JsonResponse({'exists': exists})
 
 def editprofile(request):
@@ -369,6 +427,8 @@ def editprofile(request):
     if not agent:
         messages.error(request, 'Agent profile not found.')
         return redirect('dashboard')
+    
+    campaign_count = Campaign.objects.filter(agent=agent).count()
 
     if request.method == 'POST':
         request.user.first_name = request.POST.get('first_name')
@@ -406,20 +466,222 @@ def editprofile(request):
 
         messages.success(request, 'Profile updated successfully')
         return redirect('profile')
+    return render(request, 'editprofile.html', {'agent': agent,'campaign_count': campaign_count})
 
-    return render(request, 'editprofile.html', {'agent': agent})
+def check_adhaar(request):
+    aadhar = request.GET.get('aadhar', '')
+    if aadhar:
+        exists = Client.objects.filter(aadhar=aadhar).exists()
+        return JsonResponse({'exists': exists})
+    return JsonResponse({'exists': False})
+
+def check_pan(request):
+    pan = request.GET.get('pan', '')
+    if pan:
+        exists = Client.objects.filter(pan=pan).exists()
+        return JsonResponse({'exists': exists})
+    return JsonResponse({'exists': False})
 
 def addclient(request):
-    return render(request,'addclient.html')
+    agent = Agent.objects.get(user=request.user)
+    campaign_count = Campaign.objects.filter(agent=agent).count()
+    return render(request, 'sample.html', {'agent': agent, 'campaign_count': campaign_count})
+
+def add_client_form1(request):
+    if request.method == 'POST':
+        fname = request.POST.get('fname')
+        lname = request.POST.get('lname')
+        phone = request.POST.get('phone')
+        address = request.POST.get('address')
+        dob = request.POST.get('dob')
+        age = request.POST.get('age')
+        profession = request.POST.get('profession')
+        annual_income = request.POST.get('annual_income')
+        qualification = request.POST.get('qualification')
+        aadhar = request.POST.get('aadhar')
+        pan = request.POST.get('pan')
+
+        client_id = request.session.get('client_id')
+        if client_id:
+            client = get_object_or_404(Client, id=client_id)
+        else:
+            client = Client()
+
+        agent = Agent.objects.get(user=request.user)
+        client.agent = agent 
+
+        client.first_name = fname
+        client.last_name = lname
+        client.phone = phone
+        client.address = address
+        client.dob = datetime.strptime(dob, '%Y-%m-%d')
+        client.age = age
+        client.profession = profession
+        client.annual_income = annual_income
+        client.qualification = qualification
+        client.aadhar = aadhar
+        client.pan = pan
+        client.save()
+
+        request.session['client_id'] = client.id
+
+        return JsonResponse({'success': True, 'client_id': client.id})
+    return JsonResponse({'success': False, 'message': 'Invalid request'})
+
+def add_client_form2(request):
+    if request.method == 'POST':
+        income_level = request.POST.get('income_level')
+        children = request.POST.get('children')
+        source = request.POST.getlist('source')
+        feedback = request.POST.get('feedback')
+        claim_satisfaction = request.POST.get('claim_satisfaction')
+        areas = request.POST.getlist('area')
+        img1 = request.FILES.get('img1')
+
+        client_id = request.session.get('client_id')
+        client = Client.objects.get(id=client_id)
+
+        client.income_level = income_level
+        client.children = children
+        client.source = ', '.join(source)
+        client.feedback = feedback
+        client.claim_satisfaction = claim_satisfaction
+        client.insurance_area = ', '.join(areas)
+        if img1:
+            client.agent_visited_policy = img1
+        client.save()
+
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+def form3_submission(request):
+    if request.method == 'POST':
+        purchase = request.POST.get('Purchase')
+        previous = request.POST.get('Previous')
+        feedback = request.POST.get('feedback')
+        agent_notes = request.POST.get('agent_notes')
+        switch = request.POST.get('Switch')
+        img = request.FILES.get('img')
+
+        try:
+            client_id = request.session.get('client_id')
+            if not client_id:
+                return JsonResponse({'error': 'No client found in session'}, status=400)
+
+            client = Client.objects.get(id=client_id)
+            agent = Agent.objects.get(user=request.user)
+            client.agent = agent
+
+            client.willingness_to_purchase = purchase
+            client.willingness_to_share_previous_insurance = previous
+            client.customer_preferences = feedback
+            client.agent_notes = agent_notes
+            client.willingness_to_switch = switch
+            client.existing_profile_details = img
+
+            client.save()
+            del request.session['client_id']
+            messages.success(request, 'Client added successfully!')
+            return redirect('addclient')
+
+        except Client.DoesNotExist:
+            return JsonResponse({'error': 'Client not found'}, status=404)
+        except ValidationError as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 def viewclientsbyagent(request):
-    return render(request,'viewclientsbyagent.html')
+    agent = Agent.objects.get(user=request.user)  
+    clients = Client.objects.filter(agent=agent)  
+    campaign_count = Campaign.objects.filter(agent=agent).count()
 
-def moreaboutclient(request):
-    return render(request,'moreaboutclient.html')
+    selected_client_name = request.GET.get('client_name')
+    selected_profession = request.GET.get('profession')
 
-def editclient(request):
-    return render(request,'editclient.html')
+    if selected_client_name:
+        clients = clients.filter(first_name__icontains=selected_client_name.split(' ')[0],
+                                 last_name__icontains=selected_client_name.split(' ')[1] if len(selected_client_name.split(' ')) > 1 else '')
+    if selected_profession:
+        clients = clients.filter(profession__icontains=selected_profession)
+
+    distinct_professions = clients.values_list('profession', flat=True).distinct()
+
+
+    return render(request, 'viewclientsbyagent.html', {
+        'agent': agent,
+        'campaign_count': campaign_count,
+        'clients': clients,  
+        'distinct_professions': distinct_professions,
+        'selected_client_name': selected_client_name, 
+        'selected_profession': selected_profession,})
+
+def moreaboutclient(request, client_id):
+    agent = Agent.objects.get(user=request.user)
+    client = get_object_or_404(Client, id=client_id)
+    client_sources = client.source.split(',') if isinstance(client.source, str) else client.source
+    client_areas = client.insurance_area if isinstance(client.insurance_area, list) else client.insurance_area.split(',')
+    campaign_count = Campaign.objects.filter(agent=agent).count()    
+    return render(request, 'moreaboutclient.html', {
+        'agent': agent,
+        'client': client,
+        'client_sources': client_sources,
+        'client_areas': client_areas,
+        'campaign_count': campaign_count,
+    })
+
+def editclient(request, client_id):
+    agent = Agent.objects.filter(user=request.user).first()
+    campaigns = Campaign.objects.filter(agent=agent)
+    campaign_count = campaigns.count()  
+    client = get_object_or_404(Client, id=client_id)
+    insurance_area_list = client.insurance_area if isinstance(client.insurance_area, list) else []
+
+    return render(request, 'editclient.html', {
+        'client': client, 
+        'campaigns': campaigns, 
+        'campaign_count': campaign_count, 
+        'insurance_area_list': insurance_area_list
+    })
+
+def update_client(request, client_id):
+    client = get_object_or_404(Client, id=client_id)
+
+    if request.method == "POST":
+        client.first_name = request.POST.get("fname")
+        client.last_name = request.POST.get("lname")
+        client.phone = request.POST.get("phone")
+        client.address = request.POST.get("address")
+        client.dob = request.POST.get("dob")
+        client.age = request.POST.get("age")
+        client.profession = request.POST.get("profession")
+        client.annual_income = request.POST.get("annual_income")
+        client.qualification = request.POST.get("qualification")
+        client.aadhar = request.POST.get("aadhar")
+        client.pan = request.POST.get("pan")
+        client.income_level = request.POST.get("income_level")
+        client.children = request.POST.get("children")
+        client.source = request.POST.getlist("source")
+        client.feedback = request.POST.get("feedback")
+        client.claim_satisfaction = request.POST.get("claim_satisfaction")
+        client.insurance_area = request.POST.getlist("area")
+
+        img1 = request.FILES.get("img1")
+        if img1:
+            client.img1 = img1
+
+        client.willingness_to_purchase = request.POST.get("Purchase")
+        client.willingness_to_share_previous_insurance = request.POST.get("Previous")
+        client.agent_notes = request.POST.get("agent_notes")
+        client.willingness_to_switch = request.POST.get("Switch")
+        client.save()
+
+        messages.success(request, "Client information updated successfully!")
+        return redirect('editclient', client_id=client.id)  
+
+    context = {
+        "client": client,
+    }
+    return render(request, 'moreaboutclient.html', context)
 
 
 def viewcampaignbyagent(request):
@@ -427,4 +689,5 @@ def viewcampaignbyagent(request):
     if not agent:
         return render(request, 'viewcampaignbyagent.html', {'error': "Agent not found"})
     campaigns = Campaign.objects.filter(agent=agent)
-    return render(request, 'viewcampaignbyagent.html', {'campaigns': campaigns})
+    campaign_count = campaigns.count()  
+    return render(request, 'viewcampaignbyagent.html',{'campaigns': campaigns,'campaign_count': campaign_count})

@@ -106,6 +106,7 @@
             transition: color 0.3s;
             display: flex;
             align-items: center;
+            line-height: 1;
         }
         
         .navbar-links a:hover {
@@ -171,8 +172,38 @@
             .toggle-btn {
                 display: block;
             }
-            
         }
+        
+        .badge {
+            background-color: #ef105a;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 8px;
+            position: relative;
+            top: -2px;
+            display: inline-block;
+        }
+        
+        .navbar-links li {
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-links li a {
+            display: flex;
+            align-items: center;
+        }
+        
+        @media (max-width: 768px) {
+            .badge {
+                margin-left: 6px;
+                top: 0;
+            }
+        }
+        
 
 
 
@@ -288,11 +319,39 @@ hr {
 
 }
 
-.login-image {
-    flex: 1;
-    background: url("{% static 'images/clnt.webp' %}") no-repeat center center/cover;
-    min-width: 400px;
+.login-images {
+    display: flex;
+    flex-direction: column; 
+    width: 100%; 
+    height: 250vh;
+    overflow: hidden;
 }
+
+.login-images img {
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    flex: 1; 
+    margin: 0; 
+    border: none; 
+}
+
+@media (max-width: 768px) {
+    .login-images img {
+        display: none;
+    }
+
+    .login-images img:first-child {
+        display: block; 
+        height: auto; 
+    }
+
+    .login-images {
+        height: auto; 
+    }
+}
+
+
 
 .login-form {
     flex: 2;
@@ -520,6 +579,7 @@ label {
     width: 0%;
     background-color: #4caf50;
     transition: width 0.3s ease;
+    
 }
 
 .percentage-display {
@@ -561,26 +621,40 @@ label {
         font-size: 18px; 
     }
 }
-.badge {
-    background-color: #ef105a;
-    color: white;
-    padding: 3px 8px;
-    border-radius: 50%;
-    font-size: 12px;
-    font-weight: bold;
-    margin-left: 4px;
+
+.error-message, .success-message {
+    padding: 15px;
+    margin-bottom: 10px;
+    margin-top: 7px;
+    border-radius: 5px;
+    display: none;
+    text-align: center;
 }
+
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.error-message.active, .success-message.active {
+    display: block;
+}
+
 @media (max-width: 768px) {
-    .badge {
-        display: block; 
-        position: absolute;
-        top: 50%;
-        left: 100%;
-        margin-left: 3px; 
-        transform: translateY(-50%); 
+    .error-message, .success-message {
+        font-size: 10px;
+        padding: 8px;
+        margin-top: 8px;
     }
 }
-    </style>
+</style>
 </head>
 <body>
 
@@ -592,9 +666,6 @@ label {
                 <p>Insurance Company</p>
             </div>
         </div>
-        <!-- <div class="search-bar">
-            <input type="text" placeholder="Search...">
-        </div> -->
         <div class="toggle-btn" onclick="toggleMenu()">
             <i class="fas fa-bars"></i>
         </div>
@@ -603,7 +674,7 @@ label {
             <li><a href="{% url 'viewclientsbyagent' %}"><i class="fa fa-users"></i> View Clients</a></li>
             <li>
                 <a href="{% url 'viewcampaignbyagent' %}"><i class="fa fa-bullhorn"></i> Campaigns</a>
-                <span class="badge">2</span>
+                <span class="badge">{{ campaign_count }}</span>
             </li>
             <li><a href="{% url 'profile' %}"><i class="fa-solid fa-user"></i> Profile</a></li>
             <li><a href="{% url 'homepage' %}"><i class="fa-solid fa-sign-out-alt"></i> Logout</a></li>
@@ -613,295 +684,535 @@ label {
 
 
     <div class="login-section">
+        
         <div class="login-container">
-            <div class="login-image"></div>
+            <div class="login-images">
+                <img src="{% static 'images/p.jpeg' %}" alt="Image 1">
+                <img src="{% static 'images/ik3.webp' %}" alt="Image 3">
+                <img src="{% static 'images/ik2.png' %}" alt="Image 3">
+                <img src="{% static 'images/p2.jpeg' %}" alt="Image 5">
+                <img src="{% static 'images/p1.jpeg' %}" alt="Image 3">
+                <img src="{% static 'images/ik.jpg' %}" alt="Image 4">
+            </div>
+                        
+           
             
-            <form id="form1" class="login-form" enctype="multipart/form-data" action="{% url 'viewclientsbyagent' %}" method="post">
-                <h2>EDIT INFORMATIONS OF CLIENT</h2>
+            <form id="form1" class="login-form" enctype="multipart/form-data" action="{% url 'update_client' client.id %}" method="POST">
+                <div>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="{% if message.tags == 'success' %}success-message{% else %}error-message{% endif %} active">
+                                <p>{{ message }}</p>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <h2>EDIT CLIENT INFORMATION</h2>
+                
+                {% csrf_token %}
+
                 <div class="form-row">
                     <div class="form-group">
                         <div class="input-icon">
                             <i class="fas fa-user"></i>
-                            <input type="text" name="fname" placeholder="First name" value="Manu" required>
+                            <input 
+                                type="text" 
+                                name="fname" 
+                                id="first_name" 
+                                placeholder="First name" 
+                                required 
+                                value="{{ client.first_name }}" 
+                                oninput="validateField()">
                         </div>
+                        <small 
+                            id="error-message" 
+                            style="
+                                color: #ff4d4d; 
+                                font-size: 12px; 
+                                font-weight: 500; 
+                                margin-top: 5px; 
+                                display: none;">
+                            * First name is required
+                        </small>
                     </div>
+                
                     <div class="form-group">
                         <div class="input-icon">
                             <i class="fas fa-user"></i>
-                            <input type="text" name="lname" placeholder="Last name" value="Prasad" required>
+                            <input 
+                                type="text" 
+                                name="lname" 
+                                id="last_name" 
+                                placeholder="Last name" 
+                                required 
+                                value="{{ client.last_name }}" 
+                                oninput="validateField2()">
                         </div>
+                        <small 
+                            id="error-message2" 
+                            style="
+                                color: #ff4d4d; 
+                                font-size: 12px; 
+                                font-weight: 500; 
+                                margin-top: 5px; 
+                                display: none;">
+                            * Last name is required
+                        </small>
                     </div>
                 </div>
-            
+                
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fa-solid fa-square-phone" style="margin-right: 10px;"></i>
+                        <input 
+                            type="text" 
+                            name="mobile" 
+                            id="mobile" 
+                            placeholder="Mobile number" 
+                            required 
+                            value="{{ client.phone }}"
+                            data-current-mobile="{{ client.phone }}" 
+                            oninput="validateField5()">
+                    </div>
+                    <small 
+                        id="error-message8" 
+                        style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        * Mobile number is required
+                    </small>
+                    <small 
+                        id="error-message9" 
+                        style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        * Mobile number already exists
+                    </small>
+                    <small 
+                        id="success-message3" 
+                        style="color: #4CAF50; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        Mobile number available
+                    </small>
+                    <small 
+                        id="error-message10" 
+                        style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        * Incorrect format
+                    </small>
+                </div>
+                
+               
+
                 <div class="form-group">
                     <div class="input-icon">
                         <i class="fas fa-home"></i>
-                        <textarea name="address" placeholder="Address" required>Vatakara, Calicut</textarea>
+                        <textarea
+                            name="address" 
+                            id="address"
+                            placeholder="Address" 
+                            required
+                            oninput="validateField3()">
+                            {{ client.address }}
+                        </textarea>
+                        <small 
+                            id="error-message3" 
+                            style="
+                                color: #ff4d4d; 
+                                font-size: 12px; 
+                                font-weight: 500; 
+                                margin-top: 5px; 
+                                display: none;">
+                            * Address is required
+                        </small>
                     </div>
                 </div>
-            
+                
+
+
+                
                 <div class="form-group">
                     <div class="input-icon">
                         <i class="fas fa-calendar-alt"></i>
-                        <input type="text" name="dob" id="dob" placeholder="Date of Birth" value="1990-04-15" required>
+                        <input type="text" name="dob" id="dob" placeholder="Date of Birth" value="{{ client.dob|date:'Y-m-d' }}" required oninput="validateFields()">
                     </div>
+                    <small id="error-message-dob" style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        * Date of Birth is required
+                    </small>
                 </div>
                 
                 <div class="form-group">
                     <div class="input-icon">
                         <i class="fas fa-user"></i>
-                        <input type="number" name="age" placeholder="Age" value="36" required min="1">
+                        <input type="number" name="age" id="age" placeholder="Age" value="{{ client.age }}" required min="1" oninput="validateFields()">
                     </div>
+                    <small id="error-message-age-required" style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        * Age is required
+                    </small>
+                    
+                    <small id="error-message-age-zero" style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        * Age cannot be zero
+                    </small>
                 </div>
+                
+                
+                
+               
+                
                 
                 <div class="form-row">
                     <div class="form-group">
                         <div class="input-icon">
                             <i class="fas fa-briefcase"></i>
-                            <input type="text" name="profession" placeholder="Profession" value="Engineer" required>
+                            <input 
+                                type="text" 
+                                name="profession" 
+                                id="profession" 
+                                placeholder="Profession" 
+                                value="{{ client.profession }}" 
+                                required 
+                                oninput="validateProfession()">
                         </div>
+                        <small 
+                            id="error-message-profession" 
+                            style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                            * Profession is required
+                        </small>
                     </div>
-                
+                    
                     <div class="form-group">
                         <div class="input-icon">
                             <i class="fa-solid fa-indian-rupee-sign"></i>
-                            <input type="number" name="annual_income" placeholder="Annual Income" value="500000" required min="0" step="0.01">
+                            <input 
+                                type="number" 
+                                name="annual_income" 
+                                id="annual_income" 
+                                placeholder="Annual Income" 
+                                value="{{ client.annual_income }}" 
+                                required 
+                                min="0" 
+                                step="0.01" 
+                                oninput="validateAnnualIncome()">
                         </div>
+                        <small 
+                            id="error-message-annual-income" 
+                            style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                            * Annual Income is required
+                        </small>
                     </div>
                 </div>
+                
                 
                 <div class="form-group">
                     <div class="input-icon">
                         <i class="fas fa-graduation-cap"></i>
-                        <input type="text" name="qualification" placeholder="Qualification" value="Bachlor's Degree" required>
+                        <input 
+                            type="text" 
+                            name="qualification" 
+                            id="qualification" 
+                            placeholder="Qualification" 
+                            value="{{ client.qualification }}" 
+                            required 
+                            oninput="validateQualification()">
                     </div>
+                    <small 
+                        id="error-message-qualification" 
+                        style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        * Qualification is required
+                    </small>
                 </div>
-            
+                
+                
                 <div class="form-row">
                     <div class="form-group">
                         <div class="input-icon">
                             <i class="fas fa-id-card"></i>
-                            <input type="text" name="aadhar" placeholder="Aadhar Card Number" value="1234 5678 9876" required>
+                            <input 
+                                type="text" 
+                                name="aadhar" 
+                                id="aadhar" 
+                                placeholder="Aadhar Card Number" 
+                                value="{{ client.aadhar }}" 
+                                required 
+                                oninput="validateAadhar()">
                         </div>
+                        <small 
+                            id="error-message-aadhar-required" 
+                            style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                            * Aadhar number is required
+                        </small>
+                        <small 
+                            id="error-message-aadhar-format" 
+                            style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                            * Invalid Aadhar number format
+                        </small>
+                        <small 
+                            id="error-message-aadhar-exists" 
+                            style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                            * Aadhar number already exists
+                        </small>
+                        <small 
+                            id="success-message-aadhar" 
+                            style="color: #4CAF50; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                            * Aadhar number is available
+                        </small>
                     </div>
-                
+                    
+                    
                     <div class="form-group">
                         <div class="input-icon">
                             <i class="fas fa-id-badge"></i>
-                            <input type="text" name="pan" placeholder="PAN Number" value="ABCDE1234F" required>
+                            <input 
+                                type="text" 
+                                name="pan" 
+                                id="pan" 
+                                placeholder="PAN Number" 
+                                value="{{ client.pan }}" 
+                                required 
+                                oninput="validatePan()">
                         </div>
+                        <small 
+                            id="error-message-pan-required" 
+                            style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                            * PAN number is required
+                        </small>
+                        <small 
+                            id="error-message-pan-format" 
+                            style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                            * Invalid PAN number format
+                        </small>
+                        <small 
+                            id="error-message-pan-exists" 
+                            style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                            * PAN number already exists
+                        </small>
+                        <small 
+                            id="success-message-pan" 
+                            style="color: #4CAF50; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                            * PAN number is available
+                        </small>
                     </div>
+                    
                 </div>
                 
-                <div class="login-buttons">
-                    <button type="button" class="login-button" onclick="showForm('form2')">Next</button>
-                </div>
-            </form>
-            
-            <form id="form2" class="login-form" enctype="multipart/form-data" style="display: none;" action="{% url 'viewclientsbyagent'} %">
-                <h2>EDIT ADDITIONAL DETAILS</h2>
             
                 <div class="form-group">
                     <div class="label-radio-container">
                         <label>Income Level</label>
                         <div class="radio-group">
                             <label class="radio-option">
-                                <input type="radio" name="income_level" value="low" >
+                                <input type="radio" name="income_level" value="low" {% if client.income_level == 'low' %}checked{% endif %}>
                                 <span class="radio-label">Low</span>
                             </label>
                             <label class="radio-option">
-                                <input type="radio" name="income_level" value="medium" checked>
+                                <input type="radio" name="income_level" value="medium" {% if client.income_level == 'medium' %}checked{% endif %}>
                                 <span class="radio-label">Medium</span>
                             </label>
                             <label class="radio-option">
-                                <input type="radio" name="income_level" value="high">
+                                <input type="radio" name="income_level" value="high" {% if client.income_level == 'high' %}checked{% endif %}>
                                 <span class="radio-label">High</span>
                             </label>
                         </div>
                     </div>
                 </div>
-            
+    
                 <div class="form-group">
                     <div class="label-radio-container">
                         <label>Presence of Kids</label>
                         <div class="radio-group">
                             <label class="radio-option">
-                                <input type="radio" name="children" value="yes" checked>
+                                <input type="radio" name="children" value="yes" {% if client.children == 'yes' %}checked{% endif %}>
                                 <span class="radio-label">Yes</span>
                             </label>
                             <label class="radio-option">
-                                <input type="radio" name="children" value="no">
+                                <input type="radio" name="children" value="no" {% if client.children == 'no' %}checked{% endif %}>
                                 <span class="radio-label">No</span>
                             </label>
                         </div>
                     </div>
                 </div>
-            
+                
                 <div class="form-group">
                     <label for="source" class="checkbox-group-label">Source of Information</label>
                     <div class="checkbox-options">
                         <label class="checkbox-option">
-                            <input type="checkbox" name="source" value="social_media" checked>
+                            <input type="checkbox" name="source" value="social_media" {% if 'social_media' in client.source %}checked{% endif %}>
                             Social Media
                         </label>
                         <label class="checkbox-option">
-                            <input type="checkbox" name="source" value="customer" >
+                            <input type="checkbox" name="source" value="customer" {% if 'customer' in client.source %}checked{% endif %}>
                             Customer
                         </label>
                         <label class="checkbox-option">
-                            <input type="checkbox" name="source" value="news" checked>
+                            <input type="checkbox" name="source" value="news" {% if 'news' in client.source %}checked{% endif %}>
                             News
                         </label>
                     </div>
+                    <small id="error-message-source" style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        * Please select at least one source of information.
+                    </small>
                 </div>
-            
+                
+                
                 <div class="form-group">
                     <div class="input-icon">
                         <i class="fa-regular fa-message"></i>
-                        <textarea name="feedback" placeholder="Customer feedback" required>This is some sample customer feedback by Manu Prasad 
-                        </textarea>
+                        <textarea 
+                            name="feedback" 
+                            id="feedback" 
+                            placeholder="Customer feedback" 
+                            required 
+                            oninput="validateFeedback()">{{ client.feedback }}</textarea>
                     </div>
+                    <small id="feedback-error" style="color: red; display: none;">* This field is required.</small>
                 </div>
-            
+                
                 <div class="form-group">
                     <label for="claim_satisfaction" class="rating-label">Claim Satisfaction</label>
-                    
                     <div class="progress-container">
-                        <input type="range" id="satisfaction-range" name="claim_satisfaction" min="0" max="100" value="40" class="range-slider" oninput="updateProgressBar(this)">
+                        <input type="range" id="satisfaction-range" name="claim_satisfaction" min="0" max="100" value="{{ client.claim_satisfaction }}" class="range-slider" oninput="updateProgressBar(this)">
                         <div class="progress-bar-container">
                             <div id="progress-bar" class="progress-bar"></div>
                         </div>
                     </div>
-                    
                     <div class="percentage-display">
-                        <span id="percentage-value">40%</span>
+                        <span id="percentage-value">{{ client.claim_satisfaction }}%</span>
                     </div>
                 </div>
-            
+                
                 <div class="form-group">
-                    <label for="source" class="checkbox-group-label">Insurance markup area</label>
+                    <label for="area" class="checkbox-group-label">Insurance markup area</label>
                     <div class="checkbox-options">
                         <label class="checkbox-option">
-                            <input type="checkbox" name="area" value="social_media" checked>
-                            Life
-                        </label>
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="area" value="customer" >
+                            <input type="checkbox" name="area" value="Health" {% if 'Health' in insurance_area_list %}checked{% endif %}>
                             Health
                         </label>
                         <label class="checkbox-option">
-                            <input type="checkbox" name="area" value="news">
+                            <input type="checkbox" name="area" value="Travel" {% if 'Travel' in insurance_area_list %}checked{% endif %}>
                             Travel
                         </label>
                         <label class="checkbox-option">
-                            <input type="checkbox" name="area" value="news">
+                            <input type="checkbox" name="area" value="Life" {% if 'Life' in insurance_area_list %}checked{% endif %}>
+                            Life
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="area" value="Commercial" {% if 'Commercial' in insurance_area_list %}checked{% endif %}>
                             Commercial
                         </label>
                         <label class="checkbox-option">
-                            <input type="checkbox" name="area" value="news" checked>
+                            <input type="checkbox" name="area" value="Vehicle" {% if 'Vehicle' in insurance_area_list %}checked{% endif %}>
                             Vehicle
                         </label>
                     </div>
+                    <small 
+                        id="error-message-area" 
+                        style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        * Please select at least one insurance markup area.
+                    </small>
                 </div>
+                
+                
+                
                 
                 <div style="margin-bottom: 50px;" class="form-group">
-                    <label for="img" class="file-upload-label">
+                    <label for="img1" class="file-upload-label">
                         <i class="fas fa-upload"></i> Agent Visited Policy
                     </label>
-                    <input type="file" name="img" id="img" class="file-upload-input" required>
+                    <input type="file" name="img1" id="img1" class="file-upload-input" >
                 </div>
-            
-                <div class="login-buttons">
-                    <button type="button" class="login-button" onclick="showForm('form1')">Previous</button>
-                    <button type="button" class="login-button" onclick="showForm('form3')">Next</button>
-                </div>
-            </form>
+           
 
 
 
-
-            <form id="form3" class="login-form" enctype="multipart/form-data" style="display: none;" action="{% url 'viewclientsbyagent' %}" >
-                <h2>EDIT ADDITIONAL DETAILS</h2>
-            
-                
             
                 <div class="form-group">
                     <div class="label-radio-container">
                         <label>Willingness to Purchase Insurance</label>
                         <div class="radio-group">
                             <label class="radio-option">
-                                <input type="radio" name="Purchase" value="yes" required checked>
-                                <span class="radio-label">High</span>
+                                <input type="radio" name="Purchase" value="Yes" {% if client.willingness_to_purchase == 'Yes' %}checked{% endif %} required>
+                                <span class="radio-label">Yes</span>
                             </label>
                             <label class="radio-option">
-                                <input type="radio" name="Purchase" value="no" required>
-                                <span class="radio-label">Low</span>
+                                <input type="radio" name="Purchase" value="No" {% if client.willingness_to_purchase == 'No' %}checked{% endif %} required>
+                                <span class="radio-label">No</span>
                             </label>
                         </div>
                     </div>
                 </div>
-
+                
+                
                 <div class="form-group">
                     <div class="label-radio-container">
                         <label>Willingness to Share Previous Insurance</label>
                         <div class="radio-group">
                             <label class="radio-option">
-                                <input type="radio" name="Previous" value="yes" required>
+                                <input type="radio" name="Previous" value="yes" {% if client.willingness_to_share_previous_insurance == 'yes' %}checked{% endif %} required>
                                 <span class="radio-label">Yes</span>
                             </label>
                             <label class="radio-option">
-                                <input type="radio" name="Previous" value="no" required checked>
+                                <input type="radio" name="Previous" value="no" {% if client.willingness_to_share_previous_insurance == 'no' %}checked{% endif %} required>
                                 <span class="radio-label">No</span>
                             </label>
                         </div>
                     </div>
                 </div>
-
+                
                 <div class="form-group">
                     <div class="input-icon">
                         <i class="fa-regular fa-message"></i>
-                        <textarea name="feedback" placeholder="Customer Preferences" required>Sample customer preferences of Manu Prasad
-                        </textarea>
+                        <textarea 
+                            name="feedback" 
+                            id="feedback" 
+                            placeholder="Customer Preferences" 
+                            required
+                            oninput="validateFeedback()">{{ client.feedback }}</textarea>
                     </div>
+                    <small id="feedback-error" style="color: red; display: none;">* This field is required.</small>
                 </div>
-
+                
                 <div class="form-group">
                     <div class="input-icon">
                         <i class="fa-regular fa-message"></i>
-                        <textarea name="feedback" placeholder="Agent Notes" required>Nothing</textarea>
+                        <textarea 
+                            name="agent_notes" 
+                            id="agent_notes" 
+                            placeholder="Agent Notes" 
+                            required
+                            oninput="validateAgentNotes()">{{ client.agent_notes }}</textarea>
                     </div>
+                    <small id="agent_notes-error" style="color: red; display: none;">* This field is required.</small>
                 </div>
-
+                
                 <div class="form-group">
                     <div class="label-radio-container">
                         <label>Willingness to Switch Over Another Insurance</label>
                         <div class="radio-group">
                             <label class="radio-option">
-                                <input type="radio" name="Switch" value="yes" required>
+                                <input type="radio" name="Switch" value="yes" {% if client.willingness_to_switch == 'yes' %}checked{% endif %} required>
                                 <span class="radio-label">Yes</span>
                             </label>
                             <label class="radio-option">
-                                <input type="radio" name="Switch" value="no" required checked>
+                                <input type="radio" name="Switch" value="no" {% if client.willingness_to_switch == 'no' %}checked{% endif %} required>
                                 <span class="radio-label">No</span>
                             </label>
                         </div>
                     </div>
                 </div>
             
+            
                 <div style="margin-bottom: 50px;" class="form-group">
                     <label for="img" class="file-upload-label">
                         <i class="fas fa-upload"></i> Existing Profile Details
                     </label>
-                    <input type="file" name="img" id="img" class="file-upload-input" required>
+                    <input type="file" name="img" id="img" class="file-upload-input" >
                 </div>
                 
             
                 <div class="login-buttons">
-                    <button type="button" class="login-button" onclick="showForm('form2')">Previous</button>
-                    <button type="submit" class="login-button">Submit</button>
+                    <button 
+                        type="submit" 
+                        class="login-button" 
+                        id="submit-button" 
+                        disabled>
+                        UPDATE
+                    </button>
                 </div>
             </form>
-            
         </div>
     </div>
     
@@ -982,6 +1293,338 @@ label {
 </footer>
 <script>
 
+const firstNameInput = document.getElementById('first_name');
+const lastNameInput = document.getElementById('last_name');
+const mobileInput = document.getElementById('mobile');
+const addressInput = document.getElementById('address');
+const dobInput = document.getElementById('dob');
+const ageInput = document.getElementById('age');
+const errorMessageDob = document.getElementById('error-message-dob');
+const errorMessageAgeRequired = document.getElementById('error-message-age-required');
+const errorMessageAgeZero = document.getElementById('error-message-age-zero');
+const professionInput = document.getElementById('profession');
+const annualIncomeInput = document.getElementById('annual_income');
+const errorMessageProfession = document.getElementById('error-message-profession');
+const errorMessageAnnualIncome = document.getElementById('error-message-annual-income');
+const qualificationInput = document.getElementById('qualification');
+const errorMessageQualification = document.getElementById('error-message-qualification');
+const errorMessage = document.getElementById('error-message');
+const errorMessage2 = document.getElementById('error-message2');
+const errorMessage8 = document.getElementById('error-message8');
+const errorMessage9 = document.getElementById('error-message9');
+const errorMessage10 = document.getElementById('error-message10');
+const successMessage3 = document.getElementById('success-message3');
+const errorMessage3 = document.getElementById('error-message3');
+const aadharInput = document.getElementById('aadhar');
+const errorMessageAadharRequired = document.getElementById('error-message-aadhar-required');
+const errorMessageAadharFormat = document.getElementById('error-message-aadhar-format');
+const errorMessageAadharExists = document.getElementById('error-message-aadhar-exists');
+const successMessageAadhar = document.getElementById('success-message-aadhar');
+const panInput = document.getElementById('pan');
+const errorMessagePanRequired = document.getElementById('error-message-pan-required');
+const errorMessagePanFormat = document.getElementById('error-message-pan-format');
+const errorMessagePanExists = document.getElementById('error-message-pan-exists');
+const successMessagePan = document.getElementById('success-message-pan');
+const sourceCheckboxes = document.querySelectorAll('input[name="source"]');
+const errorMessageSource = document.getElementById('error-message-source');
+const areaCheckboxes = document.querySelectorAll('input[name="area"]');
+const errorMessageArea = document.getElementById('error-message-area');
+
+
+const submitButton = document.getElementById('submit-button');
+
+function validateField() {
+        if (firstNameInput.value.trim() === "") {
+            submitButton.disabled = true;
+            errorMessage.style.display = "block";
+        } else {
+            submitButton.disabled = false;
+            errorMessage.style.display = "none";
+        }
+    }
+
+    function validateField2() {
+        if (lastNameInput.value.trim() === "") {
+            submitButton.disabled = true;
+            errorMessage2.style.display = "block";
+        } else {
+            submitButton.disabled = false;
+            errorMessage2.style.display = "none";
+        }
+    }
+
+
+    function validateField5() {
+    const mobile = mobileInput.value.trim();
+    const currentMobile = mobileInput.getAttribute("data-current-mobile");
+
+    errorMessage8.style.display = "none";
+    errorMessage9.style.display = "none";
+    errorMessage10.style.display = "none";
+    successMessage3.style.display = "none";
+    submitButton.disabled = true;
+
+    if (mobile === "") {
+        errorMessage8.style.display = "block";
+        return;
+    }
+
+    const mobileNumberFormatRegex = /^[6-9]\d{9}$/;
+    if (!mobileNumberFormatRegex.test(mobile)) {
+        errorMessage10.style.display = "block";
+        return;
+    }
+
+    if (mobile !== currentMobile) {
+        checkMobileExists(mobile);
+    } else {
+        successMessage3.style.display = "block";
+        submitButton.disabled = false;
+    }
+}
+
+function checkMobileExists(mobile) {
+    const currentMobile = mobileInput.getAttribute("data-current-mobile");
+    fetch(`/check-mobile/?mobile=${encodeURIComponent(mobile)}&current_mobile=${encodeURIComponent(currentMobile)}`)
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.exists) {
+                errorMessage9.style.display = "block";
+                successMessage3.style.display = "none";
+                submitButton.disabled = true;
+            } else {
+                successMessage3.style.display = "block";
+                errorMessage9.style.display = "none";
+                submitButton.disabled = false;
+            }
+        })
+        .catch((error) => {
+            console.error("Error checking mobile:", error);
+        });
+}
+
+function validateField3() {
+        if (addressInput.value.trim() === "") {
+            submitButton.disabled = true;
+            errorMessage3.style.display = "block";
+        } else {
+            submitButton.disabled = false;
+            errorMessage3.style.display = "none";
+        }
+    }
+
+    function validateFields() {
+    errorMessageDob.style.display = "none";
+    errorMessageAgeRequired.style.display = "none";
+    errorMessageAgeZero.style.display = "none";
+    submitButton.disabled = false;
+
+    if (dobInput.value.trim() === "") {
+        errorMessageDob.style.display = "block";
+        submitButton.disabled = true;
+    }
+
+    const age = parseInt(ageInput.value);
+
+    if (ageInput.value.trim() === "") {  
+        errorMessageAgeRequired.style.display = "block";
+        submitButton.disabled = true;
+    } else if (age === 0) { 
+        errorMessageAgeZero.style.display = "block";
+        submitButton.disabled = true;
+    }
+}
+
+function validateProfession() {
+    if (professionInput.value.trim() === "") {
+        errorMessageProfession.style.display = "block";
+        submitButton.disabled = true;
+    } else {
+        errorMessageProfession.style.display = "none";
+        submitButton.disabled = false;
+    }
+} 
+
+function validateAnnualIncome() {
+    if (annualIncomeInput.value.trim() === "") {
+        errorMessageAnnualIncome.style.display = "block";
+        submitButton.disabled = true;
+    } else {
+        errorMessageAnnualIncome.style.display = "none";
+        submitButton.disabled = false;
+    }
+}
+
+function validateQualification() {
+    if (qualificationInput.value.trim() === "") {
+        errorMessageQualification.style.display = "block";
+        submitButton.disabled = true;
+    } else {
+        errorMessageQualification.style.display = "none";
+        submitButton.disabled = false;
+    }
+}
+
+function validateAadhar() {
+    const aadhar = aadharInput.value.trim();
+
+    errorMessageAadharRequired.style.display = "none";
+    errorMessageAadharFormat.style.display = "none";
+    errorMessageAadharExists.style.display = "none";
+    successMessageAadhar.style.display = "none"; 
+    submitButton.disabled = false;
+
+    if (aadhar === "") {
+        errorMessageAadharRequired.style.display = "block";
+        submitButton.disabled = true;
+        return;
+    }
+
+    const aadharFormatRegex = /^\d{12}$/;
+    if (!aadharFormatRegex.test(aadhar)) {
+        errorMessageAadharFormat.style.display = "block";
+        submitButton.disabled = true;
+        return;
+    }
+
+    checkAadharExists(aadhar);
+}
+
+function checkAadharExists(aadhar) {
+    fetch(`/check-adhaar/?aadhar=${encodeURIComponent(aadhar)}`)
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.exists) {
+                errorMessageAadharExists.style.display = "block";
+                successMessageAadhar.style.display = "none";
+                submitButton.disabled = true;
+            } else {
+                successMessageAadhar.style.display = "block";
+                errorMessageAadharExists.style.display = "none";
+            }
+        })
+        .catch((error) => {
+            console.error("Error checking Aadhar:", error);
+        });
+}
+
+function validatePan() {
+    const pan = panInput.value.trim();
+
+    errorMessagePanRequired.style.display = "none";
+    errorMessagePanFormat.style.display = "none";
+    errorMessagePanExists.style.display = "none";
+    successMessagePan.style.display = "none"; 
+    submitButton.disabled = false;
+
+    if (pan === "") {
+        errorMessagePanRequired.style.display = "block";
+        submitButton.disabled = true;
+        return;
+    }
+
+    const panFormatRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+    if (!panFormatRegex.test(pan)) {
+        errorMessagePanFormat.style.display = "block";
+        submitButton.disabled = true;
+        return;
+    }
+
+    checkPanExists(pan);
+}
+
+function checkPanExists(pan) {
+    fetch(`/check-pan/?pan=${encodeURIComponent(pan)}`)
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.exists) {
+                errorMessagePanExists.style.display = "block";
+                successMessagePan.style.display = "none";
+                submitButton.disabled = true;
+            } else {
+                successMessagePan.style.display = "block";
+                errorMessagePanExists.style.display = "none";
+            }
+        })
+        .catch((error) => {
+            console.error("Error checking PAN:", error);
+        });
+}
+
+function validateSource() {
+    let isChecked = false;
+    sourceCheckboxes.forEach((checkbox) => {
+        if (checkbox.checked) {
+            isChecked = true;
+        }
+    });
+
+    if (!isChecked) {
+        errorMessageSource.style.display = "block";
+        submitButton.disabled = true;
+    } else {
+        errorMessageSource.style.display = "none";
+        submitButton.disabled = false;
+    }
+}
+sourceCheckboxes.forEach((checkbox) => {
+    checkbox.addEventListener('change', validateSource);
+});
+
+function validateArea() {
+    let isChecked = false;
+    areaCheckboxes.forEach((checkbox) => {
+        if (checkbox.checked) {
+            isChecked = true;
+        }
+    });
+
+    if (!isChecked) {
+        errorMessageArea.style.display = "block";
+        submitButton.disabled = true;
+    } else {
+        errorMessageArea.style.display = "none";
+        submitButton.disabled = false;
+    }
+}
+areaCheckboxes.forEach((checkbox) => {
+    checkbox.addEventListener('change', validateArea);
+});
+
+function validateFeedback() {
+        const feedbackInput = document.getElementById('feedback');
+        const feedbackError = document.getElementById('feedback-error');
+        
+        if (feedbackInput.value.trim() === '') {
+            feedbackError.style.display = 'block';
+        } else {
+            feedbackError.style.display = 'none';
+        }
+    }
+
+    function validateAgentNotes() {
+        const agentNotesInput = document.getElementById('agent_notes');
+        const agentNotesError = document.getElementById('agent_notes-error');
+        
+        if (agentNotesInput.value.trim() === '') {
+            agentNotesError.style.display = 'block';
+        } else {
+            agentNotesError.style.display = 'none';
+        }
+    }
+
+    function validateFeedback() {
+        const feedbackInput = document.getElementById('feedback');
+        const feedbackError = document.getElementById('feedback-error');
+        
+        if (feedbackInput.value.trim() === '') {
+            feedbackError.style.display = 'block';
+        } else {
+            feedbackError.style.display = 'none';
+        }
+    }
+
+
 function updateProgressBar(input) {
     var progressBar = document.getElementById('progress-bar');
     var percentageValue = document.getElementById('percentage-value');
@@ -990,15 +1633,6 @@ function updateProgressBar(input) {
     progressBar.style.width = percentage + '%';
     percentageValue.innerText = percentage + '%';
 }
-
-
-    function showForm(formId) {
-    document.getElementById("form1").style.display = "none";
-    document.getElementById("form2").style.display = "none";
-    document.getElementById("form3").style.display = "none";
-    document.getElementById(formId).style.display = "block";
-}
-
 
     const toggleBtn = document.querySelector('.toggle-btn');
     const navbarLinks = document.querySelector('.navbar-links');

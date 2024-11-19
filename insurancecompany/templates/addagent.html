@@ -538,7 +538,63 @@ hr {
     }
 }
 
+.validation-message {
+    margin-top: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 5px 10px;
+    opacity: 0; 
+    max-width: 400px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
 
+.validation-message.error {
+    color: #f44336; 
+    background-color: #ffebee;
+    border-left: 4px solid #f44336;
+    transform: translateX(10px);
+}
+
+.validation-message.success {
+    color: #4CAF50; 
+    background-color: #e8f5e9;
+    border-left: 4px solid #4CAF50;
+    transform: translateX(10px);
+}
+
+.validation-message.warning {
+    color: #ff9800; 
+    background-color: #fff3e0;
+    border-left: 4px solid #ff9800;
+    transform: translateX(10px);
+}
+
+.validation-message i {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+.login-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-button:hover {
+    background-color: #45a049;
+}
+
+.login-button.disabled {
+    background-color: #f44336;
+    cursor: not-allowed;
+}
+
+.login-button.disabled:hover {
+    background-color: #f44336;
+}
 
 
     </style>
@@ -590,54 +646,61 @@ hr {
                 <div class="form-group">
                     <div class="input-icon">
                         <i class="fas fa-user"></i>
-                        <input type="text" name="fname" placeholder="First name" required>
+                        <input type="text" name="fname" id="fname" placeholder="First name" required>
                     </div>
+                    <div id="fname-message" class="validation-message"></div>
                 </div>
                 <div class="form-group">
                     <div class="input-icon">
                         <i class="fas fa-user"></i>
-                        <input type="text" name="lname" placeholder="Last name" required>
+                        <input type="text" name="lname" id="lname" placeholder="Last name" required>
                     </div>
+                    <div id="lname-message" class="validation-message"></div>
                 </div>
             </div>
-
+            
             <div class="form-group">
                 <div class="input-icon">
-                    <i class="fas fa-user-circle"></i>
-                    <input type="text" name="uname" placeholder="Username" required>
+                    <i class="fas fa-user-circle" style="margin-right: 10px;"></i>
+                    <input type="text" name="uname" id="username-input" placeholder="Username" required>
                 </div>
+                <div id="username-message" class="validation-message"></div>
             </div>
-
+            
             <div class="form-group">
                 <div class="input-icon">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" name="mail" placeholder="Email address" required>
+                    <i class="fas fa-envelope" style="margin-right: 10px;"></i>
+                    <input type="email" name="mail" id="email-input" placeholder="Email" required>
                 </div>
+                <div id="email-message" class="validation-message"></div>
             </div>
-        
+            
             <div class="form-group">
                 <div class="input-icon">
-                    <i class="fas fa-phone"></i>
-                    <input type="tel" name="mobile" placeholder="Contact number" required pattern="[0-9]{10}" title="Please enter a 10-digit valid mobile number">
+                    <i class="fas fa-phone" style="margin-right: 10px;"></i>
+                    <input type="text" name="mobile" id="mobile-input" placeholder="Mobile" required>
                 </div>
+                <div id="mobile-message" class="validation-message"></div>
             </div>
-
+            
             <div class="form-group">
                 <div class="input-icon">
                     <i class="fas fa-home"></i>
-                    <input type="text" name="place" placeholder="Place" required>
+                    <input type="text" name="place" id="place" placeholder="Place" required>
                 </div>
+                <div id="place-message" class="validation-message"></div>
             </div>
-
+            
             <div class="form-group">
                 <label for="img" class="file-upload-label">
                     <i class="fas fa-upload"></i> Upload Image
                 </label>
                 <input type="file" name="img" id="img" class="file-upload-input" required>
+                <div id="img-message" class="validation-message"></div>
             </div>
-
+            
             <div class="login-buttons">
-                <button type="submit" class="login-button" >ADD AGENT</button>
+                <button type="submit" class="login-button" id="submit-button" disabled>ADD AGENT</button>
             </div>
         </form>
     </div>
@@ -718,6 +781,188 @@ hr {
 </footer>
 
 <script>
+
+
+const submitButton = document.getElementById('submit-button');
+const fnameInput = document.getElementById('fname');
+const lnameInput = document.getElementById('lname');
+const usernameInput = document.getElementById('username-input');
+const emailInput = document.getElementById('email-input');
+const mobileInput = document.getElementById('mobile-input');
+const placeInput = document.getElementById('place');
+const imgInput = document.getElementById('img');
+const usernameMessage = document.getElementById('username-message');
+const emailMessage = document.getElementById('email-message');
+const mobileMessage = document.getElementById('mobile-message');
+const fnameMessage = document.getElementById('fname-message');
+const lnameMessage = document.getElementById('lname-message');
+const placeMessage = document.getElementById('place-message');
+const imgMessage = document.getElementById('img-message');
+
+const validateForm = () => {
+    const isFirstNameValid = fnameInput.value.trim() !== '';
+    const isLastNameValid = lnameInput.value.trim() !== '';
+    const isUsernameValid = usernameMessage.classList.contains('success');
+    const isEmailValid = emailMessage.classList.contains('success');
+    const isMobileValid = mobileMessage.classList.contains('success');
+    const isPlaceValid = placeInput.value.trim() !== '';
+    const isImageValid = imgInput.files.length > 0;
+
+    if (isFirstNameValid && isLastNameValid && isUsernameValid && isEmailValid && isMobileValid && isPlaceValid && isImageValid) {
+        submitButton.disabled = false;
+        submitButton.classList.remove('disabled');
+    } else {
+        submitButton.disabled = true;
+        submitButton.classList.add('disabled');
+    }
+};
+
+const showMessage = (inputElement, messageElement, message, isValid) => {
+    messageElement.textContent = message;
+    if (isValid) {
+        messageElement.className = 'validation-message success';
+        messageElement.style.opacity = '1';
+    } else {
+        messageElement.className = 'validation-message error';
+        messageElement.style.opacity = '1';
+    }
+};
+
+usernameInput.addEventListener('input', function() {
+    const username = this.value;
+    if (username.length === 0) {
+        showMessage(usernameInput, usernameMessage, "Username is required", false);
+    } else {
+        checkUsername(username);
+    }
+    validateForm();
+});
+
+emailInput.addEventListener('input', function() {
+    const email = this.value;
+    if (email.length === 0) {
+        showMessage(emailInput, emailMessage, "Email is required", false);
+    } else {
+        if (!validateEmailFormat(email)) {
+            showMessage(emailInput, emailMessage, "Please enter a valid email address", false);
+        } else {
+            checkEmail(email);
+        }
+    }
+    validateForm();
+});
+
+mobileInput.addEventListener('input', function() {
+    const mobile = this.value;
+    if (mobile.length === 0) {
+        showMessage(mobileInput, mobileMessage, "Mobile number is required", false);
+    } else {
+        if (!validateMobileNumber(mobile)) {
+            showMessage(mobileInput, mobileMessage, "Please enter a valid mobile number", false);
+        } else {
+            checkMobile(mobile);
+        }
+    }
+    validateForm();
+});
+
+fnameInput.addEventListener('input', function() {
+    const firstName = this.value;
+    if (firstName.length === 0) {
+        showMessage(fnameInput, fnameMessage, "First name is required", false);
+    } else {
+        showMessage(fnameInput, fnameMessage, "", true);
+    }
+    validateForm();
+});
+
+lnameInput.addEventListener('input', function() {
+    const lastName = this.value;
+    if (lastName.length === 0) {
+        showMessage(lnameInput, lnameMessage, "Last name is required", false);
+    } else {
+        showMessage(lnameInput, lnameMessage, "", true);
+    }
+    validateForm();
+});
+
+placeInput.addEventListener('input', function() {
+    const place = this.value;
+    if (place.length === 0) {
+        showMessage(placeInput, placeMessage, "Place is required", false);
+    } else {
+        showMessage(placeInput, placeMessage, "", true);
+    }
+    validateForm();
+});
+
+imgInput.addEventListener('change', function() {
+    const image = this.files;
+    if (image.length === 0) {
+        showMessage(imgInput, imgMessage, "Image is required", false);
+    } else {
+        showMessage(imgInput, imgMessage, "", true);
+    }
+    validateForm();
+});
+
+function checkUsername(username) {
+    fetch(`/check-username?username=${username}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.exists) {
+                showMessage(usernameInput, usernameMessage, "Username already exists", false);
+            } else {
+                showMessage(usernameInput, usernameMessage, "Username is available", true);
+            }
+            validateForm();
+        });
+}
+
+function checkEmail(email) {
+    fetch(`/check-email?email=${email}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.exists) {
+                showMessage(emailInput, emailMessage, "Email already exists", false);
+            } else {
+                showMessage(emailInput, emailMessage, "Email is available", true);
+            }
+            validateForm();
+        });
+}
+
+function checkMobile(mobile) {
+    fetch(`/check-mobile?mobile=${mobile}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.exists) {
+                showMessage(mobileInput, mobileMessage, "Mobile number already exists", false);
+            } else {
+                showMessage(mobileInput, mobileMessage, "Mobile number is available", true);
+            }
+            validateForm();
+        })
+        .catch(error => {
+            showMessage(mobileInput, mobileMessage, "Error checking mobile number availability.", false);
+            validateForm();
+        });
+}
+
+function validateMobileNumber(mobile) {
+    const regex = /^[0-9]{10}$/;
+    return regex.test(mobile);
+}
+
+function validateEmailFormat(email) {
+    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.com$/;
+    return regex.test(email);
+}
+
+
+
+
+
     const toggleBtn = document.querySelector('.toggle-btn');
     const navbarLinks = document.querySelector('.navbar-links');
 

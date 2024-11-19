@@ -473,7 +473,7 @@ hr {
                             <p>Contact: {{ agent.mobile }}</p>
                             <p>Email: {{ agent.user.email }}</p>
                             <p>Address: {{ agent.place }}</p>
-                            <a href="{% url 'viewcampaignclients' %}">
+                            <a href="{% url 'viewclients' agent.id %}">
                                 <button class="view-clients-btn">View Clients</button>
                             </a>
                         </div>

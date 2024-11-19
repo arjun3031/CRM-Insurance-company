@@ -407,6 +407,8 @@ hr {
         cursor: pointer;
         transition: background-color 0.3s ease;
         text-decoration: none;
+        width: 100%;
+        text-align: center;
     }
     
     .profile-btn:hover, .clients-btn:hover {
@@ -546,8 +548,12 @@ hr {
                 <p><strong>Time:</strong> {{ campaign.start_time }}</p>
             </div>
             <div class="card-actions">
-                <a class="profile-btn" href="{% url 'viewcampaignagents' campaign.id %}"><i class="fas fa-user"></i> Agent</a>
-                <a class="clients-btn" href="{% url 'viewcampaignclients' %}"><i class="fas fa-users"></i> Clients</a>
+                <a class="profile-btn" 
+                href="{% url 'viewcampaignagents' campaign.id %}" 
+                style="display: inline-flex; align-items: center; justify-content: center; text-align: center; padding: 10px 20px; background-color: #6c1a6d; color: #fff; text-decoration: none; border-radius: 5px; font-size: 16px;">
+                <i class="fas fa-user" style="margin-right: 8px;"></i> Agent
+             </a>
+                             <!-- <a class="clients-btn" href="{% url 'viewcampaignclients' %}"><i class="fas fa-users"></i> Clients</a> -->
             </div>
             <div class="icon-container">
                 <a href="{% url 'editcampaign' campaign.id %}" class="edit-icon"><i class="fas fa-edit"></i></a>

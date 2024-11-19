@@ -619,10 +619,10 @@ hr {
             <li><a href="{% url 'viewclientsbyagent' %}"><i class="fa fa-users"></i> View Clients</a></li>
             <li>
                 <a href="{% url 'viewcampaignbyagent' %}"><i class="fa fa-bullhorn"></i> Campaigns</a>
-                <span class="badge">2</span>
+                <span class="badge">{{ campaign_count }}</span>
             </li>
             <li><a href="{% url 'profile' %}"><i class="fa-solid fa-user"></i>Profile</a></li>
-            <li><a href="{% url 'homepage' %}"><i class="fa-solid fa-sign-out-alt"></i> Logout</a></li>
+            <li><a href="{% url 'logout' %}"><i class="fa-solid fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </nav>
 
@@ -648,65 +648,235 @@ hr {
                 <div class="form-group">
                     <div class="input-icon">
                         <i class="fa fa-user" style="margin-right: 10px;"></i>
-                        <input type="text" name="first_name" placeholder="First name" required value="{{ request.user.first_name }}"> 
+                        <input 
+                            type="text" 
+                            name="first_name" 
+                            id="first_name" 
+                            placeholder="First name" 
+                            required 
+                            value="{{ agent.user.first_name }}" 
+                            oninput="validateField()"
+                        >
                     </div>
+                    <small 
+                        id="error-message" 
+                        style="
+                            color: #ff4d4d; 
+                            font-size: 12px; 
+                            font-weight: 500; 
+                            margin-top: 5px; 
+                            display: none;">
+                        * First name is required
+                    </small>
                 </div>
                 
                 <div class="form-group">
                     <div class="input-icon">
                         <i class="fa fa-user" style="margin-right: 10px;"></i>
-                        <input type="text" name="last_name" placeholder="Last name" required value="{{ request.user.last_name }}"> 
+                        <input 
+                            type="text" 
+                            name="last_name" 
+                            id="last_name" 
+                            placeholder="Last name" 
+                            required 
+                            value="{{ agent.user.last_name }}" 
+                            oninput="validateField2()"
+                        >
                     </div>
+                    <small 
+                        id="error-message2" 
+                        style="
+                            color: #ff4d4d; 
+                            font-size: 12px; 
+                            font-weight: 500; 
+                            margin-top: 5px; 
+                            display: none;">
+                        * Last name is required
+                    </small>
                 </div>
     
                 <div class="form-group">
                     <div class="input-icon">
                         <i class="fa-solid fa-circle-user" style="margin-right: 10px;"></i>
-                        <input type="text" name="username" placeholder="Username" required value="{{ request.user.username }}"> 
+                        <input 
+                            type="text"
+                            name="username"
+                            id="username"
+                            placeholder="Username" 
+                            required 
+                            value="{{ agent.user.username }}" 
+                            data-current-username="{{ agent.user.username }}"
+                            oninput="validateField3()"
+                        >
                     </div>
+                    <small 
+                        id="error-message3" 
+                        style="
+                            color: #ff4d4d; 
+                            font-size: 12px; 
+                            font-weight: 500; 
+                            margin-top: 5px; 
+                            display: none;">
+                        * Username is required
+                    </small>
+                    <small 
+                        id="error-message4" 
+                        style="
+                            color: #ff4d4d; 
+                            font-size: 12px; 
+                            font-weight: 500; 
+                            margin-top: 5px; 
+                            display: none;">
+                        * Username already exists
+                    </small>
+                    <small 
+                        id="success-message" 
+                        style="
+                            color: #4CAF50; 
+                            font-size: 12px; 
+                            font-weight: 500; 
+                            margin-top: 5px; 
+                            display: none;">
+                        Username is available
+                    </small>
                 </div>
-    
+                
                 <div class="form-group">
                     <div class="input-icon">
                         <i class="fa-solid fa-envelope" style="margin-right: 10px;"></i>
-                        <input type="email" name="email" placeholder="Email" required value="{{ request.user.email }}"> 
+                        <input
+                            type="email"
+                            name="email"
+                            id="email" 
+                            placeholder="Email" 
+                            required 
+                            value="{{ agent.user.email }}"
+                            data-current-email="{{ agent.user.email }}" 
+                            oninput="validateField4()"
+                        >
                     </div>
+                    <small 
+                        id="error-message5" 
+                        style="
+                            color: #ff4d4d; 
+                            font-size: 12px; 
+                            font-weight: 500; 
+                            margin-top: 5px; 
+                            display: none;">
+                        * Email is required
+                    </small>
+                    <small 
+                        id="error-message6" 
+                        style="
+                            color: #ff4d4d; 
+                            font-size: 12px; 
+                            font-weight: 500; 
+                            margin-top: 5px; 
+                            display: none;">
+                        * Email already exists
+                    </small>
+                    <small 
+                        id="success-message2" 
+                        style="
+                            color: #4CAF50; 
+                            font-size: 12px; 
+                            font-weight: 500; 
+                            margin-top: 5px; 
+                            display: none;">
+                        Email is available
+                    </small>
+                    <small 
+                        id="error-message7" 
+                        style="
+                            color: #ff4d4d; 
+                            font-size: 12px; 
+                            font-weight: 500; 
+                            margin-top: 5px; 
+                            display: none;">
+                        * Incorrect email format
+                    </small>
                 </div>
-    
+                
                 <div class="form-group">
-                    <div class="input-container">
-                        <i class="fas fa-phone"></i>
+                    <div class="input-icon">
+                        <i class="fa-solid fa-square-phone" style="margin-right: 10px;"></i>
                         <input 
                             type="text" 
-                            id="phone-input" 
                             name="mobile" 
-                            value="{{ agent.mobile }}" 
-                            placeholder="Enter phone number" 
-                            required>
+                            id="mobile" 
+                            placeholder="Mobile number" 
+                            required 
+                            value="{{ agent.mobile }}"
+                            data-current-mobile="{{ agent.mobile }}" 
+                            oninput="validateField5()"
+                        >
                     </div>
-                    <div 
-                        id="phone-message" 
+                    <small 
+                        id="error-message8" 
                         style="
-                            margin-top: 0.5rem;
-                            font-size: 0.9rem;
-                            padding: 0.5rem;
-                            border-radius: 4px;
-                            opacity: 0;
-                            max-width: 100%;
-                            word-wrap: break-word;
-                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                            cursor: default;
-                            transition: opacity 0.3s ease;
-                        "
-                    ></div> 
+                            color: #ff4d4d; 
+                            font-size: 12px; 
+                            font-weight: 500; 
+                            margin-top: 5px; 
+                            display: none;">
+                        * Mobile number is required
+                    </small>
+                    <small 
+                        id="error-message9" 
+                        style="
+                            color: #ff4d4d; 
+                            font-size: 12px; 
+                            font-weight: 500; 
+                            margin-top: 5px; 
+                            display: none;">
+                        * Mobile number already exists
+                    </small>
+                    <small 
+                        id="success-message3" 
+                        style="
+                            color: #4CAF50; 
+                            font-size: 12px; 
+                            font-weight: 500; 
+                            margin-top: 5px; 
+                            display: none;">
+                        Mobile number available
+                    </small>
+                    <small 
+                        id="error-message10" 
+                        style="
+                            color: #ff4d4d; 
+                            font-size: 12px; 
+                            font-weight: 500; 
+                            margin-top: 5px; 
+                            display: none;">
+                        * Incorrect format
+                    </small>
                 </div>
            
                 
                 <div class="form-group">
                     <div class="input-icon">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <input type="text" name="location" placeholder="Location" required value="{{ agent.place }}">
+                        <i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i>
+                        <input 
+                            type="text" 
+                            name="location" 
+                            id="location" 
+                            placeholder="Location" 
+                            required 
+                            value="{{ agent.place }}" 
+                            oninput="validateLocation()"
+                        >
                     </div>
+                    <small 
+                        id="error-location" 
+                        style="
+                            color: #ff4d4d; 
+                            font-size: 12px; 
+                            font-weight: 500; 
+                            margin-top: 5px; 
+                            display: none;">
+                        Location is required.
+                    </small>
                 </div>
                 
                 <div class="form-group">
@@ -716,24 +886,12 @@ hr {
                     <input type="file" name="img" id="img" class="file-upload-input">
                 </div>
                 
-                <div class="form-group">
+                <div class="login-buttons">
                     <button 
                         type="submit" 
                         class="login-button" 
-                        id="submit-btn" 
-                        disabled 
-                        style="
-                            background-color: #ccc;
-                            color: #fff;
-                            font-size: 1rem;
-                            padding: 0.75rem 1.5rem;
-                            border: none;
-                            border-radius: 5px;
-                            cursor: not-allowed;
-                            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-                            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                        "
-                    >
+                        id="submit-button" 
+                        disabled>
                         UPDATE DETAILS
                     </button>
                 </div>
@@ -819,97 +977,208 @@ hr {
 </footer>
 
 <script>
-  const phoneMessage = document.getElementById("phone-message");
-const submitBtn = document.getElementById("submit-btn");
 
-function enableButton() {
-    submitBtn.disabled = false;
-    submitBtn.style.backgroundColor = "#5f2760";  
-    submitBtn.style.cursor = "pointer";
-    submitBtn.style.boxShadow = "0 4px 10px rgba(0, 128, 0, 0.3)";
-}
+    const firstNameInput = document.getElementById('first_name');
+    const lastNameInput = document.getElementById('last_name');
+    const usernameInput = document.getElementById('username');
+    const currentUsername = usernameInput.dataset.currentUsername;
+    const emailInput = document.getElementById('email');
+    const currentEmail = emailInput.dataset.currentEmail;
+    const mobileInput = document.getElementById('mobile');
+    const currentMobile = emailInput.dataset.currentMobile;
+    const locationInput = document.getElementById('location');
 
-function disableButton() {
-    submitBtn.disabled = true;
-    submitBtn.style.backgroundColor = "#ccc"; 
-    submitBtn.style.cursor = "not-allowed";
-    submitBtn.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
-}
+    const submitButton = document.getElementById('submit-button');
 
-submitBtn.addEventListener("mouseover", function() {
-    if (!submitBtn.disabled) {
-        submitBtn.style.boxShadow = "0 6px 12px rgba(0, 128, 0, 0.4)";
+    const errorMessage = document.getElementById('error-message');
+    const errorMessage2 = document.getElementById('error-message2');
+    const errorMessage3 = document.getElementById('error-message3');
+    const errorMessage4 = document.getElementById('error-message4');
+    const successMessage = document.getElementById('success-message');
+    const errorMessage5 = document.getElementById('error-message5');
+    const errorMessage6 = document.getElementById('error-message6');
+    const errorMessage7 = document.getElementById('error-message7');
+    const successMessage2 = document.getElementById('success-message2');
+    const errorMessage8 = document.getElementById('error-message8');
+    const errorMessage9 = document.getElementById('error-message9');
+    const errorMessage10 = document.getElementById('error-message10');
+    const successMessage3 = document.getElementById('success-message3');
+    const errorLocation = document.getElementById('error-location');
+
+
+    function validateField() {
+        if (firstNameInput.value.trim() === "") {
+            submitButton.disabled = true;
+            errorMessage.style.display = "block";
+        } else {
+            submitButton.disabled = false;
+            errorMessage.style.display = "none";
+        }
     }
-});
 
-submitBtn.addEventListener("mouseout", function() {
-    if (!submitBtn.disabled) {
-        submitBtn.style.boxShadow = "0 4px 10px rgba(0, 128, 0, 0.3)";
+    function validateField2() {
+        if (lastNameInput.value.trim() === "") {
+            submitButton.disabled = true;
+            errorMessage2.style.display = "block";
+        } else {
+            submitButton.disabled = false;
+            errorMessage2.style.display = "none";
+        }
     }
-});
 
-document.getElementById("phone-input").addEventListener("input", function() {
-    const phoneInput = this.value;
+    function validateField3() {
+    const username = usernameInput.value.trim();
 
-    const phonePattern = /^\d{10}$/;
+    errorMessage3.style.display = "none";
+    errorMessage4.style.display = "none";
+    successMessage.style.display = "none";
+    submitButton.disabled = true; 
 
-    if (phoneInput.length === 0) {
-        phoneMessage.style.opacity = "0"; 
-        phoneMessage.textContent = ""; 
-    } else if (!phonePattern.test(phoneInput)) {
-        phoneMessage.textContent = "Phone number must be 10 digits";
-        phoneMessage.style.opacity = "1"; 
-        phoneMessage.style.color = "#f44336"; 
-        phoneMessage.style.backgroundColor = "#ffebee"; 
-        phoneMessage.style.border = "1px solid #f44336"; 
-        phoneMessage.style.boxShadow = "0 0 10px rgba(244, 67, 54, 0.3)";
-        disableButton();
+    if (username === "") {
+        errorMessage3.style.display = "block";
+        return;
+    }
+
+    if (username !== currentUsername) {
+        checkUsernameExists(username, currentUsername);
     } else {
-        checkPhoneNumber(phoneInput);
+        errorMessage4.style.display = "none";
+        successMessage.style.display = "none";  
+        submitButton.disabled = false;  
     }
-});
+}
 
-function checkPhoneNumber(phone) {
-    fetch(`/check-phone?phone=${phone}`)
-        .then(response => response.json())
-        .then(data => {
+function checkUsernameExists(username, currentUsername) {
+    fetch(`/check-username/?username=${encodeURIComponent(username)}&current_username=${encodeURIComponent(currentUsername)}`)
+        .then((response) => response.json())
+        .then((data) => {
             if (data.exists) {
-                phoneMessage.textContent = "Phone number already exists";
-                phoneMessage.style.color = "#f44336";
-                phoneMessage.style.backgroundColor = "#ffebee";
-                phoneMessage.style.border = "1px solid #f44336";
-                phoneMessage.style.boxShadow = "0 0 10px rgba(244, 67, 54, 0.3)";
-                disableButton();
+                errorMessage4.style.display = "block";
+                successMessage.style.display = "none";
+                submitButton.disabled = true;  
             } else {
-                phoneMessage.textContent = "Phone number is available";
-                phoneMessage.style.color = "#4CAF50"; 
-                phoneMessage.style.backgroundColor = "#e8f5e9"; 
-                phoneMessage.style.border = "1px solid #4CAF50"; 
-                phoneMessage.style.boxShadow = "0 0 10px rgba(76, 175, 80, 0.3)";
-                enableButton();
+                errorMessage4.style.display = "none";
+                successMessage.style.display = "block";  
+                submitButton.disabled = false;  
             }
-            phoneMessage.style.opacity = "1"; 
         })
-        .catch(error => {
-            console.error("Error:", error);
-            phoneMessage.textContent = "Error checking phone number";
-            phoneMessage.style.color = "#f44336";
-            phoneMessage.style.backgroundColor = "#ffebee";
-            phoneMessage.style.border = "1px solid #f44336";
-            phoneMessage.style.boxShadow = "0 0 10px rgba(244, 67, 54, 0.3)";
-            phoneMessage.style.opacity = "1"; 
-            disableButton();
+        .catch((error) => {
+            console.error('Error checking username:', error);
         });
 }
 
-phoneMessage.addEventListener("mouseenter", function() {
-    this.style.boxShadow = "0 0 15px rgba(0, 0, 0, 0.2)";
-});
+function validateField4() {
+    const email = emailInput.value.trim();
 
-phoneMessage.addEventListener("mouseleave", function() {
-    this.style.boxShadow = "0 0 10px rgba(0, 0, 0, 0.1)";
-});
+    errorMessage5.style.display = "none";
+    errorMessage6.style.display = "none";
+    errorMessage7.style.display = "none";
+    successMessage2.style.display = "none";
+    submitButton.disabled = true; 
 
+    if (email === "") {
+        errorMessage5.style.display = "block";
+        return;
+    }
+
+    const emailFormatRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.com$/; 
+    if (!emailFormatRegex.test(email)) {
+        errorMessage7.style.display = "block";  
+        return;
+    }
+
+    if (email !== currentEmail) {
+        checkEmailExists(email, currentEmail);
+    } else {
+        errorMessage5.style.display = "none";
+        successMessage2.style.display = "none";  
+        submitButton.disabled = false;  
+    }
+}
+
+function checkEmailExists(email, currentEmail) {
+    fetch(`/check-email/?email=${encodeURIComponent(email)}&current_email=${encodeURIComponent(currentEmail)}`)
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.exists) {
+                errorMessage6.style.display = "block";
+                successMessage2.style.display = "none";
+                submitButton.disabled = true;  
+            } else {
+                errorMessage6.style.display = "none";
+                successMessage2.style.display = "block";  
+                submitButton.disabled = false;  
+            }
+        })
+        .catch((error) => {
+            console.error('Error checking email:', error);
+        });
+}
+
+function validateField5() {
+    const mobile = mobileInput.value.trim();
+
+    errorMessage8.style.display = "none";
+    errorMessage9.style.display = "none";
+    errorMessage10.style.display = "none";
+    successMessage3.style.display = "none";
+    submitButton.disabled = true; 
+
+    if (mobile === "") {
+        errorMessage8.style.display = "block";
+        return;
+    }
+
+    const mobileNumberFormatRegex = /^[6-9]\d{9}$/;
+    if (!mobileNumberFormatRegex.test(mobile)) {
+        errorMessage10.style.display = "block";  
+        return;
+    }
+
+    if (mobile !== currentMobile) {
+        checkMobileExists(mobile, currentMobile);
+    } else {
+        errorMessage8.style.display = "none";
+        successMessage3.style.display = "none";  
+        submitButton.disabled = false;  
+    }
+}
+
+function checkMobileExists(mobile, currentMobile) {
+    fetch(`/check-mobile/?mobile=${encodeURIComponent(mobile)}&current_mobile=${encodeURIComponent(currentMobile)}`)
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.exists) {
+                errorMessage9.style.display = "block";
+                successMessage3.style.display = "none";
+                submitButton.disabled = true;  
+            } else {
+                errorMessage9.style.display = "none";
+                successMessage3.style.display = "block";  
+                submitButton.disabled = false;  
+            }
+        })
+        .catch((error) => {
+            console.error('Error checking mobile:', error);
+        });
+}
+
+    function validateLocation() {
+        if (locationInput.value.trim() === "") {
+            submitButton.disabled = true;
+            errorLocation.style.display = "block";
+        } else {
+            submitButton.disabled = false;
+            errorLocation.style.display = "none";
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        validateField();
+        validateField2();
+        validateField3();
+        validateLocation();
+    });
 
 
     const toggleBtn = document.querySelector('.toggle-btn');
