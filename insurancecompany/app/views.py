@@ -404,9 +404,9 @@ def resetpassword(request):
 
 def check_mobile(request):
     mobile = request.GET.get('mobile', '')
-    current_mobile = request.GET.get('current_mobile', '') 
+    current_mobile = request.GET.get('current_mobile', '')
     if mobile:
-        exists = Agent.objects.filter(mobile=mobile).exclude(mobile=current_mobile).exists()
+        exists = Client.objects.filter(phone=mobile).exclude(phone=current_mobile).exists()
         return JsonResponse({'exists': exists})
     return JsonResponse({'exists': False})
 

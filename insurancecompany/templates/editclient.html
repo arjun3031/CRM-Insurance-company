@@ -763,39 +763,59 @@ label {
                 
                 <div class="form-group">
                     <div class="input-icon">
-                        <i class="fa-solid fa-square-phone" style="margin-right: 10px;"></i>
+                        <i class="fa-solid fa-square-phone"></i>
                         <input 
                             type="text" 
-                            name="mobile" 
+                            name="phone" 
                             id="mobile" 
                             placeholder="Mobile number" 
                             required 
-                            value="{{ client.phone }}"
+                            value="{{ client.phone }}" 
                             data-current-mobile="{{ client.phone }}" 
-                            oninput="validateField5()">
+                            oninput="validateField5()"
+                        >
                     </div>
                     <small 
                         id="error-message8" 
-                        style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        style="
+                            color: #ff4d4d; 
+                            font-size: 12px; 
+                            font-weight: 500; 
+                            margin-top: 5px; 
+                            display: none;">
                         * Mobile number is required
                     </small>
                     <small 
                         id="error-message9" 
-                        style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        style="
+                            color: #ff4d4d; 
+                            font-size: 12px; 
+                            font-weight: 500; 
+                            margin-top: 5px; 
+                            display: none;">
                         * Mobile number already exists
                     </small>
                     <small 
                         id="success-message3" 
-                        style="color: #4CAF50; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        style="
+                            color: #4CAF50; 
+                            font-size: 12px; 
+                            font-weight: 500; 
+                            margin-top: 5px; 
+                            display: none;">
                         Mobile number available
                     </small>
                     <small 
                         id="error-message10" 
-                        style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        style="
+                            color: #ff4d4d; 
+                            font-size: 12px; 
+                            font-weight: 500; 
+                            margin-top: 5px; 
+                            display: none;">
                         * Incorrect format
                     </small>
                 </div>
-                
                
 
                 <div class="form-group">
@@ -1296,6 +1316,7 @@ label {
 const firstNameInput = document.getElementById('first_name');
 const lastNameInput = document.getElementById('last_name');
 const mobileInput = document.getElementById('mobile');
+const currentMobile = emailInput.dataset.currentMobile;
 const addressInput = document.getElementById('address');
 const dobInput = document.getElementById('dob');
 const ageInput = document.getElementById('age');
@@ -1354,9 +1375,19 @@ function validateField() {
     }
 
 
+
+
+
     function validateField5() {
+    const mobileInput = document.getElementById('mobile');
     const mobile = mobileInput.value.trim();
-    const currentMobile = mobileInput.getAttribute("data-current-mobile");
+    const currentMobile = mobileInput.dataset.currentMobile;
+
+    const errorMessage8 = document.getElementById('error-message8');
+    const errorMessage9 = document.getElementById('error-message9');
+    const errorMessage10 = document.getElementById('error-message10');
+    const successMessage3 = document.getElementById('success-message3');
+    const submitButton = document.querySelector('button[type="submit"]');
 
     errorMessage8.style.display = "none";
     errorMessage9.style.display = "none";
@@ -1376,32 +1407,37 @@ function validateField() {
     }
 
     if (mobile !== currentMobile) {
-        checkMobileExists(mobile);
+        checkMobileExists(mobile, currentMobile);
     } else {
-        successMessage3.style.display = "block";
         submitButton.disabled = false;
+        successMessage3.style.display = "block";
     }
 }
 
-function checkMobileExists(mobile) {
-    const currentMobile = mobileInput.getAttribute("data-current-mobile");
+function checkMobileExists(mobile, currentMobile) {
     fetch(`/check-mobile/?mobile=${encodeURIComponent(mobile)}&current_mobile=${encodeURIComponent(currentMobile)}`)
         .then((response) => response.json())
         .then((data) => {
+            const errorMessage9 = document.getElementById('error-message9');
+            const successMessage3 = document.getElementById('success-message3');
+            const submitButton = document.querySelector('button[type="submit"]');
+
             if (data.exists) {
                 errorMessage9.style.display = "block";
                 successMessage3.style.display = "none";
                 submitButton.disabled = true;
             } else {
-                successMessage3.style.display = "block";
                 errorMessage9.style.display = "none";
+                successMessage3.style.display = "block";
                 submitButton.disabled = false;
             }
         })
         .catch((error) => {
-            console.error("Error checking mobile:", error);
+            console.error('Error checking mobile:', error);
         });
 }
+
+    
 
 function validateField3() {
         if (addressInput.value.trim() === "") {
