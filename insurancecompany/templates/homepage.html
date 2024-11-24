@@ -810,8 +810,15 @@ hr {
 
 @media (max-width: 768px) {
     .carousel-item {
-        flex: 1 1 100%;
+        flex: 1 1 48%; 
+        margin: 8px; 
     }
+
+    .carousel-inner {
+        width: 80%;
+        gap: 20px;
+    }
+    
     .arrow {
         font-size: 18px;
     }
@@ -821,19 +828,24 @@ hr {
     .carousel-container {
         padding: 10px;
     }
+
     .carousel-item {
-        flex: 1 1 100%;
+        flex: 1 1 100%; 
         margin: 5px 0;
     }
+
     .carousel-item h2 {
         font-size: 18px;
     }
+
     .carousel-item p {
         font-size: 12px;
     }
+
     .carousel-item .icon {
         font-size: 24px;
     }
+
     .stars {
         font-size: 16px;
     }
@@ -843,19 +855,24 @@ hr {
     .carousel-container {
         padding: 10px;
     }
+
     .carousel-item h2 {
         font-size: 18px;
     }
+
     .carousel-item p {
         font-size: 12px;
     }
+
     .carousel-item .icon {
         font-size: 24px;
     }
+
     .stars {
         font-size: 16px;
     }
 }
+
 
 
     </style>
@@ -927,9 +944,9 @@ hr {
        
 
         <div class="bottom-info">
-            <span class="info-item">Claims Handled 24Cr+ |</span>
-            <span class="info-item">Network Hospitals 16,625 |</span>
-            <span class="info-item">Network Garages 7159 |</span>
+            <span class="info-item">Claims Handled 24Cr+ </span>
+            <span class="info-item">Network Hospitals 16,625 </span>
+            <span class="info-item">Network Garages 7159 </span>
             <span class="info-item">Locations 140+</span>
         </div>
     </div>
@@ -937,13 +954,13 @@ hr {
   
    
     <div class="additional-content">
-        <div class="content-box" style="display: flex; align-items: center; margin-bottom: 20px; background-color: rgb(245, 215, 241); padding: 20px; border-radius: 8px; flex-wrap: wrap;">
+        <div class="content-box" style="display: flex; align-items: center; background-color: rgb(184, 227, 241); padding: 20px; border-radius: 8px; flex-wrap: wrap;">
+            <img src="{% static 'images/i3.webp' %}" alt="Insurance Solutions" style="width: 150px; height: 150px; margin-left: 20px; filter: hue-rotate(270deg);">
             <div style="flex: 1; min-width: 250px;">
                 <h3 style="text-transform: uppercase; color: rgb(1, 41, 1); margin-bottom: 10px;">Innovative Insurance Solutions</h3>
                 <p style="margin-top: 5px;">At JAN SURAKSHA, we offer reliable insurance coverage to protect what matters most to you.</p>
                 <button style="background-color: #84228b; color: white; padding: 12px 24px; border: none; border-radius: 20px; cursor: pointer; margin-top: 20px;" onclick="window.location.href='#';">Know More</button>
             </div>
-            <img src="{% static 'images/i3.webp' %}" alt="Insurance Solutions" style="width: 150px; height: 150px; margin-left: 20px; filter: hue-rotate(270deg);">
         </div>
         
         <div class="content-box" style="display: flex; align-items: center; background-color: rgb(184, 227, 241); padding: 20px; border-radius: 8px; flex-wrap: wrap;">
@@ -1140,39 +1157,54 @@ hr {
         toggleBtn.addEventListener('click', () => {
             navbarLinks.classList.toggle('active');
         });
-
         let currentSlide = 0;
-    const itemsPerPage = 3;
-    const totalItems = 6;
+let itemsPerPage = 3;  // Default for larger screens
+const totalItems = 6;
 
-    function showSlide() {
-        for (let i = 1; i <= totalItems; i++) {
-            document.getElementById(`item${i}`).style.display = 'none';
-        }
+function setItemsPerPage() {
+    // Set itemsPerPage to 2 for mobile view and 3 for larger screens
+    if (window.innerWidth <= 768) {
+        itemsPerPage = 2;
+    } else {
+        itemsPerPage = 3;
+    }
+    showSlide();  // Call showSlide to adjust based on itemsPerPage
+}
 
-        for (let i = 1; i <= itemsPerPage; i++) {
-            const itemIndex = currentSlide * itemsPerPage + i;
-            if (itemIndex <= totalItems) {
-                document.getElementById(`item${itemIndex}`).style.display = 'block';
-            }
-        }
+function showSlide() {
+    // Hide all items first
+    for (let i = 1; i <= totalItems; i++) {
+        document.getElementById(`item${i}`).style.display = 'none';
     }
 
-    function nextSlide() {
-        if (currentSlide < Math.ceil(totalItems / itemsPerPage) - 1) {
-            currentSlide++;
-            showSlide();
+    // Show the appropriate number of items per page
+    for (let i = 1; i <= itemsPerPage; i++) {
+        const itemIndex = currentSlide * itemsPerPage + i;
+        if (itemIndex <= totalItems) {
+            document.getElementById(`item${itemIndex}`).style.display = 'block';
         }
     }
+}
 
-    function prevSlide() {
-        if (currentSlide > 0) {
-            currentSlide--;
-            showSlide();
-        }
+function nextSlide() {
+    if (currentSlide < Math.ceil(totalItems / itemsPerPage) - 1) {
+        currentSlide++;
+        showSlide();
     }
+}
 
-    showSlide();
+function prevSlide() {
+    if (currentSlide > 0) {
+        currentSlide--;
+        showSlide();
+    }
+}
+
+// Initialize itemsPerPage based on current window width
+setItemsPerPage();
+
+// Recalculate itemsPerPage when the window is resized
+window.addEventListener('resize', setItemsPerPage);
 
 
         

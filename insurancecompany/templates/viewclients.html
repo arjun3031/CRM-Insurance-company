@@ -275,14 +275,15 @@ hr {
         }
 
         .agent-details {
-            display: flex;
-            align-items: center;
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .agent-image {
+    display: flex;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.agent-image {
     width: 140px;
     height: 140px;
     border-radius: 50%;
@@ -299,58 +300,108 @@ hr {
     object-position: center;
 }
 
+.agent-info {
+    flex: 1;
+}
+
+.agent-name {
+    font-size: 40px;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    margin-left: 30px;
+
+}
+
+.agent-icon {
+    display: flex;
+    margin-bottom: 10px; 
+    margin-left: 30px;
+    color: #813377;
+
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 30px;
+}
+
+.contact-info p {
+    margin: 5px 0;
+}
+
 @media (max-width: 768px) {
+    .agent-details {
+        flex-direction: column;
+        align-items: center;
+        padding: 15px; 
+        text-align: center; 
+    }
+
     .agent-image {
-        margin: 0 auto 10px;
+        margin: 0 0 10px; 
+    }
+
+    .agent-info {
+        text-align: center; 
+        width: 100%; 
+    }
+
+    .agent-name {
+        font-size: 30px;
+        margin-bottom: 5px; 
+        text-align: center; 
+        margin-left: 0; 
+        margin-right: 0; 
+    }
+
+    .agent-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center; 
+        margin-bottom: 10px; 
+        margin-left: 0;
+    }
+    .contact-info {
+        margin-left: 0;
+        margin-top: 10px; 
+        display: flex;
+        flex-direction: column; 
+        gap: 5px; 
+    }
+
+    .contact-info p {
+        font-size: 16px;
+        color: #5a1e3c; 
     }
 }
 
-        .agent-info {
-            flex: 1;
-        }
-        .agent-name {
-            font-size: 40px;
-            margin-bottom: 10px;
-            margin-left: 30px;
-            text-transform: capitalize;
-            font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-        }
-        .agent-icon, .contact-info {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-left: 30px;
-        }
-        .contact-info p {
-            margin: 5px 0;
-        }
-
-        .filter-section {
+.filter-section {
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-bottom: 50px;
-    margin-top: 50px;
+    flex-wrap: wrap; 
+    gap: 80px; 
+    margin-bottom: 20px;
+    margin-top: 20px;
+    justify-content: center; 
 }
 
 .filter-section select {
-    width: 100%;
-    max-width: 500px;
-    padding: 12px;
+    width: 260px; 
+    padding: 10px;
     font-size: 16px;
-    border: 2px solid #301f2e;
-    border-radius: 8px;
-    background-color: #ffffff;
-    color: #333;
-    transition: all 0.3s ease;
+    border: 1px solid #ddd; 
+    border-radius: 4px;
+    background-color: #ffffff; 
+    color: #565555;
+    transition: border-color 0.3s;
     cursor: pointer;
-    margin: 0 auto;
 }
 
 .filter-section select:focus {
     outline: none;
-    border-color: #351c28;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+    border-color: #3c163c; 
 }
 
 .filter-section select option {
@@ -361,10 +412,18 @@ hr {
 }
 
 @media (max-width: 768px) {
+    .filter-section {
+        flex-direction: column; 
+        align-items: center; 
+        gap: 10px; 
+    }
+
     .filter-section select {
-        width: 65%;
+        width: 100%; 
+        max-width: none;
     }
 }
+
 
 
         .table-container {
@@ -426,6 +485,8 @@ hr {
     margin-top: 30px;
 }
 
+
+
 </style>
 </head>
 <body>
@@ -461,11 +522,9 @@ hr {
             </div>
             <div class="agent-info">
                 <div class="agent-name">{{ agent.user.first_name }} {{ agent.user.last_name }}</div>
-                <div class="agent-icon">
-                    <span>👤</span>Agent
-                </div>
+                <div class="agent-icon">Agent</div>
                 <div class="contact-info">
-                    <p> Mobile: {{ agent.phone }}</p>
+                    <p>📱 Mobile: {{ agent.mobile }}</p>
                     <p>✉️ Email: {{ agent.user.email }}</p>
                 </div>
             </div>
@@ -475,23 +534,26 @@ hr {
     
         <div class="filter-section" style="display: flex; justify-content: center; gap: 35px; align-items: center;">
             <form method="GET" style="display: flex; gap: 35px;">
-                <select name="client_name" style="background-color: rgb(255, 255, 255); width: 250px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px; background-color: transparent; color: #565555; transition: border-color 0.3s;" onchange="this.form.submit()">
-                    <option value="">Select Client Name</option>
-                    {% for client in clients %}
-                        <option value="{{ client.first_name }} {{ client.last_name }}" {% if selected_client_name == client.first_name|add:" "|add:client.last_name %}selected{% endif %}>
-                            {{ client.first_name }} {{ client.last_name }}
-                        </option>
-                    {% endfor %}
-                </select>
+                <div class="filter-section">
+                    <select name="client_name" onchange="this.form.submit()">
+                        <option value="">Select Client Name</option>
+                        {% for client in clients %}
+                            <option value="{{ client.first_name }} {{ client.last_name }}" 
+                                {% if selected_client_name == client.first_name|add:" "|add:client.last_name %}selected{% endif %}>
+                                {{ client.first_name }} {{ client.last_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
     
-                <select name="profession" style="background-color: rgb(255, 255, 255); width: 250px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px; background-color: transparent; color: #565555; transition: border-color 0.3s;" onchange="this.form.submit()">
-                    <option value="">Select Profession</option>
-                    {% for profession in distinct_professions %}
-                        <option value="{{ profession }}" {% if selected_profession == profession %}selected{% endif %}>
-                            {{ profession }}
-                        </option>
-                    {% endfor %}
-                </select>
+                    <select name="profession" onchange="this.form.submit()">
+                        <option value="">Select Profession</option>
+                        {% for profession in distinct_professions %}
+                            <option value="{{ profession }}" {% if selected_profession == profession %}selected{% endif %}>
+                                {{ profession }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
             </form>
         </div>
     
@@ -525,9 +587,6 @@ hr {
         </div>
     </div>
     
-
-
-
 
     
     

@@ -588,7 +588,7 @@ hr {
                     {% endif %}
                 </div>
             
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <div class="input-icon">
                         <select name="agent" id="agent" required>
                             <option value="">Select Agent</option>
@@ -597,6 +597,29 @@ hr {
                             {% endfor %}
                         </select>
                     </div>
+                </div> -->
+
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fa-solid fa-file-signature"></i>
+                        <input type="text" 
+                        name="campname" 
+                        id="cname" 
+                        placeholder="Campaign name" 
+                        value="{{ campaign.campaign_name }}"
+                        required
+                        oninput="validateField10()">
+                    </div>
+                    <small 
+                    id="error-message-cname" 
+                    style="
+                        color: #ff4d4d; 
+                        font-size: 12px; 
+                        font-weight: 500; 
+                        margin-top: 5px; 
+                        display: none;">
+                        * Campaign name required.
+                    </small>                
                 </div>
                 
                 <div class="form-group">
@@ -755,6 +778,22 @@ const startDateInput = document.getElementById('start_date');
 const endDateInput = document.getElementById('end_date');
 const errorMessage = document.getElementById('error-message');
 const submitButton = document.getElementById('submit-button');
+
+
+const cnameInput = document.getElementById('cname');
+const errorMessages = document.getElementById('error-message-cname');
+
+validateField10();
+
+function validateField10() {
+    if (cnameInput.value.trim() === "") {
+        submitButton.disabled = true;
+        errorMessages.style.display = "block";
+    } else {
+        submitButton.disabled = false;
+        errorMessages.style.display = "none";
+    }
+}
 
 validateDates();
 

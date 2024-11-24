@@ -1,0 +1,1318 @@
+
+
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add client</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+         * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+            height: 100%;
+        }
+
+        nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: white;
+    padding: 0 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    height: 120px;
+    width: 100%;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo i {
+    font-size: 35px;
+    color: rgb(170, 99, 170);
+    margin-right: 14px;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo h1 {
+    color: rgb(141, 42, 118);
+    font-size: 40px;
+    margin-bottom: 5px;
+    font-family: 'Lucida Sans', 'Lucida Grande', Geneva, Verdana, sans-serif;
+}
+
+.logo p {
+    font-size: 18px;
+    color: rgb(141, 145, 145);
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    margin: 0 20px;
+}
+
+.search-bar input[type="text"] {
+    width: 100%;
+    max-width: 400px;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.search-bar input[type="text"]:focus {
+    border-color: rgb(188, 32, 170);
+}
+
+.navbar-links {
+    display: flex;
+    list-style: none;
+    align-items: center;
+    margin-left: auto;
+    gap: 20px;
+}
+
+.navbar-links li {
+    margin: 0;
+}
+
+.navbar-links a {
+    text-decoration: none;
+    color: rgb(141, 42, 118);
+    font-size: 18px;
+    padding: 10px;
+    transition: color 0.3s;
+    display: flex;
+    align-items: center;
+    line-height: 1;
+}
+
+.navbar-links a:hover {
+    color: rgb(51, 5, 41);
+}
+
+.navbar-links a i {
+    margin-right: 8px;
+}
+
+.toggle-btn {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: black;
+}
+
+@media (max-width: 1560px) {
+    .search-bar {
+        display: none;
+    }
+}
+
+@media (min-width: 750px) and (max-width: 1030px) {
+    .navbar-links {
+        flex-wrap: nowrap;
+        gap: 10px;
+    }
+
+    .logo h1 {
+        font-size: 30px;
+    }
+}
+
+@media (max-width: 1530px) {
+    .navbar-links {
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        position: absolute;
+        top: 120px;
+        left: 0;
+        background-color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 999;
+        padding: 20px;
+    }
+
+    .navbar-links.active {
+        display: flex;
+    }
+
+    .navbar-links li {
+        width: 100%;
+    }
+
+    .navbar-links a {
+        padding: 10px 20px;
+        width: 100%;
+    }
+
+    .toggle-btn {
+        display: block;
+    }
+}
+
+.badge {
+    background-color: #ef105a;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 8px;
+    position: relative;
+    top: -2px;
+    display: inline-block;
+}
+
+.navbar-links li {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-links li a {
+    display: flex;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .badge {
+        margin-left: 6px;
+        top: 0;
+    }
+}
+
+
+
+        .footer {
+    background-color: #efd6ea;
+    color: rgb(106, 53, 107);
+    padding: 40px 20px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-columns {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.footer-column {
+    flex: 1;
+    min-width: 200px;
+    margin: 10px 20px;
+}
+
+.footer-column h4 {
+    color: #532a4f;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.footer-column p, .footer-column ul {
+    font-size: 14px;
+    color: #532a4f;
+    line-height: 1.6;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 8px;
+}
+
+.footer-column ul li a {
+    color: #532a4f;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-column ul li a:hover {
+    color: #532a4f;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.social-icons a {
+    color: #532a4f;
+    font-size: 20px;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: #532a4f;
+}
+
+.footer-bottom {
+    font-size: 14px;
+    color: #532a4f;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #351839;
+    margin: 20px 0;
+}
+
+@media (max-width: 768px) {
+    .footer-columns {
+        flex-direction: column;
+    }
+    .footer-column {
+        text-align: left;
+    }
+}
+
+
+.login-section {
+    background: url("{% static 'images/bg.jpg' %}") no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 80px);
+}
+
+.login-container {
+    display: flex;
+    width: 90%;
+    max-width: 1000px;
+    background-color: rgba(249, 254, 255, 0.7);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin: 20px auto;
+    padding: 20px;
+
+}
+
+.login-image {
+    flex: 1;
+    background: url("{% static 'images/client1.webp' %}") no-repeat center center/cover;
+    min-width: 400px;
+}
+
+.login-form {
+    flex: 2;
+    padding: 40px;
+}
+
+.login-form h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #430e3d;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.input-icon {
+    position: relative;
+}
+
+.input-icon i {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #433246;
+    font-size: 18px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 10px 10px 40px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: rgba(249, 254, 255, 0.5);
+}
+
+.form-group input:focus {
+    border-color: #ff00ee;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.login-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.login-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #5f2760;
+    color: white;
+    flex: 1;
+}
+
+.login-button:hover {
+    background-color: #403a42;
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+        width: 85%;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+}
+
+.form-group textarea {
+    background-color: rgba(249, 254, 255, 0.5);
+    width: 100%;
+    padding: 10px 10px 10px 40px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    font-size: 16px;
+    resize: vertical; 
+    min-height: 100px; 
+}
+
+.form-group textarea:focus {
+    border-color: #ff00ee;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.label-radio-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+label {
+    font-weight: bold;
+    color: #433246;
+    font-size: 16px;
+}
+
+.radio-group {
+    display: flex;
+    gap: 20px;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+}
+
+.radio-option input[type="radio"] {
+    appearance: none;
+    background-color: #f0f0f0;
+    border: 2px solid #cccccc;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 8px;
+    transition: background-color 0.3s, border-color 0.3s;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.radio-option input[type="radio"]:checked {
+    background-color: #ff00ee;
+    border-color: #ff00ee;
+}
+
+.radio-option input[type="radio"]:checked::before {
+    content: '';
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin: 4px auto;
+}
+
+.checkbox-group-label {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.checkbox-options {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.checkbox-option input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.checkbox-option label {
+    display: flex;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .checkbox-options {
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .label-radio-container {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .radio-group {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+}
+
+.rating-label {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.progress-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.range-slider {
+    width: 100%;
+    height: 10px;
+    background: #f0f0f0;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 10px;
+    background: #e0e0e0;
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background-color: #4caf50;
+    transition: width 0.3s ease;
+}
+
+.percentage-display {
+    font-size: 16px;
+    font-weight: bold;
+    color: #433246;
+}
+
+@media (max-width: 768px) {
+    .progress-container {
+        max-width: 100%;
+    }
+}
+
+.file-upload-label {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fdedff;
+    color: rgb(106, 106, 106);
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+    text-align: center;
+    width: 100%; 
+}
+
+.file-upload-label:hover {
+    background-color: #f9d0ff; 
+}
+
+.file-upload-input {
+    display: none; 
+}
+
+@media (max-width: 768px) {
+    .file-upload-label {
+        padding: 15px; 
+        font-size: 18px; 
+    }
+}
+.error-message, .success-message {
+    padding: 15px;
+    margin-bottom: 10px;
+    margin-top: 7px;
+    border-radius: 5px;
+    display: none;
+    text-align: center;
+}
+
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.error-message.active, .success-message.active {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .error-message, .success-message {
+        font-size: 10px;
+        padding: 8px;
+        margin-top: 8px;
+    }
+}
+
+
+.validation-message {
+    margin-top: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 5px 10px;
+    opacity: 0; 
+    max-width: 400px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.validation-message.error {
+    color: #f44336; 
+    background-color: #ffebee;
+    border-left: 4px solid #f44336;
+    transform: translateX(10px);
+}
+
+.validation-message.success {
+    color: #4CAF50; 
+    background-color: #e8f5e9;
+    border-left: 4px solid #4CAF50;
+    transform: translateX(10px);
+}
+
+.validation-message.warning {
+    color: #ff9800; 
+    background-color: #fff3e0;
+    border-left: 4px solid #ff9800;
+    transform: translateX(10px);
+}
+
+.validation-message i {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+.login-button {
+    background-color: #4a154d;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-button:hover {
+    background-color: #353039;
+}
+
+.login-button.disabled {
+    background-color: #f44336;
+    cursor: not-allowed;
+}
+
+.login-button.disabled:hover {
+    background-color: #f44336;
+}
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">
+            <i class="fa-solid fa-hand-holding-heart"></i>
+            <div class="logo-text">
+                <h1>JAN SURAKSHA</h1>
+                <p>Insurance Company</p>
+            </div>
+        </div>
+        <div class="toggle-btn">
+            <i class="fas fa-bars"></i>
+        </div>
+        <ul class="navbar-links" id="navbarLinks">
+            <li><a style="color: rgb(51, 5, 41);" href="{% url 'addclient' %}"><i class="fa fa-id-card"></i> Add Clients</a></li>
+            <li><a href="{% url 'viewclientsbyagent' %}"><i class="fa fa-users"></i> View Clients</a></li>
+            <li>
+                <a href="{% url 'viewcampaignbyagent' %}"><i class="fa fa-bullhorn"></i> Campaigns</a>
+                <span class="badge">{{ campaign_count }}</span>
+            </li>            
+            <li><a  href="{% url 'profile' %}"><i class="fa-solid fa-user"></i>Profile</a></li>
+            <li><a href="{% url 'logout' %}"><i class="fa-solid fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </nav>
+
+
+
+    <div class="login-section">
+        <div class="login-container">
+            <div class="login-image"></div>
+            
+            <form id="campform1" class="login-form" enctype="multipart/form-data" 
+            onsubmit="event.preventDefault(); submitForm('campform1','campform2');">
+            {% csrf_token %}
+
+
+            <div>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="{% if message.tags == 'success' %}success-message{% else %}error-message{% endif %} active">
+                            <p>{{ message }}</p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <h2>ENTER BASIC INFORMATIONS OF CLIENT</h2>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" name="fname" id="fname" placeholder="First name" required>
+                    </div>
+                    <div class="validation-message" id="fname-message"></div>
+                </div>
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" name="lname" id="lname" placeholder="Last name" required>
+                    </div>
+                    <div class="validation-message" id="lname-message"></div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="input-icon">
+                    <i class="fas fa-phone"></i>
+                    <input type="text" name="phone" id="phone" placeholder="Mobile number" required>
+                </div>
+                <div class="validation-message" id="phone-message"></div>
+            </div>
+            
+            <div class="form-group">
+                <div class="input-icon">
+                    <i class="fas fa-home"></i>
+                    <textarea name="address" id="address" placeholder="Address" required></textarea>
+                </div>
+                <div class="validation-message" id="address-message"></div>
+            </div>
+            
+            <div class="form-group">
+                <div class="input-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                    <input type="date" name="dob" id="dob" placeholder="Date of Birth" required>
+                </div>
+                <div class="validation-message" id="dob-message"></div>
+            </div>
+            
+            <div class="form-group">
+                <div class="input-icon">
+                    <i class="fas fa-user"></i>
+                    <input type="number" name="age" id="age" placeholder="Age" required min="1">
+                </div>
+                <div class="validation-message" id="age-message"></div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fas fa-briefcase"></i>
+                        <input type="text" name="profession" id="profession" placeholder="Profession" required>
+                    </div>
+                    <div class="validation-message" id="profession-message"></div>
+                </div>
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fa-solid fa-indian-rupee-sign"></i>
+                        <input type="number" name="annual_income" id="annual_income" placeholder="Annual Income" required min="0" step="0.01">
+                    </div>
+                    <div class="validation-message" id="annual_income-message"></div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="input-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                    <input type="text" name="qualification" id="qualification" placeholder="Qualification" required>
+                </div>
+                <div class="validation-message" id="qualification-message"></div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" name="aadhar" id="aadhar" placeholder="Aadhar Card Number" required>
+                    </div>
+                    <div class="validation-message" id="aadhar-message"></div>
+                </div>
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fas fa-id-badge"></i>
+                        <input type="text" name="pan" id="pan" placeholder="PAN Number" required>
+                    </div>
+                    <div class="validation-message" id="pan-message"></div>
+                </div>
+            </div>
+                
+                <div class="login-buttons">
+                    <input type="submit" class="login-button" value="Next" onclick="showForm('campform2')" id="submit-btn" disabled>
+                </div>
+            </form>
+    
+            <form id="campform2" class="login-form" enctype="multipart/form-data" style="display: none;" onsubmit="event.preventDefault(); submitForm('campform2', 'campform3');">
+                {% csrf_token %}
+
+                <h2>ENTER ADDITIONAL DETAILS</h2>
+            
+                <div class="form-group">
+                    <div class="label-radio-container">
+                        <label>Income Level</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="income_level" value="low" required>
+                                <span class="radio-label">Low</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="income_level" value="medium">
+                                <span class="radio-label">Medium</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="income_level" value="high">
+                                <span class="radio-label">High</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="form-group">
+                    <div class="label-radio-container">
+                        <label>Presence of Kids</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="children" value="yes" required>
+                                <span class="radio-label">Yes</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="children" value="no" required>
+                                <span class="radio-label">No</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="form-group">
+                    <label for="source" class="checkbox-group-label">Source of Information</label>
+                    <div class="checkbox-options">
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="source" value="social_media">
+                            Social Media
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="source" value="customer">
+                            Customer
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="source" value="news">
+                            News
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fa-regular fa-message"></i>
+                        <textarea name="feedback" placeholder="Customer feedback" required></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="claim_satisfaction" class="rating-label">Claim Satisfaction</label>
+                    
+                    <div class="progress-container">
+                        <input type="range" id="satisfaction-range" name="claim_satisfaction" min="0" max="100" value="0" class="range-slider" oninput="updateProgressBar(this)">
+                        <div class="progress-bar-container">
+                            <div id="progress-bar" class="progress-bar"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="percentage-display">
+                        <span id="percentage-value">0%</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="source" class="checkbox-group-label">Insurance markup area</label>
+                    <div class="checkbox-options">
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="area" value="Life">
+                            Life
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="area" value="Health">
+                            Health
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="area" value="Travel">
+                            Travel
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="area" value="Commercial">
+                            Commercial
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="area" value="Vehicle">
+                            Vehicle
+                        </label>
+                    </div>
+                </div>
+                <div style="margin-bottom: 50px;" class="form-group">
+                    <label for="img1" class="file-upload-label">
+                        <i class="fas fa-upload"></i> Agent Visited Policy
+                    </label>
+                    <input type="file" name="img1" id="img1" class="file-upload-input" required>
+                </div>
+                
+            
+                <div class="login-buttons">
+                    <button type="button" class="login-button" onclick="showForm('campform1')">Previous</button>
+                    <button type="submit" class="login-button" onclick="showForm('campform3')" >Next</button>
+                </div>
+            </form>
+
+
+
+
+            <form id="campform3" class="login-form" enctype="multipart/form-data" action="{% url 'campaign_client_form3' %}" method="POST" style="display: none;">
+                {% csrf_token %}
+
+                <h2>ENTER ADDITIONAL DETAILS</h2>
+            
+                
+            
+                <div class="form-group">
+                    <div class="label-radio-container">
+                        <label>Willingness to Purchase Insurance</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="Purchase" value="Yes" required>
+                                <span class="radio-label">Yes</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="Purchase" value="No" required>
+                                <span class="radio-label">No</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-radio-container">
+                        <label>Willingness to Share Previous Insurance</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="Previous" value="yes" required>
+                                <span class="radio-label">Yes</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="Previous" value="no" required>
+                                <span class="radio-label">No</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fa-regular fa-message"></i>
+                        <textarea name="feedback" placeholder="Customer Preferences" required></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fa-regular fa-message"></i>
+                        <textarea name="agent_notes" placeholder="Agent Notes" required></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-radio-container">
+                        <label>Willingness to Switch Over Another Insurance</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="Switch" value="yes" required>
+                                <span class="radio-label">Yes</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="Switch" value="no" required>
+                                <span class="radio-label">No</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            
+                <div style="margin-bottom: 50px;" class="form-group">
+                    <label for="img" class="file-upload-label">
+                        <i class="fas fa-upload"></i> Existing Profile Details
+                    </label>
+                    <input type="file" name="img" id="img" class="file-upload-input" required>
+                </div>
+                
+            
+                <div class="login-buttons">
+                    <button type="button" class="login-button" onclick="showForm('campform2')">Previous</button>
+                    <button type="submit" class="login-button">Submit</button>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+    
+        
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-columns">
+            <div class="footer-column">
+                <h4>Vision</h4>
+                <p>Our vision is to become the most trusted general insurer for a transforming India.</p>
+                <h4>Mission</h4>
+                <p>Our mission is to provide simple and innovative general insurance solutions, be responsive to our customers' needs and build a sustainable business for the future.</p>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Popular Links</h4>
+                <ul>
+                    <li><a href="#">Blogs</a></li>
+                    <li><a href="#">Become an Agent</a></li>
+                    <li><a href="#">Important Links</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Usage</a></li>
+                    <li><a href="#">Azadi ka Amrit Mahotsav</a></li>
+                    <li><a href="#">Glossary</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Investors</a></li>
+                    <li><a href="#">Public Disclosure</a></li>
+                    <li><a href="#">SBI General in News</a></li>
+                    <li><a href="#">Testimonials</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Services</h4>
+                <ul>
+                    <li><a href="#">Intimate Claim</a></li>
+                    <li><a href="#">Renew Policy</a></li>
+                    <li><a href="#">Downloads</a></li>
+                    <li><a href="#">Retrieve Quote</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Help & Support</h4>
+                <ul>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Write To Us</a></li>
+                    <li><a href="#">Garage Network</a></li>
+                    <li><a href="#">Hospital Network</a></li>
+                    <li><a href="#">Grievance Redressal</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>We're Socially Active!</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Jan Suraksha Insurance Scheme. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+    const fields = [
+        { id: "fname", message: "First name is required." },
+        { id: "lname", message: "Last name is required." },
+        { id: "phone", message: "Enter a valid phone number.", pattern: /^[0-9]{10}$/ },
+        { id: "address", message: "Address is required." },
+        { id: "dob", message: "Date of Birth is required." },
+        { id: "age", message: "Enter a valid age.", pattern: /^[1-9][0-9]*$/ },
+        { id: "profession", message: "Profession is required." },
+        { id: "annual_income", message: "Enter a valid annual income.", pattern: /^[0-9]+(\.[0-9]{1,2})?$/ },
+        { id: "qualification", message: "Qualification is required." },
+        { id: "aadhar", message: "Enter a valid Aadhar number.", pattern: /^\d{12}$/ },
+        { id: "pan", message: "Enter a valid PAN number.", pattern: /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/ }
+    ];
+
+    const submitButton = document.getElementById("submit-btn");
+
+    function validateField(field) {
+        const input = document.getElementById(field.id);
+        const messageEl = document.getElementById(`${field.id}-message`);
+        const value = input.value.trim();
+
+        if (!value) {
+            messageEl.textContent = field.message;
+            messageEl.className = "validation-message error";
+            messageEl.style.opacity = 1;
+            return false;
+        }
+
+        if (field.pattern && !field.pattern.test(value)) {
+            messageEl.textContent = field.message;
+            messageEl.className = "validation-message warning";
+            messageEl.style.opacity = 1;
+            return false;
+        }
+
+        messageEl.textContent = "Looks good!";
+        messageEl.className = "validation-message success";
+        messageEl.style.opacity = 1;
+        return true;
+    }
+
+    fields.forEach(field => {
+        const input = document.getElementById(field.id);
+        input.addEventListener("input", () => {
+            const allValid = fields.every(f => validateField(f));
+            submitButton.disabled = !allValid;
+            submitButton.classList.toggle("disabled", !allValid);
+        });
+    });
+
+    const aadharInput = document.getElementById("aadhar");
+    const mobileInput = document.getElementById("phone");
+    const panInput = document.getElementById("pan");
+    
+    aadharInput.addEventListener('input', function() {
+        const aadhar = this.value.trim();
+
+        if (!/^\d{12}$/.test(aadhar)) {
+            showMessage(aadharInput, "Aadhar number is required and must be 12 digits.", false);
+        } else {
+            checkAadhar(aadhar);
+        }
+    });
+
+    mobileInput.addEventListener('input', function() {
+        const mobile = this.value.trim();
+
+        if (!/^[0-9]{10}$/.test(mobile)) {
+            showMessage(mobileInput, "Please enter a valid mobile number.", false);
+        } else {
+            checkMobile(mobile);
+        }
+    });
+
+    panInput.addEventListener('input', function() {
+        const pan = this.value.trim();
+
+        if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(pan)) {
+            showMessage(panInput, "Please enter a valid PAN number.", false);
+        } else {
+            checkPan(pan);
+        }
+    });
+
+    function checkAadhar(aadhar) {
+        fetch(`/check-adhaar/?aadhar=${aadhar}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.exists) {
+                    showMessage(aadharInput, "Aadhar number already exists", false);
+                } else {
+                    showMessage(aadharInput, "Aadhar number is valid", true);
+                }
+            })
+            .catch(error => {
+                showMessage(aadharInput, "Error checking Aadhar number availability.", false);
+            });
+    }
+
+    function checkMobile(mobile) {
+        fetch(`/check-mobile?mobile=${mobile}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.exists) {
+                    showMessage(mobileInput, "Mobile number already exists", false);
+                } else {
+                    showMessage(mobileInput, "Mobile number is available", true);
+                }
+            })
+            .catch(error => {
+                showMessage(mobileInput, "Error checking mobile number availability.", false);
+            });
+    }
+
+    function checkPan(pan) {
+    fetch(`/check-pan/?pan=${pan}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.exists) {
+                showMessage(panInput, "PAN number already exists", false);
+            } else {
+                showMessage(panInput, "PAN number is valid", true);
+            }
+        })
+        .catch(error => {
+            showMessage(panInput, "Error checking PAN number availability.", false);
+        });
+    }
+
+   
+
+
+    function showMessage(input, message, success) {
+        const messageEl = document.getElementById(`${input.id}-message`);
+        messageEl.textContent = message;
+        messageEl.className = success ? "validation-message success" : "validation-message error";
+        messageEl.style.opacity = 1;
+    }
+});
+
+
+
+
+
+
+    function showForm(formId) {
+        document.getElementById("campform1").style.display = "none";
+        document.getElementById("campform2").style.display = "none";
+        document.getElementById("campform3").style.display = "none";
+        document.getElementById(formId).style.display = "block";
+    }
+
+   
+    function submitForm(formId, nextFormId) {
+        const form = document.getElementById(formId);
+
+        const formData = new FormData(form);
+
+        fetch(`/${formId}/`, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById(formId).style.display = 'none';
+                if (nextFormId) {
+                    document.getElementById(nextFormId).style.display = 'block';
+                }
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while submitting the form.');
+        });
+    }
+
+
+
+    function updateProgressBar(slider) {
+        var percentage = slider.value;
+        document.getElementById("progress-bar").style.width = percentage + "%";
+        document.getElementById("percentage-value").innerText = percentage + "%";
+    }
+
+    const toggleBtn = document.querySelector('.toggle-btn');
+    const navbarLinks = document.querySelector('.navbar-links');
+
+    toggleBtn.addEventListener('click', () => {
+        navbarLinks.classList.toggle('active');
+    });
+</script>
+
+</body>
+</html>

@@ -327,21 +327,20 @@ hr {
     }
     
     .card {
-        background: rgb(249, 245, 245);
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        padding: 20px;
-        flex: 1 1 calc(33.33% - 30px); 
-        max-width: 350px;
-        min-width: 350px; 
-        margin-bottom: 30px;
-        transition: transform 0.2s, box-shadow 0.2s;
-        position: relative;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-    }
-    
+    background: rgb(249, 245, 245);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    flex: 1 1 calc(50% - 20px); 
+    max-width: 800px; 
+    min-width: 400px; 
+    margin-bottom: 30px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
     .card:hover {
         transform: translateY(-5px);
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
@@ -477,8 +476,8 @@ hr {
 }
 
 .success-message {
-    background-color: #d4edda;
-    color: #155724;
+    background-color: #671766;
+    color: #ffffff;
     border: 1px solid #c3e6cb;
 }
 
@@ -492,6 +491,45 @@ hr {
         padding: 8px;
         margin-top: 8px;
     }
+}
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 2px solid #9c299e;
+  border-radius: 8px;
+  padding: 10px 15px;
+  background-color: #f9f9f9;
+  max-width: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  text-align: center;
+}
+
+.link-wrapper {
+  margin: 0;
+}
+
+.custom-link {
+  color: #9c299e;
+  text-decoration: dashed;
+  font-weight: bold;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .button-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .link-wrapper {
+    margin-bottom: 10px;
+  }
+
+  .link-wrapper:last-child {
+    margin-bottom: 0;
+  }
 }
 
 
@@ -542,18 +580,39 @@ hr {
                 {% endif %}
             </div>
             <div class="card-info">
-                <h3>Campaign at {{ campaign.location }}</h3>  
+                <h3> {{ campaign.campaign_name }}</h3> 
+                <p><strong>Start Date:</strong> {{ campaign.location }}</p> 
                 <p><strong>Start Date:</strong> {{ campaign.start_date }}</p>
                 <p><strong>End Date:</strong> {{ campaign.end_date }}</p>
                 <p><strong>Time:</strong> {{ campaign.start_time }}</p>
+                <div class="button-container">
+                   
+                    <div class="link-wrapper">
+                        <p style="text-align: center;color: #532a4f;text-decoration: none;margin-left: 100px;">
+                          <a style="text-align: center;color: #532a4f;text-decoration: none;" href="{% url 'view_agents_in_campaign' campaign.id %}" class="custom-link">Assigned Agents</a>
+                        </p>
+                      </div>
+                  </div>
+
+                  <div class="button-container">
+                   
+                    <div class="link-wrapper">
+                      <p style="text-align: center;color: #532a4f;text-decoration: none;margin-left: 100px;">
+                        <a style="text-align: center;color: #532a4f;text-decoration: none;"  href="{% url 'show_campaign_clients_by_admin' campaign_id=campaign.id %}" class="custom-link">Enrolled Clients</a>
+                      </p>
+                    </div>
+                  </div>
+                  
             </div>
             <div class="card-actions">
                 <a class="profile-btn" 
-                href="{% url 'viewcampaignagents' campaign.id %}" 
+                href="{% url 'addagentstocampagin' campaign.id %}" 
                 style="display: inline-flex; align-items: center; justify-content: center; text-align: center; padding: 10px 20px; background-color: #6c1a6d; color: #fff; text-decoration: none; border-radius: 5px; font-size: 16px;">
-                <i class="fas fa-user" style="margin-right: 8px;"></i> Agent
+                <i class="fa-solid fa-user-plus" style="margin-right: 8px;"></i>Add Agent
              </a>
-                             <!-- <a class="clients-btn" href="{% url 'viewcampaignclients' %}"><i class="fas fa-users"></i> Clients</a> -->
+          
+             
+
             </div>
             <div class="icon-container">
                 <a href="{% url 'editcampaign' campaign.id %}" class="edit-icon"><i class="fas fa-edit"></i></a>

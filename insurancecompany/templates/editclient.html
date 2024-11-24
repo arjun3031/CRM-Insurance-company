@@ -722,7 +722,7 @@ label {
                                 placeholder="First name" 
                                 required 
                                 value="{{ client.first_name }}" 
-                                oninput="validateField()">
+                                oninput="validateField1()">
                         </div>
                         <small 
                             id="error-message" 
@@ -1094,7 +1094,7 @@ label {
                     </div>
                 </div>
                 
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="area" class="checkbox-group-label">Insurance markup area</label>
                     <div class="checkbox-options">
                         <label class="checkbox-option">
@@ -1121,6 +1121,35 @@ label {
                     <small 
                         id="error-message-area" 
                         style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        * Please select at least one insurance markup area.
+                    </small>
+                </div> -->
+                
+                <div class="form-group">
+                    <label for="area" class="checkbox-group-label">Insurance markup area</label>
+                    <div class="checkbox-options">
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="area" value="Health" {% if 'Health' in insurance_area_list %}checked{% endif %}>
+                            Health
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="area" value="Travel" {% if 'Travel' in insurance_area_list %}checked{% endif %}>
+                            Travel
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="area" value="Life" {% if 'Life' in insurance_area_list %}checked{% endif %}>
+                            Life
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="area" value="Commercial" {% if 'Commercial' in insurance_area_list %}checked{% endif %}>
+                            Commercial
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="area" value="Vehicle" {% if 'Vehicle' in insurance_area_list %}checked{% endif %}>
+                            Vehicle
+                        </label>
+                    </div>
+                    <small id="error-message-area" style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
                         * Please select at least one insurance markup area.
                     </small>
                 </div>
@@ -1313,11 +1342,7 @@ label {
 </footer>
 <script>
 
-const firstNameInput = document.getElementById('first_name');
-const lastNameInput = document.getElementById('last_name');
-const mobileInput = document.getElementById('mobile');
-const currentMobile = emailInput.dataset.currentMobile;
-const addressInput = document.getElementById('address');
+
 const dobInput = document.getElementById('dob');
 const ageInput = document.getElementById('age');
 const errorMessageDob = document.getElementById('error-message-dob');
@@ -1329,13 +1354,6 @@ const errorMessageProfession = document.getElementById('error-message-profession
 const errorMessageAnnualIncome = document.getElementById('error-message-annual-income');
 const qualificationInput = document.getElementById('qualification');
 const errorMessageQualification = document.getElementById('error-message-qualification');
-const errorMessage = document.getElementById('error-message');
-const errorMessage2 = document.getElementById('error-message2');
-const errorMessage8 = document.getElementById('error-message8');
-const errorMessage9 = document.getElementById('error-message9');
-const errorMessage10 = document.getElementById('error-message10');
-const successMessage3 = document.getElementById('success-message3');
-const errorMessage3 = document.getElementById('error-message3');
 const aadharInput = document.getElementById('aadhar');
 const errorMessageAadharRequired = document.getElementById('error-message-aadhar-required');
 const errorMessageAadharFormat = document.getElementById('error-message-aadhar-format');
@@ -1354,17 +1372,25 @@ const errorMessageArea = document.getElementById('error-message-area');
 
 const submitButton = document.getElementById('submit-button');
 
-function validateField() {
+    function validateField1() {
+        const firstNameInput = document.getElementById('first_name');
+        const submitButton = document.getElementById('submit-button');
+        const errorMessage = document.getElementById('error-message');
+
         if (firstNameInput.value.trim() === "") {
-            submitButton.disabled = true;
-            errorMessage.style.display = "block";
+            submitButton.disabled = true; 
+            errorMessage.style.display = "block"; 
         } else {
             submitButton.disabled = false;
-            errorMessage.style.display = "none";
+            errorMessage.style.display = "none"; 
         }
     }
 
     function validateField2() {
+        const lastNameInput = document.getElementById('last_name');
+        const errorMessage2 = document.getElementById('error-message2');
+        const submitButton = document.getElementById('submit-button');
+
         if (lastNameInput.value.trim() === "") {
             submitButton.disabled = true;
             errorMessage2.style.display = "block";
@@ -1439,7 +1465,11 @@ function checkMobileExists(mobile, currentMobile) {
 
     
 
-function validateField3() {
+    function validateField3() {
+        const addressInput = document.getElementById('address');
+        const errorMessage3 = document.getElementById('error-message3');
+        const submitButton = document.getElementById('submit-button');
+
         if (addressInput.value.trim() === "") {
             submitButton.disabled = true;
             errorMessage3.style.display = "block";
@@ -1670,23 +1700,15 @@ function updateProgressBar(input) {
     percentageValue.innerText = percentage + '%';
 }
 
-    const toggleBtn = document.querySelector('.toggle-btn');
-    const navbarLinks = document.querySelector('.navbar-links');
+    
 
-    toggleBtn.addEventListener('click', () => {
-        navbarLinks.classList.toggle('active');
-    });
+const toggleBtn = document.querySelector('.toggle-btn'); 
+const navbarLinks = document.querySelector('.navbar-links'); 
 
-    document.getElementById('toggleCurrent').addEventListener('click', function () {
-                    const passwordField = document.getElementById('password');
-                    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-                    passwordField.setAttribute('type', type);
-                    this.classList.toggle('fa-eye-slash');
-                });
-                flatpickr("#dob", {
-        dateFormat: "Y-m-d", 
-    });
-          
+toggleBtn.addEventListener('click', () => {
+    navbarLinks.classList.toggle('active'); 
+});
+
 </script>
 
 </body>

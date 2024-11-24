@@ -579,7 +579,7 @@ hr {
     
                 <h2 style="color: #392039; letter-spacing: 1px;">ADD NEW CAMPAIGN</h2>
     
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <div class="input-icon">
                         <select name="agent" id="agent" required>
                             <option value="" disabled selected>Select an agent</option>
@@ -588,6 +588,28 @@ hr {
                             {% endfor %}
                         </select>
                     </div>
+                </div> -->
+
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fa-solid fa-file-signature"></i>
+                        <input type="text" 
+                        name="campname" 
+                        id="cname" 
+                        placeholder="Campaign name" 
+                        required
+                        oninput="validateField10()">
+                    </div>
+                    <small 
+                    id="error-message-cname" 
+                    style="
+                        color: #ff4d4d; 
+                        font-size: 12px; 
+                        font-weight: 500; 
+                        margin-top: 5px; 
+                        display: none;">
+                        * Campaign name required.
+                    </small>                
                 </div>
     
                 <div class="form-group">
@@ -813,6 +835,21 @@ function validateField1() {
     } else {
         submitButton.disabled = false;
         errorMessage1.style.display = "none";
+    }
+}
+
+const cnameInput = document.getElementById('cname');
+const errorMessages = document.getElementById('error-message-cname');
+
+validateField10();
+
+function validateField10() {
+    if (cnameInput.value.trim() === "") {
+        submitButton.disabled = true;
+        errorMessages.style.display = "block";
+    } else {
+        submitButton.disabled = false;
+        errorMessages.style.display = "none";
     }
 }
 

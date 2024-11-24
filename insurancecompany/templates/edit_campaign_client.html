@@ -1,0 +1,1686 @@
+
+
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit client</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+         * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+            height: 100%;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: white;
+            padding: 0 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: 120px;
+            width: 100%;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            font-size: 35px;
+            color: rgb(170, 99, 170);
+            margin-right: 14px;
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo h1 {
+            color: rgb(141, 42, 118);
+            font-size: 40px;
+            margin-bottom: 5px;
+            font-family: 'Lucida Sans', 'Lucida Grande', Geneva, Verdana, sans-serif;
+        }
+        
+        .logo p {
+            font-size: 18px;
+            color: rgb(141, 145, 145);
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            margin: 0 20px;
+        }
+        
+        .search-bar input[type="text"] {
+            width: 100%;
+            max-width: 400px;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .search-bar input[type="text"]:focus {
+            border-color: rgb(188, 32, 170);
+        }
+        
+        .navbar-links {
+            display: flex;
+            list-style: none;
+            align-items: center;
+            margin-left: auto;
+            gap: 20px;
+        }
+        
+        .navbar-links li {
+            margin: 0;
+        }
+        
+        .navbar-links a {
+            text-decoration: none;
+            color: rgb(141, 42, 118);
+            font-size: 18px;
+            padding: 10px;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            line-height: 1;
+        }
+        
+        .navbar-links a:hover {
+            color: rgb(51, 5, 41);
+        }
+        
+        .navbar-links a i {
+            margin-right: 8px;
+        }
+        
+        .toggle-btn {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: black;
+        }
+        
+        @media (max-width: 1560px) {
+            .search-bar {
+                display: none;
+            }
+        }
+        
+        @media (min-width: 750px) and (max-width: 1030px) {
+            .navbar-links {
+                flex-wrap: nowrap;
+                gap: 10px;
+            }
+        
+            .logo h1 {
+                font-size: 30px;
+            }
+        }
+        
+        @media (max-width: 1530px) {
+            .navbar-links {
+                display: none;
+                flex-direction: column;
+                align-items: flex-start;
+                width: 100%;
+                position: absolute;
+                top: 120px;
+                left: 0;
+                background-color: white;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                z-index: 999;
+                padding: 20px;
+            }
+        
+            .navbar-links.active {
+                display: flex;
+            }
+        
+            .navbar-links li {
+                width: 100%;
+            }
+        
+            .navbar-links a {
+                padding: 10px 20px;
+                width: 100%;
+            }
+        
+            .toggle-btn {
+                display: block;
+            }
+        }
+        
+        .badge {
+            background-color: #ef105a;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 8px;
+            position: relative;
+            top: -2px;
+            display: inline-block;
+        }
+        
+        .navbar-links li {
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-links li a {
+            display: flex;
+            align-items: center;
+        }
+        
+        @media (max-width: 768px) {
+            .badge {
+                margin-left: 6px;
+                top: 0;
+            }
+        }
+        
+
+
+
+        .footer {
+    background-color: #efd6ea;
+    color: rgb(106, 53, 107);
+    padding: 40px 20px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-columns {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.footer-column {
+    flex: 1;
+    min-width: 200px;
+    margin: 10px 20px;
+}
+
+.footer-column h4 {
+    color: #532a4f;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.footer-column p, .footer-column ul {
+    font-size: 14px;
+    color: #532a4f;
+    line-height: 1.6;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 8px;
+}
+
+.footer-column ul li a {
+    color: #532a4f;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-column ul li a:hover {
+    color: #532a4f;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.social-icons a {
+    color: #532a4f;
+    font-size: 20px;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: #532a4f;
+}
+
+.footer-bottom {
+    font-size: 14px;
+    color: #532a4f;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #351839;
+    margin: 20px 0;
+}
+
+@media (max-width: 768px) {
+    .footer-columns {
+        flex-direction: column;
+    }
+    .footer-column {
+        text-align: left;
+    }
+}
+
+
+.login-section {
+    background: url("{% static 'images/bg.jpg' %}") no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 80px);
+}
+
+.login-container {
+    display: flex;
+    width: 90%;
+    max-width: 1000px;
+    background-color: rgba(249, 254, 255, 0.7);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin: 20px auto;
+    padding: 20px;
+
+}
+
+.login-images {
+    display: flex;
+    flex-direction: column; 
+    width: 100%; 
+    height: 250vh;
+    overflow: hidden;
+}
+
+.login-images img {
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    flex: 1; 
+    margin: 0; 
+    border: none; 
+}
+
+@media (max-width: 768px) {
+    .login-images img {
+        display: none;
+    }
+
+    .login-images img:first-child {
+        display: block; 
+        height: auto; 
+    }
+
+    .login-images {
+        height: auto; 
+    }
+}
+
+
+
+.login-form {
+    flex: 2;
+    padding: 40px;
+}
+
+.login-form h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #430e3d;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.input-icon {
+    position: relative;
+}
+
+.input-icon i {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #433246;
+    font-size: 18px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 10px 10px 40px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: rgba(249, 254, 255, 0.5);
+}
+
+.form-group input:focus {
+    border-color: #ff00ee;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.login-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.login-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #5f2760;
+    color: white;
+    flex: 1;
+}
+
+.login-button:hover {
+    background-color: #403a42;
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+        width: 85%;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+}
+
+.form-group textarea {
+    background-color: rgba(249, 254, 255, 0.5);
+    width: 100%;
+    padding: 10px 10px 10px 40px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    font-size: 16px;
+    resize: vertical; 
+    min-height: 100px; 
+}
+
+.form-group textarea:focus {
+    border-color: #ff00ee;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.label-radio-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+label {
+    font-weight: bold;
+    color: #433246;
+    font-size: 16px;
+}
+
+.radio-group {
+    display: flex;
+    gap: 20px;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+}
+
+.radio-option input[type="radio"] {
+    appearance: none;
+    background-color: #f0f0f0;
+    border: 2px solid #cccccc;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 8px;
+    transition: background-color 0.3s, border-color 0.3s;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.radio-option input[type="radio"]:checked {
+    background-color: #ff00ee;
+    border-color: #ff00ee;
+}
+
+.radio-option input[type="radio"]:checked::before {
+    content: '';
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin: 4px auto;
+}
+
+.checkbox-group-label {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.checkbox-options {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.checkbox-option input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.checkbox-option label {
+    display: flex;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .checkbox-options {
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .label-radio-container {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .radio-group {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+}
+
+.rating-label {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.progress-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.range-slider {
+    width: 100%;
+    height: 10px;
+    background: #f0f0f0;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 10px;
+    background: #e0e0e0;
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background-color: #4caf50;
+    transition: width 0.3s ease;
+    
+}
+
+.percentage-display {
+    font-size: 16px;
+    font-weight: bold;
+    color: #433246;
+}
+
+@media (max-width: 768px) {
+    .progress-container {
+        max-width: 100%;
+    }
+}
+
+.file-upload-label {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fdedff;
+    color: rgb(106, 106, 106);
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+    text-align: center;
+    width: 100%; 
+}
+
+.file-upload-label:hover {
+    background-color: #f9d0ff; 
+}
+
+.file-upload-input {
+    display: none; 
+}
+
+@media (max-width: 768px) {
+    .file-upload-label {
+        padding: 15px; 
+        font-size: 18px; 
+    }
+}
+
+.error-message, .success-message {
+    padding: 15px;
+    margin-bottom: 10px;
+    margin-top: 7px;
+    border-radius: 5px;
+    display: none;
+    text-align: center;
+}
+
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.error-message.active, .success-message.active {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .error-message, .success-message {
+        font-size: 10px;
+        padding: 8px;
+        margin-top: 8px;
+    }
+}
+</style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">
+            <i class="fa-solid fa-hand-holding-heart"></i>
+            <div class="logo-text">
+                <h1>JAN SURAKSHA</h1>
+                <p>Insurance Company</p>
+            </div>
+        </div>
+        <div class="toggle-btn" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+        <ul class="navbar-links" id="navbarLinks">
+            <li><a href="{% url 'addclient' %}"><i class="fa fa-id-card"></i> Add Clients</a></li>
+            <li><a href="{% url 'viewclientsbyagent' %}"><i class="fa fa-users"></i> View Clients</a></li>
+            <li>
+                <a href="{% url 'viewcampaignbyagent' %}"><i class="fa fa-bullhorn"></i> Campaigns</a>
+                <span class="badge">{{ campaign_count }}</span>
+            </li>
+            <li><a href="{% url 'profile' %}"><i class="fa-solid fa-user"></i> Profile</a></li>
+            <li><a href="{% url 'homepage' %}"><i class="fa-solid fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </nav>
+
+
+
+    <div class="login-section">
+        
+        <div class="login-container">
+            <div class="login-images">
+                <img src="{% static 'images/p.jpeg' %}" alt="Image 1">
+                <img src="{% static 'images/ik3.webp' %}" alt="Image 3">
+                <img src="{% static 'images/ik2.png' %}" alt="Image 3">
+                <img src="{% static 'images/p2.jpeg' %}" alt="Image 5">
+                <img src="{% static 'images/p1.jpeg' %}" alt="Image 3">
+                <img src="{% static 'images/ik.jpg' %}" alt="Image 4">
+            </div>
+                        
+           
+            
+            <form id="form1" class="login-form" enctype="multipart/form-data" action="{% url 'update_campaign_client' client.id %}" method="POST">
+                <div>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="{% if message.tags == 'success' %}success-message{% else %}error-message{% endif %} active">
+                                <p>{{ message }}</p>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <h2>EDIT CLIENT INFORMATION</h2>
+                
+                {% csrf_token %}
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            <input 
+                                type="text" 
+                                name="fname" 
+                                id="first_name" 
+                                placeholder="First name" 
+                                required 
+                                value="{{ client.first_name }}" 
+                                oninput="validateField1()">
+                        </div>
+                        <small 
+                            id="error-message" 
+                            style="
+                                color: #ff4d4d; 
+                                font-size: 12px; 
+                                font-weight: 500; 
+                                margin-top: 5px; 
+                                display: none;">
+                            * First name is required
+                        </small>
+                    </div>
+                
+                    <div class="form-group">
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            <input 
+                                type="text" 
+                                name="lname" 
+                                id="last_name" 
+                                placeholder="Last name" 
+                                required 
+                                value="{{ client.last_name }}" 
+                                oninput="validateField2()">
+                        </div>
+                        <small 
+                            id="error-message2" 
+                            style="
+                                color: #ff4d4d; 
+                                font-size: 12px; 
+                                font-weight: 500; 
+                                margin-top: 5px; 
+                                display: none;">
+                            * Last name is required
+                        </small>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fa-solid fa-square-phone"></i>
+                        <input 
+                            type="text" 
+                            name="phone" 
+                            id="mobile" 
+                            placeholder="Mobile number" 
+                            required 
+                            value="{{ client.phone }}" 
+                            data-current-mobile="{{ client.phone }}" 
+                            oninput="validateField5()"
+                        >
+                    </div>
+                    <small 
+                        id="error-message8" 
+                        style="
+                            color: #ff4d4d; 
+                            font-size: 12px; 
+                            font-weight: 500; 
+                            margin-top: 5px; 
+                            display: none;">
+                        * Mobile number is required
+                    </small>
+                    <small 
+                        id="error-message9" 
+                        style="
+                            color: #ff4d4d; 
+                            font-size: 12px; 
+                            font-weight: 500; 
+                            margin-top: 5px; 
+                            display: none;">
+                        * Mobile number already exists
+                    </small>
+                    <small 
+                        id="success-message3" 
+                        style="
+                            color: #4CAF50; 
+                            font-size: 12px; 
+                            font-weight: 500; 
+                            margin-top: 5px; 
+                            display: none;">
+                        Mobile number available
+                    </small>
+                    <small 
+                        id="error-message10" 
+                        style="
+                            color: #ff4d4d; 
+                            font-size: 12px; 
+                            font-weight: 500; 
+                            margin-top: 5px; 
+                            display: none;">
+                        * Incorrect format
+                    </small>
+                </div>
+               
+
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fas fa-home"></i>
+                        <textarea
+                            name="address" 
+                            id="address"
+                            placeholder="Address" 
+                            required
+                            oninput="validateField3()">
+                            {{ client.address }}
+                        </textarea>
+                        <small 
+                            id="error-message3" 
+                            style="
+                                color: #ff4d4d; 
+                                font-size: 12px; 
+                                font-weight: 500; 
+                                margin-top: 5px; 
+                                display: none;">
+                            * Address is required
+                        </small>
+                    </div>
+                </div>
+                
+
+
+                
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                        <input type="text" name="dob" id="dob" placeholder="Date of Birth" value="{{ client.dob|date:'Y-m-d' }}" required oninput="validateFields()">
+                    </div>
+                    <small id="error-message-dob" style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        * Date of Birth is required
+                    </small>
+                </div>
+                
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="number" name="age" id="age" placeholder="Age" value="{{ client.age }}" required min="1" oninput="validateFields()">
+                    </div>
+                    <small id="error-message-age-required" style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        * Age is required
+                    </small>
+                    
+                    <small id="error-message-age-zero" style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        * Age cannot be zero
+                    </small>
+                </div>
+                
+                
+                
+               
+                
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <div class="input-icon">
+                            <i class="fas fa-briefcase"></i>
+                            <input 
+                                type="text" 
+                                name="profession" 
+                                id="profession" 
+                                placeholder="Profession" 
+                                value="{{ client.profession }}" 
+                                required 
+                                oninput="validateProfession()">
+                        </div>
+                        <small 
+                            id="error-message-profession" 
+                            style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                            * Profession is required
+                        </small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="input-icon">
+                            <i class="fa-solid fa-indian-rupee-sign"></i>
+                            <input 
+                                type="number" 
+                                name="annual_income" 
+                                id="annual_income" 
+                                placeholder="Annual Income" 
+                                value="{{ client.annual_income }}" 
+                                required 
+                                min="0" 
+                                step="0.01" 
+                                oninput="validateAnnualIncome()">
+                        </div>
+                        <small 
+                            id="error-message-annual-income" 
+                            style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                            * Annual Income is required
+                        </small>
+                    </div>
+                </div>
+                
+                
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                        <input 
+                            type="text" 
+                            name="qualification" 
+                            id="qualification" 
+                            placeholder="Qualification" 
+                            value="{{ client.qualification }}" 
+                            required 
+                            oninput="validateQualification()">
+                    </div>
+                    <small 
+                        id="error-message-qualification" 
+                        style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        * Qualification is required
+                    </small>
+                </div>
+                
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <div class="input-icon">
+                            <i class="fas fa-id-card"></i>
+                            <input 
+                                type="text" 
+                                name="aadhar" 
+                                id="aadhar" 
+                                placeholder="Aadhar Card Number" 
+                                value="{{ client.aadhar }}" 
+                                required 
+                                oninput="validateAadhar()">
+                        </div>
+                        <small 
+                            id="error-message-aadhar-required" 
+                            style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                            * Aadhar number is required
+                        </small>
+                        <small 
+                            id="error-message-aadhar-format" 
+                            style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                            * Invalid Aadhar number format
+                        </small>
+                        <small 
+                            id="error-message-aadhar-exists" 
+                            style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                            * Aadhar number already exists
+                        </small>
+                        <small 
+                            id="success-message-aadhar" 
+                            style="color: #4CAF50; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                            * Aadhar number is available
+                        </small>
+                    </div>
+                    
+                    
+                    <div class="form-group">
+                        <div class="input-icon">
+                            <i class="fas fa-id-badge"></i>
+                            <input 
+                                type="text" 
+                                name="pan" 
+                                id="pan" 
+                                placeholder="PAN Number" 
+                                value="{{ client.pan }}" 
+                                required 
+                                oninput="validatePan()">
+                        </div>
+                        <small 
+                            id="error-message-pan-required" 
+                            style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                            * PAN number is required
+                        </small>
+                        <small 
+                            id="error-message-pan-format" 
+                            style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                            * Invalid PAN number format
+                        </small>
+                        <small 
+                            id="error-message-pan-exists" 
+                            style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                            * PAN number already exists
+                        </small>
+                        <small 
+                            id="success-message-pan" 
+                            style="color: #4CAF50; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                            * PAN number is available
+                        </small>
+                    </div>
+                    
+                </div>
+                
+            
+                <div class="form-group">
+                    <div class="label-radio-container">
+                        <label>Income Level</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="income_level" value="low" {% if client.income_level == 'low' %}checked{% endif %}>
+                                <span class="radio-label">Low</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="income_level" value="medium" {% if client.income_level == 'medium' %}checked{% endif %}>
+                                <span class="radio-label">Medium</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="income_level" value="high" {% if client.income_level == 'high' %}checked{% endif %}>
+                                <span class="radio-label">High</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="form-group">
+                    <div class="label-radio-container">
+                        <label>Presence of Kids</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="children" value="yes" {% if client.children == 'yes' %}checked{% endif %}>
+                                <span class="radio-label">Yes</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="children" value="no" {% if client.children == 'no' %}checked{% endif %}>
+                                <span class="radio-label">No</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="source" class="checkbox-group-label">Source of Information</label>
+                    <div class="checkbox-options">
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="source" value="social_media" {% if 'social_media' in client.source %}checked{% endif %}>
+                            Social Media
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="source" value="customer" {% if 'customer' in client.source %}checked{% endif %}>
+                            Customer
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="source" value="news" {% if 'news' in client.source %}checked{% endif %}>
+                            News
+                        </label>
+                    </div>
+                    <small id="error-message-source" style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        * Please select at least one source of information.
+                    </small>
+                </div>
+                
+                
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fa-regular fa-message"></i>
+                        <textarea 
+                            name="feedback" 
+                            id="feedback" 
+                            placeholder="Customer feedback" 
+                            required 
+                            oninput="validateFeedback()">{{ client.feedback }}</textarea>
+                    </div>
+                    <small id="feedback-error" style="color: red; display: none;">* This field is required.</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="claim_satisfaction" class="rating-label">Claim Satisfaction</label>
+                    <div class="progress-container">
+                        <input type="range" id="satisfaction-range" name="claim_satisfaction" min="0" max="100" value="{{ client.claim_satisfaction }}" class="range-slider" oninput="updateProgressBar(this)">
+                        <div class="progress-bar-container">
+                            <div id="progress-bar" class="progress-bar"></div>
+                        </div>
+                    </div>
+                    <div class="percentage-display">
+                        <span id="percentage-value">{{ client.claim_satisfaction }}%</span>
+                    </div>
+                </div>
+                
+          
+                
+                <div class="form-group">
+                    <label for="area" class="checkbox-group-label">Insurance markup area</label>
+                    <div class="checkbox-options">
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="area" value="Health" {% if 'Health' in insurance_area_list %}checked{% endif %}>
+                            Health
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="area" value="Travel" {% if 'Travel' in insurance_area_list %}checked{% endif %}>
+                            Travel
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="area" value="Life" {% if 'Life' in insurance_area_list %}checked{% endif %}>
+                            Life
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="area" value="Commercial" {% if 'Commercial' in insurance_area_list %}checked{% endif %}>
+                            Commercial
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="area" value="Vehicle" {% if 'Vehicle' in insurance_area_list %}checked{% endif %}>
+                            Vehicle
+                        </label>
+                    </div>
+                    <small id="error-message-area" style="color: #ff4d4d; font-size: 12px; font-weight: 500; margin-top: 5px; display: none;">
+                        * Please select at least one insurance markup area.
+                    </small>
+                </div>
+                
+                
+                
+                
+                <div style="margin-bottom: 50px;" class="form-group">
+                    <label for="img1" class="file-upload-label">
+                        <i class="fas fa-upload"></i> Agent Visited Policy
+                    </label>
+                    <input type="file" name="img1" id="img1" class="file-upload-input" >
+                </div>
+           
+
+
+
+            
+                <div class="form-group">
+                    <div class="label-radio-container">
+                        <label>Willingness to Purchase Insurance</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="Purchase" value="Yes" {% if client.willingness_to_purchase == 'Yes' %}checked{% endif %} required>
+                                <span class="radio-label">Yes</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="Purchase" value="No" {% if client.willingness_to_purchase == 'No' %}checked{% endif %} required>
+                                <span class="radio-label">No</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <div class="form-group">
+                    <div class="label-radio-container">
+                        <label>Willingness to Share Previous Insurance</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="Previous" value="yes" {% if client.willingness_to_share_previous_insurance == 'yes' %}checked{% endif %} required>
+                                <span class="radio-label">Yes</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="Previous" value="no" {% if client.willingness_to_share_previous_insurance == 'no' %}checked{% endif %} required>
+                                <span class="radio-label">No</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fa-regular fa-message"></i>
+                        <textarea 
+                            name="feedback" 
+                            id="feedback" 
+                            placeholder="Customer Preferences" 
+                            required
+                            oninput="validateFeedback()">{{ client.feedback }}</textarea>
+                    </div>
+                    <small id="feedback-error" style="color: red; display: none;">* This field is required.</small>
+                </div>
+                
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fa-regular fa-message"></i>
+                        <textarea 
+                            name="agent_notes" 
+                            id="agent_notes" 
+                            placeholder="Agent Notes" 
+                            required
+                            oninput="validateAgentNotes()">{{ client.agent_notes }}</textarea>
+                    </div>
+                    <small id="agent_notes-error" style="color: red; display: none;">* This field is required.</small>
+                </div>
+                
+                <div class="form-group">
+                    <div class="label-radio-container">
+                        <label>Willingness to Switch Over Another Insurance</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="Switch" value="yes" {% if client.willingness_to_switch == 'yes' %}checked{% endif %} required>
+                                <span class="radio-label">Yes</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="Switch" value="no" {% if client.willingness_to_switch == 'no' %}checked{% endif %} required>
+                                <span class="radio-label">No</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            
+            
+                <div style="margin-bottom: 50px;" class="form-group">
+                    <label for="img" class="file-upload-label">
+                        <i class="fas fa-upload"></i> Existing Profile Details
+                    </label>
+                    <input type="file" name="img" id="img" class="file-upload-input" >
+                </div>
+                
+            
+                <div class="login-buttons">
+                    <button 
+                        type="submit" 
+                        class="login-button" 
+                        id="submit-button" 
+                        disabled>
+                        UPDATE
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+        
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-columns">
+            <div class="footer-column">
+                <h4>Vision</h4>
+                <p>Our vision is to become the most trusted general insurer for a transforming India.</p>
+                <h4>Mission</h4>
+                <p>Our mission is to provide simple and innovative general insurance solutions, be responsive to our customers' needs and build a sustainable business for the future.</p>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Popular Links</h4>
+                <ul>
+                    <li><a href="#">Blogs</a></li>
+                    <li><a href="#">Become an Agent</a></li>
+                    <li><a href="#">Important Links</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Usage</a></li>
+                    <li><a href="#">Azadi ka Amrit Mahotsav</a></li>
+                    <li><a href="#">Glossary</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Investors</a></li>
+                    <li><a href="#">Public Disclosure</a></li>
+                    <li><a href="#">SBI General in News</a></li>
+                    <li><a href="#">Testimonials</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Services</h4>
+                <ul>
+                    <li><a href="#">Intimate Claim</a></li>
+                    <li><a href="#">Renew Policy</a></li>
+                    <li><a href="#">Downloads</a></li>
+                    <li><a href="#">Retrieve Quote</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Help & Support</h4>
+                <ul>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Write To Us</a></li>
+                    <li><a href="#">Garage Network</a></li>
+                    <li><a href="#">Hospital Network</a></li>
+                    <li><a href="#">Grievance Redressal</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>We're Socially Active!</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Jan Suraksha Insurance Scheme. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+<script>
+
+
+const dobInput = document.getElementById('dob');
+const ageInput = document.getElementById('age');
+const errorMessageDob = document.getElementById('error-message-dob');
+const errorMessageAgeRequired = document.getElementById('error-message-age-required');
+const errorMessageAgeZero = document.getElementById('error-message-age-zero');
+const professionInput = document.getElementById('profession');
+const annualIncomeInput = document.getElementById('annual_income');
+const errorMessageProfession = document.getElementById('error-message-profession');
+const errorMessageAnnualIncome = document.getElementById('error-message-annual-income');
+const qualificationInput = document.getElementById('qualification');
+const errorMessageQualification = document.getElementById('error-message-qualification');
+const aadharInput = document.getElementById('aadhar');
+const errorMessageAadharRequired = document.getElementById('error-message-aadhar-required');
+const errorMessageAadharFormat = document.getElementById('error-message-aadhar-format');
+const errorMessageAadharExists = document.getElementById('error-message-aadhar-exists');
+const successMessageAadhar = document.getElementById('success-message-aadhar');
+const panInput = document.getElementById('pan');
+const errorMessagePanRequired = document.getElementById('error-message-pan-required');
+const errorMessagePanFormat = document.getElementById('error-message-pan-format');
+const errorMessagePanExists = document.getElementById('error-message-pan-exists');
+const successMessagePan = document.getElementById('success-message-pan');
+const sourceCheckboxes = document.querySelectorAll('input[name="source"]');
+const errorMessageSource = document.getElementById('error-message-source');
+const areaCheckboxes = document.querySelectorAll('input[name="area"]');
+const errorMessageArea = document.getElementById('error-message-area');
+
+
+const submitButton = document.getElementById('submit-button');
+
+    function validateField1() {
+        const firstNameInput = document.getElementById('first_name');
+        const submitButton = document.getElementById('submit-button');
+        const errorMessage = document.getElementById('error-message');
+
+        if (firstNameInput.value.trim() === "") {
+            submitButton.disabled = true; 
+            errorMessage.style.display = "block"; 
+        } else {
+            submitButton.disabled = false;
+            errorMessage.style.display = "none"; 
+        }
+    }
+
+    function validateField2() {
+        const lastNameInput = document.getElementById('last_name');
+        const errorMessage2 = document.getElementById('error-message2');
+        const submitButton = document.getElementById('submit-button');
+
+        if (lastNameInput.value.trim() === "") {
+            submitButton.disabled = true;
+            errorMessage2.style.display = "block";
+        } else {
+            submitButton.disabled = false;
+            errorMessage2.style.display = "none";
+        }
+    }
+
+
+
+
+
+    function validateField5() {
+    const mobileInput = document.getElementById('mobile');
+    const mobile = mobileInput.value.trim();
+    const currentMobile = mobileInput.dataset.currentMobile;
+
+    const errorMessage8 = document.getElementById('error-message8');
+    const errorMessage9 = document.getElementById('error-message9');
+    const errorMessage10 = document.getElementById('error-message10');
+    const successMessage3 = document.getElementById('success-message3');
+    const submitButton = document.querySelector('button[type="submit"]');
+
+    errorMessage8.style.display = "none";
+    errorMessage9.style.display = "none";
+    errorMessage10.style.display = "none";
+    successMessage3.style.display = "none";
+    submitButton.disabled = true;
+
+    if (mobile === "") {
+        errorMessage8.style.display = "block";
+        return;
+    }
+
+    const mobileNumberFormatRegex = /^[6-9]\d{9}$/;
+    if (!mobileNumberFormatRegex.test(mobile)) {
+        errorMessage10.style.display = "block";
+        return;
+    }
+
+    if (mobile !== currentMobile) {
+        checkMobileExists(mobile, currentMobile);
+    } else {
+        submitButton.disabled = false;
+        successMessage3.style.display = "block";
+    }
+}
+
+function checkMobileExists(mobile, currentMobile) {
+    fetch(`/check-mobile/?mobile=${encodeURIComponent(mobile)}&current_mobile=${encodeURIComponent(currentMobile)}`)
+        .then((response) => response.json())
+        .then((data) => {
+            const errorMessage9 = document.getElementById('error-message9');
+            const successMessage3 = document.getElementById('success-message3');
+            const submitButton = document.querySelector('button[type="submit"]');
+
+            if (data.exists) {
+                errorMessage9.style.display = "block";
+                successMessage3.style.display = "none";
+                submitButton.disabled = true;
+            } else {
+                errorMessage9.style.display = "none";
+                successMessage3.style.display = "block";
+                submitButton.disabled = false;
+            }
+        })
+        .catch((error) => {
+            console.error('Error checking mobile:', error);
+        });
+}
+
+    
+
+    function validateField3() {
+        const addressInput = document.getElementById('address');
+        const errorMessage3 = document.getElementById('error-message3');
+        const submitButton = document.getElementById('submit-button');
+
+        if (addressInput.value.trim() === "") {
+            submitButton.disabled = true;
+            errorMessage3.style.display = "block";
+        } else {
+            submitButton.disabled = false;
+            errorMessage3.style.display = "none";
+        }
+    }
+
+    function validateFields() {
+    errorMessageDob.style.display = "none";
+    errorMessageAgeRequired.style.display = "none";
+    errorMessageAgeZero.style.display = "none";
+    submitButton.disabled = false;
+
+    if (dobInput.value.trim() === "") {
+        errorMessageDob.style.display = "block";
+        submitButton.disabled = true;
+    }
+
+    const age = parseInt(ageInput.value);
+
+    if (ageInput.value.trim() === "") {  
+        errorMessageAgeRequired.style.display = "block";
+        submitButton.disabled = true;
+    } else if (age === 0) { 
+        errorMessageAgeZero.style.display = "block";
+        submitButton.disabled = true;
+    }
+}
+
+function validateProfession() {
+    if (professionInput.value.trim() === "") {
+        errorMessageProfession.style.display = "block";
+        submitButton.disabled = true;
+    } else {
+        errorMessageProfession.style.display = "none";
+        submitButton.disabled = false;
+    }
+} 
+
+function validateAnnualIncome() {
+    if (annualIncomeInput.value.trim() === "") {
+        errorMessageAnnualIncome.style.display = "block";
+        submitButton.disabled = true;
+    } else {
+        errorMessageAnnualIncome.style.display = "none";
+        submitButton.disabled = false;
+    }
+}
+
+function validateQualification() {
+    if (qualificationInput.value.trim() === "") {
+        errorMessageQualification.style.display = "block";
+        submitButton.disabled = true;
+    } else {
+        errorMessageQualification.style.display = "none";
+        submitButton.disabled = false;
+    }
+}
+
+function validateAadhar() {
+    const aadhar = aadharInput.value.trim();
+
+    errorMessageAadharRequired.style.display = "none";
+    errorMessageAadharFormat.style.display = "none";
+    errorMessageAadharExists.style.display = "none";
+    successMessageAadhar.style.display = "none"; 
+    submitButton.disabled = false;
+
+    if (aadhar === "") {
+        errorMessageAadharRequired.style.display = "block";
+        submitButton.disabled = true;
+        return;
+    }
+
+    const aadharFormatRegex = /^\d{12}$/;
+    if (!aadharFormatRegex.test(aadhar)) {
+        errorMessageAadharFormat.style.display = "block";
+        submitButton.disabled = true;
+        return;
+    }
+
+    checkAadharExists(aadhar);
+}
+
+function checkAadharExists(aadhar) {
+    fetch(`/check-adhaar/?aadhar=${encodeURIComponent(aadhar)}`)
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.exists) {
+                errorMessageAadharExists.style.display = "block";
+                successMessageAadhar.style.display = "none";
+                submitButton.disabled = true;
+            } else {
+                successMessageAadhar.style.display = "block";
+                errorMessageAadharExists.style.display = "none";
+            }
+        })
+        .catch((error) => {
+            console.error("Error checking Aadhar:", error);
+        });
+}
+
+function validatePan() {
+    const pan = panInput.value.trim();
+
+    errorMessagePanRequired.style.display = "none";
+    errorMessagePanFormat.style.display = "none";
+    errorMessagePanExists.style.display = "none";
+    successMessagePan.style.display = "none"; 
+    submitButton.disabled = false;
+
+    if (pan === "") {
+        errorMessagePanRequired.style.display = "block";
+        submitButton.disabled = true;
+        return;
+    }
+
+    const panFormatRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+    if (!panFormatRegex.test(pan)) {
+        errorMessagePanFormat.style.display = "block";
+        submitButton.disabled = true;
+        return;
+    }
+
+    checkPanExists(pan);
+}
+
+function checkPanExists(pan) {
+    fetch(`/check-pan/?pan=${encodeURIComponent(pan)}`)
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.exists) {
+                errorMessagePanExists.style.display = "block";
+                successMessagePan.style.display = "none";
+                submitButton.disabled = true;
+            } else {
+                successMessagePan.style.display = "block";
+                errorMessagePanExists.style.display = "none";
+            }
+        })
+        .catch((error) => {
+            console.error("Error checking PAN:", error);
+        });
+}
+
+function validateSource() {
+    let isChecked = false;
+    sourceCheckboxes.forEach((checkbox) => {
+        if (checkbox.checked) {
+            isChecked = true;
+        }
+    });
+
+    if (!isChecked) {
+        errorMessageSource.style.display = "block";
+        submitButton.disabled = true;
+    } else {
+        errorMessageSource.style.display = "none";
+        submitButton.disabled = false;
+    }
+}
+sourceCheckboxes.forEach((checkbox) => {
+    checkbox.addEventListener('change', validateSource);
+});
+
+function validateArea() {
+    let isChecked = false;
+    areaCheckboxes.forEach((checkbox) => {
+        if (checkbox.checked) {
+            isChecked = true;
+        }
+    });
+
+    if (!isChecked) {
+        errorMessageArea.style.display = "block";
+        submitButton.disabled = true;
+    } else {
+        errorMessageArea.style.display = "none";
+        submitButton.disabled = false;
+    }
+}
+areaCheckboxes.forEach((checkbox) => {
+    checkbox.addEventListener('change', validateArea);
+});
+
+function validateFeedback() {
+        const feedbackInput = document.getElementById('feedback');
+        const feedbackError = document.getElementById('feedback-error');
+        
+        if (feedbackInput.value.trim() === '') {
+            feedbackError.style.display = 'block';
+        } else {
+            feedbackError.style.display = 'none';
+        }
+    }
+
+    function validateAgentNotes() {
+        const agentNotesInput = document.getElementById('agent_notes');
+        const agentNotesError = document.getElementById('agent_notes-error');
+        
+        if (agentNotesInput.value.trim() === '') {
+            agentNotesError.style.display = 'block';
+        } else {
+            agentNotesError.style.display = 'none';
+        }
+    }
+
+    function validateFeedback() {
+        const feedbackInput = document.getElementById('feedback');
+        const feedbackError = document.getElementById('feedback-error');
+        
+        if (feedbackInput.value.trim() === '') {
+            feedbackError.style.display = 'block';
+        } else {
+            feedbackError.style.display = 'none';
+        }
+    }
+
+
+function updateProgressBar(input) {
+    var progressBar = document.getElementById('progress-bar');
+    var percentageValue = document.getElementById('percentage-value');
+    
+    var percentage = input.value;
+    progressBar.style.width = percentage + '%';
+    percentageValue.innerText = percentage + '%';
+}
+
+    
+
+const toggleBtn = document.querySelector('.toggle-btn'); 
+const navbarLinks = document.querySelector('.navbar-links'); 
+
+toggleBtn.addEventListener('click', () => {
+    navbarLinks.classList.toggle('active'); 
+});
+
+</script>
+
+</body>
+</html>
