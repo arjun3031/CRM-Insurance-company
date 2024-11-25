@@ -437,28 +437,34 @@ hr {
     }
     
     @media (max-width: 768px) {
-        .card-container {
-            flex-direction: column;
-            align-items: center;
-        }
-    
-        .card {
-            width: 100%; 
-        }
-    
-        .card h3 {
-            font-size: 20px;
-        }
-    
-        .card p {
-            font-size: 14px;
-        }
-    
-        .profile-btn, .clients-btn {
-            font-size: 12px;
-            padding: 6px 10px;
-        }
+    .card-container {
+        flex-direction: column;
+        align-items: center;
     }
+
+    .card {
+        flex: 1 1 95%;
+        max-width: 480px;
+        min-width: 300px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .card h3 {
+        font-size: 18px;
+    }
+
+    .card p {
+        font-size: 14px;
+    }
+
+    .profile-btn, .clients-btn {
+        font-size: 12px;
+        padding: 10px 12px;
+    }
+}
+
+
     
     .error-message, .success-message {
     padding: 15px;
@@ -533,6 +539,7 @@ hr {
 }
 
 
+
     </style>
 </head>
 <body>
@@ -585,23 +592,22 @@ hr {
                 <p><strong>Start Date:</strong> {{ campaign.start_date }}</p>
                 <p><strong>End Date:</strong> {{ campaign.end_date }}</p>
                 <p><strong>Time:</strong> {{ campaign.start_time }}</p>
-                <div class="button-container">
-                   
-                    <div class="link-wrapper">
-                        <p style="text-align: center;color: #532a4f;text-decoration: none;margin-left: 100px;">
-                          <a style="text-align: center;color: #532a4f;text-decoration: none;" href="{% url 'view_agents_in_campaign' campaign.id %}" class="custom-link">Assigned Agents</a>
+                <div class="button-container" style="display: flex; justify-content: center; align-items: center; flex-direction: column; padding: 10px; margin: 15px auto; text-align: center;">
+                    <div class="link-wrapper" style="margin: 10px 0;">
+                        <p style="margin: 0;">
+                            <a href="{% url 'view_agents_in_campaign' campaign.id %}" style="color: #532a4f; text-decoration: none; font-weight: bold;">Assigned Agents</a>
                         </p>
-                      </div>
-                  </div>
-
-                  <div class="button-container">
-                   
-                    <div class="link-wrapper">
-                      <p style="text-align: center;color: #532a4f;text-decoration: none;margin-left: 100px;">
-                        <a style="text-align: center;color: #532a4f;text-decoration: none;"  href="{% url 'show_campaign_clients_by_admin' campaign_id=campaign.id %}" class="custom-link">Enrolled Clients</a>
-                      </p>
                     </div>
-                  </div>
+                </div>
+                
+                <div class="button-container" style="display: flex; justify-content: center; align-items: center; flex-direction: column; padding: 10px; margin: 15px auto; text-align: center;">
+                    <div class="link-wrapper" style="margin: 10px 0;">
+                        <p style="margin: 0;">
+                            <a href="{% url 'show_campaign_clients_by_admin' campaign_id=campaign.id %}" style="color: #532a4f; text-decoration: none; font-weight: bold;">Enrolled Clients</a>
+                        </p>
+                    </div>
+                </div>
+                
                   
             </div>
             <div class="card-actions">
